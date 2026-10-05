@@ -1,0 +1,579 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "AC hotel by Marriott Santa Fe",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2802743,
+          19.3607897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Altezza Palmas",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2111537,
+          19.4296859
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Cervantes 169",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2052335,
+          19.4401422
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Cipriani Polanco",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1941283,
+          19.4316836
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "City Express Ciudad de Mexico Buenavista",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1483028,
+          19.4571963
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Club de Golf Mexico",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1596987,
+          19.2795067
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "COPEMSA Bajio",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2183606,
+          19.3843269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "COPEMSA Vizcainas",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1409894,
+          19.4276223
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Corporativo Lomas Cantabria A.C.",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2125988,
+          19.4339694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Courtyard Mexico City Airport",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.0823129,
+          19.4367989
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Crater 823",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2114731,
+          19.3159782
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Downtown Santa Fe",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2605042,
+          19.3677266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Americana Grand Chapultepec",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1792729,
+          19.4266703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Americana Reforma",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1547756,
+          19.4323731
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Inn Insurgentes Viaducto",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1811972,
+          19.3666031
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Inn Periferico Sur",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1657913,
+          19.302205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Four Seasons Hotel Mexico, D.F.",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1742051,
+          19.42293
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "German Center",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2566089,
+          19.36782
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Gran Sur",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1475201,
+          19.2859739
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hotel Galeria Plaza Reforma",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1679171,
+          19.4249074
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "InterContinental Presidente Santa Fe Mexico",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2781992,
+          19.3579805
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "La Cocina el Tras",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.3010764,
+          19.3501655
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Live Aqua Bosques Mexico",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2583835,
+          19.3822958
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Plaza Altavista",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1911676,
+          19.3478499
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Presidente InterContinental Polanco",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1935963,
+          19.4274067
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Qubica Lomas",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2077994,
+          19.4293163
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Samara Santa Fe",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2582739,
+          19.3683374
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sanborn's Palmas",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2222005,
+          19.4249815
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sanborn's Tacubaya",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1838156,
+          19.408433
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sheraton Four Points Roma CDMX",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1591441,
+          19.4185091
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sheraton Santa Fe Mexico City",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1125418,
+          19.430037
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sinaloa 195",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1722404,
+          19.4197426
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "St. Regis Mexico City",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1331785,
+          19.4326296
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Torre Optima",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2208072,
+          19.4267785
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Torre Optima 3",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2296152,
+          19.4106523
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Torre Reforma",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1744162,
+          19.4247518
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Torre Reforma 115",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2667948,
+          19.3689018
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Club Deportivo Chapultepec",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1818,
+          19.4269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Inn Plaza Central Aeropuerto",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.0967,
+          19.3789
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hotel W",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1963,
+          19.4278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Terraza Pedregal",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2069,
+          19.3175
+        ]
+      }
+    }
+  ]
+}
