@@ -1,1 +1,6 @@
 raw/destinos_economicos_raw.json
+.DS_Store
+**/.DS_Store
+__pycache__/
+**/__pycache__/
+salidas/
