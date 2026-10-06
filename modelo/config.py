@@ -32,7 +32,7 @@ ESCENARIOS_ADOPCION = {
     "media": dict(max=0.20, k=0.35, mid=2034),
     "alta":  dict(max=0.30, k=0.35, mid=2033),   # = supuesto original
 }
-ADOPT_BASE = 0.01        # % de autos eléctricos hoy
+ADOPT_BASE = 0.005       # PLACEHOLDER. Parque nacional BEV+PHEV ≈ 0.3% (EMA: 107,633 en 2024; parque total por confirmar en INEGI). CDMX es mayor.
 ADOPT_MAX = ESCENARIOS_ADOPCION[ESCENARIO]["max"]
 ADOPT_K   = ESCENARIOS_ADOPCION[ESCENARIO]["k"]
 ADOPT_MID = ESCENARIOS_ADOPCION[ESCENARIO]["mid"]
@@ -41,23 +41,37 @@ ADOPT_REF = 0.30         # referencia FIJA para el tráfico de destino (no cambi
 KWH_EV_ANIO = 2500       # kWh/año por EV
 PUBLIC_SHARE = 0.20      # ~80% se carga en casa (ver README)
 DEST_KWH_BASE = 300_000  # kWh/año de carga de destino con tráfico máximo
-OPEX_FIJO = 60_000       # MXN/año por estación
+OPEX_FIJO = 60_000       # MXN/año POR CARGADOR (antes: por estación)
 
 # ---- Margen = precio al público - costo de energía (MXN/kWh) ----
-# Costo: precio medio comercial 2024 de la CFE (Informe Anual 2024, p.127).
-# OJO: es promedio nacional; un cargador con poco uso paga cargos por demanda
-# que encarecen el kWh efectivo.
-COSTO_ENERGIA = 4.00
+# Costo "max": precio medio comercial 2024 de la CFE (Informe Anual 2024, p.127).
+# Costo "min": PLACEHOLDER (5.0) que supone cargos por demanda por poco uso; sin fuente.
+COSTO_ENERGIA = {"max": 4.00, "min": 5.00}
 COSTO_DERIVA = 0.0       # variación real anual del costo (0 = pesos reales constantes)
 COSTO_BASE_YEAR = 2024
-# PLACEHOLDER: precios al público por VERIFICAR (Evergo/Tesla/PlugShare).
-# Estos valores reproducen los márgenes anteriores (5.5 y 2.5).
+# Precio al público: Evergo ≈ 10.5 MXN/kWh (prensa, 2026); rango observado 7-15.
+# No hay tarifa vigente de Tesla en México; 8.0 es un valor conservador. VERIFICAR.
 PRECIO_PUBLICO = {"max": 10.5, "min": 8.0}
-MARGEN = {k: PRECIO_PUBLICO[k] - COSTO_ENERGIA for k in PRECIO_PUBLICO}  # a año base
-CAPTURA = {"max": 1.25, "min": 0.60}     # multiplicador de captura
+MARGEN = {k: PRECIO_PUBLICO[k] - COSTO_ENERGIA[k] for k in PRECIO_PUBLICO}  # a año base
+
+# Captura = fracción de la demanda de la zona que llega a la estación.
+# NUNCA > 1: la demanda total se conserva (antes max=1.25 "capturaba" 120% de la demanda).
+# PLACEHOLDERS: calibrar con sesiones reales de algún operador.
+CAPTURA = {"max": 1.0, "min": 0.5}
 PESO_MARCA = {"Tesla": 1.5, "Evergo": 1.0, "PlugShare": 0.7}  # peso competitivo
 
-# ---- Inversión (PLACEHOLDERS sin fuente: reemplazar con cotización real) ----
-CAPEX_ESTACION = 500_000  # MXN por estación (hardware + instalación + conexión)
+# ---- Capacidad: cuántos cargadores caben en la demanda de una AGEB ----
+KW_CARGADOR = 50          # kW de un cargador DC (p. ej. los 3 de 50 kW de Evergo en Metrópoli Patriotismo)
+# Utilización con la que se DIMENSIONA un sitio. Ojo: el punto de equilibrio es
+# OPEX_FIJO / (margen * KW_CARGADOR * 8760) (≈4.6% en el caso min, ≈2.1% en el max).
+# Si UTIL_OBJETIVO queda cerca del equilibrio, la ganancia es ~0 y muy sensible.
+UTIL_OBJETIVO = 0.05      # fracción del año a potencia nominal (2%-8% en estaciones públicas; contexto europeo)
+KWH_POR_CARGADOR = KW_CARGADOR * 8760 * UTIL_OBJETIVO   # = 21,900 kWh/año (tope: ignora el taper)
+
+# ---- Inversión (PLACEHOLDERS: reemplazar con cotización real) ----
+# Capex total de un sitio = CAPEX_SITIO + n_cargadores * CAPEX_CARGADOR
+CAPEX_CARGADOR = 100_000  # MXN por cargador DC (Expansión 2021: equipo de 50 a 100 mil)
+CAPEX_SITIO = 400_000     # MXN: transformador, obra y conexión (1 cargador + sitio = 500 mil)
+CAPEX_FACTORES = (0.5, 1.0, 2.0)   # sensibilidad: 250 mil / 500 mil / 1 millón para 1 cargador
 VIDA_UTIL = 10            # años
 TASA_DESC = 0.12          # tasa de descuento anual

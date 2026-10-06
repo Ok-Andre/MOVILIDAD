@@ -20,11 +20,7 @@
             align-items: center;
         }
 
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        h1 { color: #333; text-align: center; margin-bottom: 20px; }
 
         .mapa {
             width: 1000px;
@@ -35,10 +31,7 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
-        .leaflet-popup-content {
-            font-size: 14px;
-            line-height: 1.5;
-        }
+        .leaflet-popup-content { font-size: 14px; line-height: 1.5; }
 
         .popup-title {
             font-weight: bold;
@@ -48,8 +41,11 @@
             padding-bottom: 3px;
         }
 
+        .popup-sec { margin-top: 6px; font-weight: 600; color: #444; }
+        .popup-no { margin-top: 6px; color: #8a4b00; font-weight: 600; }
+
         .controls {
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -67,13 +63,22 @@
             transition: background-color 0.3s;
         }
 
-        .btn:hover {
-            background-color: #0056b3;
+        .btn:hover { background-color: #0056b3; }
+        .btn.active { background-color: #28a745; }
+
+        .opciones {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #333;
         }
 
-        .btn.active {
-            background-color: #28a745;
-        }
+        .opciones select { padding: 6px 8px; font-size: 14px; border-radius: 4px; }
+        .opciones.off { opacity: 0.45; }
 
         .nota {
             max-width: 1000px;
@@ -82,6 +87,8 @@
             text-align: center;
             margin: 0 0 12px 0;
         }
+
+        #aviso { color: #b00020; font-size: 14px; min-height: 18px; margin: 0 0 8px 0; text-align: center; }
 
         .legend {
             background: white;
@@ -114,9 +121,33 @@
         <button id="btn-2035" class="btn">Predicción 2035</button>
     </div>
 
-    <p class="nota">Los colores se asignan por percentil entre las AGEB de la CDMX (verde = 20 % superior,
-        amarillo = 40–80 %, rojo = 40 % inferior). Las predicciones 2030/2035 son una simulación con supuestos,
-        no un pronóstico calibrado.</p>
+    <!-- Solo aplican a las predicciones 2030 / 2035 -->
+    <div id="opciones" class="opciones off">
+        <label>Escenario de adopción de EVs:
+            <select id="sel-escenario">
+                <option value="baja">Baja</option>
+                <option value="media" selected>Media</option>
+                <option value="alta">Alta</option>
+            </select>
+        </label>
+        <label>Colorear por:
+            <select id="sel-metrica">
+                <option value="score">Viabilidad (percentil)</option>
+                <option value="prob">Probabilidad de ser rentable</option>
+                <option value="payback_max">Payback, caso optimista (P90)</option>
+                <option value="payback_min">Payback, caso pesimista (P10)</option>
+            </select>
+        </label>
+    </div>
+
+    <p class="nota">Modelos originales: los colores se asignan por percentil entre las AGEB de la CDMX (verde = 20 %
+        superior, amarillo = 40–80 %, rojo = 40 % inferior). Las predicciones 2030/2035 son una simulación Monte Carlo
+        con supuestos provisionales (precios, capex, adopción de EVs), no un pronóstico calibrado: el rango va del
+        percentil 10 (pesimista) al 90 (optimista). El número de cargadores se decide con el caso base y la
+        probabilidad de ser rentable es la de que la ganancia neta anualizada sea positiva. Payback = años para
+        recuperar la inversión del sitio con la ganancia operativa.</p>
+
+    <p id="aviso"></p>
 
     <!-- Contenedor del mapa -->
     <div id="map" class="mapa"></div>
@@ -133,15 +164,25 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // ---------- Leyenda ----------
+        // ---------- Leyenda (cambia según lo que se colorea) ----------
+        let legendDiv = null;
+        function renderLegend(kind) {
+            if (!legendDiv) return;
+            const filas = {
+                pb: [['#2ca25f', 'Payback ≤ 3 años'], ['#ffeda0', 'Payback de 3 a 6 años'],
+                     ['#de2d26', 'Más de 6 años o no recupera']],
+                prob: [['#2ca25f', 'Rentable en ≥ 80 % de los casos'], ['#ffeda0', 'Rentable en 50–80 %'],
+                       ['#de2d26', 'Rentable en < 50 %'], ['#bdbdbd', 'No se construiría']],
+                pct: [['#2ca25f', 'Alta (top 20 %)'], ['#ffeda0', 'Media (40–80 %)'],
+                      ['#de2d26', 'Baja (40 % inferior)']]
+            }[kind];
+            legendDiv.innerHTML = filas.map(([c, t]) => `<div><i style="background:${c}"></i>${t}</div>`).join('');
+        }
         const legend = L.control({ position: 'bottomright' });
         legend.onAdd = function () {
-            const div = L.DomUtil.create('div', 'legend');
-            div.innerHTML = `
-                <div><i style="background:#2ca25f"></i>Alta (top 20 %)</div>
-                <div><i style="background:#ffeda0"></i>Media (40–80 %)</div>
-                <div><i style="background:#de2d26"></i>Baja (40 % inferior)</div>`;
-            return div;
+            legendDiv = L.DomUtil.create('div', 'legend');
+            renderLegend('pct');
+            return legendDiv;
         };
         legend.addTo(map);
 
@@ -153,6 +194,22 @@
             return '#de2d26';                  // Rojo (baja)
         }
 
+        // Payback en años; null/undefined = la ganancia no cubre la inversión
+        function colorPayback(v) {
+            if (v === null || v === undefined) return '#de2d26';
+            if (v <= 3) return '#2ca25f';
+            if (v <= 6) return '#ffeda0';
+            return '#de2d26';
+        }
+
+        // Probabilidad de ganancia neta > 0 (solo zonas que se construirían en el caso base)
+        function colorProb(p) {
+            if (!p || !p.viable_max) return '#bdbdbd';
+            if (p.prob_rentable >= 0.8) return '#2ca25f';
+            if (p.prob_rentable >= 0.5) return '#ffeda0';
+            return '#de2d26';
+        }
+
         // Calcula el percentil de `key` entre todos los polígonos y lo guarda en _pct
         function addPct(data, key) {
             const vals = data.features
@@ -161,7 +218,6 @@
             const n = Math.max(vals.length - 1, 1);
             data.features.forEach(f => {
                 const v = f.properties[key] ?? 0;
-                // primer índice con valor >= v (los empates comparten percentil)
                 let lo = 0, hi = vals.length;
                 while (lo < hi) {
                     const m = (lo + hi) >> 1;
@@ -171,9 +227,10 @@
             });
         }
 
+        // Si la feature trae _fill (predicciones) se usa; si no, el percentil
         function style(feature) {
             return {
-                fillColor: getColor(feature.properties._pct ?? 0),
+                fillColor: feature.properties._fill ?? getColor(feature.properties._pct ?? 0),
                 weight: 1,
                 opacity: 1,
                 color: 'white',
@@ -182,6 +239,8 @@
         }
 
         const btnIds = ['btn-original', 'btn-no-destinos', 'btn-2030', 'btn-2035'];
+        const aviso = document.getElementById('aviso');
+        const opciones = document.getElementById('opciones');
 
         function setActive(id) {
             btnIds.forEach(b => document.getElementById(b).classList.remove('active'));
@@ -191,6 +250,8 @@
         // ---------- Mapas de viabilidad (originales) ----------
         let isSinDestinosMap = false;
         let currentLayer = null;
+        let predAño = null;          // año de la predicción activa (null = mapa original)
+        let reqId = 0;               // descarta respuestas viejas si el usuario hace clic rápido
 
         function onEachFeature(feature, layer) {
             if (feature.properties) {
@@ -225,6 +286,7 @@
             if (currentLayer) {
                 map.removeLayer(currentLayer);
             }
+            const id = ++reqId;
             fetch(filename)
                 .then(response => {
                     if (!response.ok) {
@@ -233,6 +295,7 @@
                     return response.json();
                 })
                 .then(data => {
+                    if (id !== reqId) return;
                     addPct(data, 'viabilidad');
                     currentLayer = L.geoJSON(data, {
                         style: style,
@@ -245,70 +308,135 @@
         }
 
         // ---------- Predicciones 2030 / 2035 (modelo) ----------
-        // Se carga una sola vez; la llave "zona" == CVEGEO del polígono.
-        // Se guarda la promesa para que un clic rápido espere a que termine la carga.
-        const PRED_PROMISE = fetch('./predicciones.json')
+        // Un archivo por escenario. "media" es el predicciones.json de siempre;
+        // baja/alta son predicciones_baja.json / predicciones_alta.json (los copia export.py).
+        const PRED_CACHE = {};
+        function getPred(esc) {
+            if (!PRED_CACHE[esc]) {
+                const url = esc === 'media' ? './predicciones.json' : `./predicciones_${esc}.json`;
+                PRED_CACHE[esc] = fetch(url)
+                    .then(r => {
+                        if (!r.ok) throw new Error('No se encontró ' + url);
+                        return r.json();
+                    })
+                    .catch(e => {
+                        console.error(e);
+                        delete PRED_CACHE[esc];      // permite reintentar
+                        return null;
+                    });
+            }
+            return PRED_CACHE[esc];
+        }
+
+        let GEO_PROMISE = null;
+        const getGeo = () => GEO_PROMISE ??= fetch('./viabilidad_cdmx_v2.geojson')
             .then(r => {
-                if (!r.ok) throw new Error('No se encontró predicciones.json');
+                if (!r.ok) throw new Error('Error al cargar el GeoJSON');
                 return r.json();
-            })
-            .catch(e => {
-                console.error('No se pudo cargar predicciones.json:', e);
-                return [];
             });
 
-        const mxn = n => '$' + Math.round(n).toLocaleString('es-MX');
+        const mxn = n => (n === null || n === undefined) ? 'N/D'
+            : (n < 0 ? '-' : '') + '$' + Math.abs(Math.round(n)).toLocaleString('es-MX');
+        // payback null = la ganancia operativa no es positiva
+        const años = v => (v === null || v === undefined) ? 'No recupera' : v.toFixed(1) + ' años';
+
+        function popupPrediccion(p, año) {
+            const prob = (p.prob_rentable !== null && p.prob_rentable !== undefined)
+                ? (p.prob_rentable * 100).toFixed(0) + ' %' : 'N/D';
+            const obra = p.viable_max
+                ? `<div class="popup-sec">Cargadores a construir</div><div>${p.n_cargadores_max} (nuevos netos: ${p.nuevos_max ?? 'N/D'})</div>`
+                : `<div class="popup-no">Con el caso base no conviene construir aquí.</div>`;
+            return `
+                <div class="popup-title">${p.alcaldia} — ${año} (adopción ${p.escenario ?? ''})</div>
+                <div><b>Probabilidad de ser rentable:</b> ${prob}</div>
+                <div><b>Ganancia mediana:</b> ${mxn(p.ganancia_p50)}</div>
+                <div><b>Ganancia P10 a P90:</b> ${mxn(p.ganancia_min)} a ${mxn(p.ganancia_max)}</div>
+                <div><b>Percentil de viabilidad:</b> ${(p.score_viabilidad * 100).toFixed(0)}</div>
+                ${obra}
+                <div class="popup-sec">Payback (capex base)</div>
+                <div>Optimista: ${años(p.payback_max)} · Pesimista: ${años(p.payback_min)}</div>
+                <div class="popup-sec">Sensibilidad al capex (optimista)</div>
+                <div>×0.5: ${años(p.payback_max_capex50)} · ×2: ${años(p.payback_max_capex200)}</div>
+                <div class="popup-sec">Ganancia neta anualizada</div>
+                <div>Mediana: ${mxn(p.neta_p50)}</div>
+                <div>P10: ${mxn(p.neta_min)} · P90: ${mxn(p.neta_max)}</div>
+            `;
+        }
 
         async function loadPrediction(año) {
+            predAño = año;
+            const id = ++reqId;
+            aviso.textContent = '';
+            opciones.classList.remove('off');
             if (currentLayer) {
                 map.removeLayer(currentLayer);
                 currentLayer = null;
             }
 
+            const esc = document.getElementById('sel-escenario').value;
+            const metrica = document.getElementById('sel-metrica').value;
+
             try {
-                const PRED = await PRED_PROMISE;
+                const [PRED, geo] = await Promise.all([getPred(esc), getGeo()]);
+                if (id !== reqId) return;     // el usuario ya pidió otra cosa
+
+                if (!PRED) {
+                    aviso.textContent = `No se pudo cargar el escenario "${esc}". ` +
+                        `Revisa que exista su archivo de predicciones en esta carpeta (lo copia export.py).`;
+                    return;
+                }
 
                 // Índice rápido: CVEGEO -> predicción de ese año
                 const porZona = {};
                 PRED.filter(r => r['año'] === año).forEach(r => { porZona[r.zona] = r; });
 
-                const resp = await fetch('./viabilidad_cdmx_v2.geojson');
-                if (!resp.ok) throw new Error('Error al cargar el GeoJSON');
-                const geo = await resp.json();
-
-                // score_viabilidad ya es un percentil (0-1) calculado en export.py
                 geo.features.forEach(f => {
                     const p = porZona[f.properties.CVEGEO];
-                    f.properties._pct = p ? p.score_viabilidad : 0;
+                    if (metrica === 'score') {
+                        // score_viabilidad ya es un percentil (0-1) calculado en export.py
+                        f.properties._pct = p ? p.score_viabilidad : 0;
+                        f.properties._fill = undefined;
+                    } else if (metrica === 'prob') {
+                        f.properties._fill = colorProb(p);
+                    } else {
+                        f.properties._fill = p ? colorPayback(p[metrica]) : '#de2d26';
+                    }
                 });
+                renderLegend(metrica === 'score' ? 'pct' : metrica === 'prob' ? 'prob' : 'pb');
 
                 currentLayer = L.geoJSON(geo, {
                     style: style,
                     onEachFeature: (f, layer) => {
                         const p = porZona[f.properties.CVEGEO];
                         if (!p) return;
-                        layer.bindPopup(`
-                            <div class="popup-title">${p.alcaldia} — ${año}</div>
-                            <div><b>Ganancia máx:</b> ${mxn(p.ganancia_max)}</div>
-                            <div><b>Ganancia mín:</b> ${mxn(p.ganancia_min)}</div>
-                            <div><b>Percentil de viabilidad:</b> ${(p.score_viabilidad * 100).toFixed(0)}</div>
-                        `);
+                        layer.bindPopup(popupPrediccion(p, año));
                     }
                 }).addTo(map);
             } catch (e) {
                 console.error('Error al cargar la predicción:', e);
+                aviso.textContent = 'Error al cargar la predicción. Revisa la consola.';
             }
+        }
+
+        // Al volver a un mapa original: quita los colores de predicción y restaura la leyenda
+        function modoOriginal() {
+            predAño = null;
+            aviso.textContent = '';
+            opciones.classList.add('off');
+            renderLegend('pct');
         }
 
         // ---------- Botones ----------
         document.getElementById('btn-original').addEventListener('click', function () {
             setActive('btn-original');
+            modoOriginal();
             isSinDestinosMap = false;
             loadMapData('./viabilidad_cdmx_v2.geojson');
         });
 
         document.getElementById('btn-no-destinos').addEventListener('click', function () {
             setActive('btn-no-destinos');
+            modoOriginal();
             isSinDestinosMap = true;
             loadMapData('./viabilidad_cdmx_v2_no_destinos.geojson');
         });
@@ -322,6 +450,12 @@
             setActive('btn-2035');
             loadPrediction(2035);
         });
+
+        // Cambiar escenario o métrica reaplica la predicción activa
+        ['sel-escenario', 'sel-metrica'].forEach(id =>
+            document.getElementById(id).addEventListener('change', () => {
+                if (predAño) loadPrediction(predAño);
+            }));
 
         // Mapa por defecto
         loadMapData('./viabilidad_cdmx_v2.geojson');

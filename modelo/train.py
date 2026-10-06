@@ -1,6 +1,6 @@
 import json, pickle
 import numpy as np
-from sklearn.compose import ColumnTransformer
+from sklearn.compose import ColumnTransformer, TransformedTargetRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
@@ -11,18 +11,23 @@ from config import *
 from data import build_zones
 from simulate import simulate_targets
 
+# vph_autom, riqueza_norm y destinos_raw son los motores de la fórmula de simulate.py:
+# si el modelo no los ve, no puede aprender la relación.
 NUM = ["year", "dens_cargadores", "n_Tesla", "n_Evergo", "n_PlugShare",
-       "poblacion", "traffic_idx"]
+       "poblacion", "traffic_idx", "vph_autom", "riqueza_norm", "destinos_raw"]
 CAT = ["tipo_zona", "marca_dom", "alcaldia"]   # alcaldia = "zona" categórica
 FEATURES = NUM + CAT
-TARGETS = ["ganancia_max", "ganancia_min"]
+TARGETS = ["ganancia_max", "ganancia_min", "n_cargadores_max", "n_cargadores_min"]
 
 def _pipe(model):
     pre = ColumnTransformer([
         ("num", StandardScaler(), NUM),
         ("cat", OneHotEncoder(handle_unknown="ignore"), CAT),
     ])
-    return Pipeline([("pre", pre), ("model", model)])
+    pipe = Pipeline([("pre", pre), ("model", model)])
+    # Objetivos en escalas muy distintas (MXN vs. # de cargadores): se estandarizan
+    # para que el random forest los pese igual.
+    return TransformedTargetRegressor(regressor=pipe, transformer=StandardScaler())
 
 def _rmse(y, p):
     return float(np.sqrt(mean_squared_error(y, p)))
@@ -45,10 +50,13 @@ def train():
     for nombre, pipe in candidatos.items():
         pipe.fit(X.iloc[tr], Y.iloc[tr])
         pred = pipe.predict(X.iloc[te])
+        yt = Y.iloc[te]
         metricas[nombre] = {
-            "rmse_max": _rmse(Y.iloc[te]["ganancia_max"], pred[:, 0]),
-            "rmse_min": _rmse(Y.iloc[te]["ganancia_min"], pred[:, 1]),
-            "rmse_prom": _rmse(Y.iloc[te], pred),
+            "rmse_max": _rmse(yt["ganancia_max"], pred[:, 0]),
+            "rmse_min": _rmse(yt["ganancia_min"], pred[:, 1]),
+            "rmse_prom": _rmse(yt[["ganancia_max", "ganancia_min"]], pred[:, :2]),
+            "rmse_n_cargadores_max": _rmse(yt["n_cargadores_max"], pred[:, 2]),
+            "rmse_n_cargadores_min": _rmse(yt["n_cargadores_min"], pred[:, 3]),
         }
         print(nombre, metricas[nombre])
 
