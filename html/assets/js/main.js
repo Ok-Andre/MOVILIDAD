@@ -29,22 +29,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Iconos SVG personalizados para las electrolineras
     const teslaIcon = L.icon({
         iconUrl: 'assets/img/pin_tesla.svg',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -28],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
+        popupAnchor: [0, -45],
         className: 'custom-pin-icon'
     });
 
     const evergoIcon = L.icon({
         iconUrl: 'assets/img/pin_evergo.svg',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -28],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
+        popupAnchor: [0, -45],
         className: 'custom-pin-icon'
     });
 
-    // Marcador de PlugShare (tal como estaba)
-    const plugshareIcon = new L.Icon.Default();
+    const plugshareIcon = L.icon({
+        iconUrl: 'assets/img/pin_plugshare.svg',
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
+        popupAnchor: [0, -45],
+        className: 'custom-pin-icon'
+    });
 
     // 4. Degradado continuo de color (Rojo -> Amarillo -> Verde)
     function getColorGradient(val) {
@@ -52,11 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Escala: 0.0 (Rojo) -> 0.35 (Naranja) -> 0.55 (Amarillo) -> 0.75 (Verde claro) -> 1.0 (Verde)
         const stops = [
-            { pos: 0.00, r: 222, g: 45,  b: 38 },   // #de2d26 Rojo
+            { pos: 0.00, r: 222, g: 45, b: 38 },   // #de2d26 Rojo
             { pos: 0.35, r: 244, g: 162, b: 97 },   // #f4a261 Naranja
             { pos: 0.55, r: 255, g: 237, b: 160 },  // #ffeda0 Amarillo
             { pos: 0.75, r: 120, g: 198, b: 121 },  // #78c679 Verde claro
-            { pos: 1.00, r: 44,  g: 162, b: 95 }    // #2ca25f Verde
+            { pos: 1.00, r: 44, g: 162, b: 95 }    // #2ca25f Verde
         ];
 
         let lower = stops[0];
