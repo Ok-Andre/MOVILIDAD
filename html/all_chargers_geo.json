@@ -1,0 +1,4303 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "AC hotel by Marriott Santa Fe",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2802743,
+          19.3607897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Altezza Palmas",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2111537,
+          19.4296859
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Cervantes 169",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2052335,
+          19.4401422
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Cipriani Polanco",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1941283,
+          19.4316836
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "City Express Ciudad de Mexico Buenavista",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1483028,
+          19.4571963
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Club de Golf Mexico",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1596987,
+          19.2795067
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "COPEMSA Bajio",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2183606,
+          19.3843269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "COPEMSA Vizcainas",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1409894,
+          19.4276223
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Corporativo Lomas Cantabria A.C.",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2125988,
+          19.4339694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Courtyard Mexico City Airport",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.0823129,
+          19.4367989
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Crater 823",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2114731,
+          19.3159782
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Downtown Santa Fe",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2605042,
+          19.3677266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Americana Grand Chapultepec",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1792729,
+          19.4266703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Americana Reforma",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1547756,
+          19.4323731
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Inn Insurgentes Viaducto",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1811972,
+          19.3666031
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Inn Periferico Sur",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1657913,
+          19.302205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Four Seasons Hotel Mexico, D.F.",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1742051,
+          19.42293
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "German Center",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2566089,
+          19.36782
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Gran Sur",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1475201,
+          19.2859739
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hotel Galeria Plaza Reforma",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1679171,
+          19.4249074
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "InterContinental Presidente Santa Fe Mexico",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2781992,
+          19.3579805
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "La Cocina el Tras",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.3010764,
+          19.3501655
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Live Aqua Bosques Mexico",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2583835,
+          19.3822958
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Plaza Altavista",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1911676,
+          19.3478499
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Presidente InterContinental Polanco",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1935963,
+          19.4274067
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Qubica Lomas",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2077994,
+          19.4293163
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Samara Santa Fe",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2582739,
+          19.3683374
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sanborn's Palmas",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2222005,
+          19.4249815
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sanborn's Tacubaya",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1838156,
+          19.408433
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sheraton Four Points Roma CDMX",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1591441,
+          19.4185091
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sheraton Santa Fe Mexico City",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1125418,
+          19.430037
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sinaloa 195",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1722404,
+          19.4197426
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "St. Regis Mexico City",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1331785,
+          19.4326296
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Torre Optima",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2208072,
+          19.4267785
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Torre Optima 3",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2296152,
+          19.4106523
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Torre Reforma",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1744162,
+          19.4247518
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Torre Reforma 115",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2667948,
+          19.3689018
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Club Deportivo Chapultepec",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1818,
+          19.4269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Inn Plaza Central Aeropuerto",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.0967,
+          19.3789
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hotel W",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1963,
+          19.4278
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Terraza Pedregal",
+        "red": "Tesla"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2069,
+          19.3175
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Tlahuac",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.088874,
+          19.3308911
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Residencial Dos Vistas 481",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.25256042,
+          19.36587301
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Reforma 265",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.16449123,
+          19.42907163
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Pepsico Xalostoc",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.053477,
+          19.5497231
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Pepsico Tlalpizahuac",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.955416,
+          19.3250925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Patio Santa Fe",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2542237,
+          19.3769714
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.104408,
+          19.366943
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Naucalpan",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2423326,
+          19.4708684
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "KIA Satélite",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.21323572,
+          19.54097043
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "KIA Satélite",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.21323572,
+          19.54097043
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Holcim",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.279353,
+          19.3556944
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo Reforma",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.22653965,
+          19.40649848
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo MUTEC",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.196639,
+          19.41466181
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo Lago Mayor",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.19980984,
+          19.41596313
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo La Tapatía",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.19785744,
+          19.4184832
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo El Sope 209",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20217973,
+          19.41807923
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "ENGEN",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.258401,
+          19.368292
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Edrive Home",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.10460415,
+          19.36698117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Interlomas",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.27518518,
+          19.40562358
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Interlomas",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.27518518,
+          19.40562358
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Imagen Motors San Angel",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18899879,
+          19.34295699
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Cever Santa Fe",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.277598,
+          19.357837
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Audi Pedregal",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.22191009,
+          19.31879441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Audi Insurgentes",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18150677,
+          19.36521459
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Plaza Carso, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2738772,
+          19.4417502
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Imagen Pedregal, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.215222,
+          19.32432607
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2679498,
+          19.5154925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Indie Park, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1676152,
+          19.4073731
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Cever Santa Fe, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.277598,
+          19.357837
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Patio Santa Fe, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2542237,
+          19.3769714
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Paseo Interlomas, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2830491,
+          19.3974798
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.21323572,
+          19.54097043
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "La Comer Insurgentes, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1818593,
+          19.3665555
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2193774,
+          19.5331543
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Chevrolet Valle Dorado, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2231394,
+          19.3935123
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo Reforma, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.22653965,
+          19.40649848
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Interlomas, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.27518518,
+          19.40562358
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Imagen Motors San Angel, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18899879,
+          19.34295699
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo Lago Mayor, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.19980984,
+          19.41596313
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Edrive Home, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.10460415,
+          19.36698117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Audi Insurgentes, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18150677,
+          19.36521459
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Audi Pedregal, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.22191009,
+          19.31879441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Oficinas E.Drive Evergo MX, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.104408,
+          19.366943
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Tlahuac",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.088874,
+          19.3308911
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Residencial Dos Vistas 481",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.25256042,
+          19.36587301
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Reforma 265",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.16449123,
+          19.42907163
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Pepsico Xalostoc",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.053477,
+          19.5497231
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Pepsico Tlalpizahuac",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.955416,
+          19.3250925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Patio Santa Fe",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2542237,
+          19.3769714
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.104408,
+          19.366943
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Naucalpan",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2423326,
+          19.4708684
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "KIA Satélite",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.21323572,
+          19.54097043
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "KIA Satélite",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.21323572,
+          19.54097043
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Holcim",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.279353,
+          19.3556944
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo Reforma",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.22653965,
+          19.40649848
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo MUTEC",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.196639,
+          19.41466181
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo Lago Mayor",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.19980984,
+          19.41596313
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo La Tapatía",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.19785744,
+          19.4184832
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo El Sope 209",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20217973,
+          19.41807923
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "ENGEN",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.258401,
+          19.368292
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Edrive Home",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.10460415,
+          19.36698117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Interlomas",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.27518518,
+          19.40562358
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Interlomas",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.27518518,
+          19.40562358
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Imagen Motors San Angel",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18899879,
+          19.34295699
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Cever Santa Fe",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.277598,
+          19.357837
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Audi Pedregal",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.22191009,
+          19.31879441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Audi Insurgentes",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18150677,
+          19.36521459
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Plaza Carso, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2738772,
+          19.4417502
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Imagen Pedregal, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.215222,
+          19.32432607
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2679498,
+          19.5154925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Indie Park, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1676152,
+          19.4073731
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Cever Santa Fe, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.277598,
+          19.357837
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Patio Santa Fe, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2542237,
+          19.3769714
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Paseo Interlomas, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2830491,
+          19.3974798
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.21323572,
+          19.54097043
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "La Comer Insurgentes, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1818593,
+          19.3665555
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2193774,
+          19.5331543
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Chevrolet Valle Dorado, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2231394,
+          19.3935123
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo Reforma, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.22653965,
+          19.40649848
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Interlomas, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.27518518,
+          19.40562358
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Imagen Motors San Angel, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18899879,
+          19.34295699
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo Lago Mayor, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.19980984,
+          19.41596313
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Edrive Home, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.10460415,
+          19.36698117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Metropoli Patriotismo, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18084974,
+          19.39641956
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Audi Insurgentes, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18150677,
+          19.36521459
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Audi Pedregal, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.22191009,
+          19.31879441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Oficinas E.Drive Evergo MX, México",
+        "red": "Evergo"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.104408,
+          19.366943
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BYD Ecatepec (Coming Soon)",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.05693504959345,
+          19.541935728478148
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Plaza Aragón Evergo",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.0270022675395,
+          19.528328832332303
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "outlet plaza aeropuerto",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.09636162716274,
+          19.420905612891023
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Audi Center Esmeralda",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.297125,
+          19.559897
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "ELECTRONITY - Satélite",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.23258360426935,
+          19.481557190571657
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "ELECTRONITY - 240kW Cargadores Ultra Rápida",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.27422729999999,
+          19.3579558
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Audi Center Satélite",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.212223,
+          19.540898
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "City Energy Ermita",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.01454407721758,
+          19.352964553217635
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Tlahuac",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.05763,
+          19.303428
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Mega Soriana Atizapan",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.26278756820084,
+          19.592763527967623
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Watts by VEMO",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.0911016,
+          19.444337
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Walmart Perisur",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18723378770687,
+          19.305686898650787
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "VEMO Plaza Lomas Verdes",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.23625446856022,
+          19.486661470250606
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BYD Zaragoza (Coming Soon)",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.06930807977915,
+          19.40384072413217
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Courtyard Aeropuerto",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.08229,
+          19.436687
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Antara",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20241169631481,
+          19.43951574932997
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Lomas Verdes",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.254866,
+          19.504776
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "casa particular",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.95604164105539,
+          19.31308676129332
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "City Energy Coyoacán (2)",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1446285,
+          19.3400936
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "La Cuspide",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.26792907714844,
+          19.514970779418945
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "plaza portal Vallejo",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1445521,
+          19.4681039
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Efraín Connect",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.96001388448595,
+          19.268287578314133
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Scuderia Miralrio",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.01673644781113,
+          19.35177166331395
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Azcárraga ",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.039078,
+          19.386554
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "VEMO - BYD - Iztapalapa",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.0832931175828,
+          19.35506181662326
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Plaza Churubusco (1)",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.10137010382086,
+          19.382047301347587
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Unidad Rey Neza",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.98241925984621,
+          19.399327073992385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "City Energy Coyoacán (1)",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.14478157623176,
+          19.340089619785125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Multiplaza Arboledas",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20732919126749,
+          19.547437185771198
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Soriana Hiper Las Armas",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20920351982252,
+          19.51334371451331
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "STE - Municipio Libre 1",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.132808,
+          19.36666
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Inn Naucalpan",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.230757,
+          19.479738
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "STE - Subestación Xola 1",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.149143,
+          19.395607
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo IndiPark",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.15374100208282,
+          19.435391032380647
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Gasolinera Pemex",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.16453,
+          19.268718
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Buhohost",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.08316403627396,
+          19.24842094007545
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Kia Vallejo",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.15370378643274,
+          19.494651869931147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Electro Ram (Coming Soon)",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.01959300041199,
+          19.405968006744263
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Soni - Rosario",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.206425,
+          19.504723
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "The Point Santa Fe",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2567692,
+          19.3779342
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "GAC Motor Watts Vemo",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1560989348903,
+          19.39359381896004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Cargador Cda de Fresno-Tlapacoya",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.91921781581394,
+          19.296561609830913
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Contrapared",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2727988,
+          19.3342758
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Plaza Satélite",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.23363314508772,
+          19.511436381112038
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Fuji",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.104987,
+          19.356261
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "GTBC",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.29073953420834,
+          19.523454468959226
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Kioto",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.131885,
+          19.498533
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Grupo Luqross",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18529132279848,
+          19.489203876100454
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Zaragoza",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.073423,
+          19.407377
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "CADyC",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.28330443799496,
+          19.450286754554448
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo Coapa",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.11931126858893,
+          19.30282966558301
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Oasis Coyoacán",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18073199999999,
+          19.3455222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Audi Center Santa Fe",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.277634,
+          19.359074
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Premium Outlets - Punta Norte",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.19981396546056,
+          19.599984900997406
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Universidad Anáhuac del Sur",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.243198,
+          19.334751
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hybrid & Electric Tech",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.209939,
+          19.401346
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "VEMO Hub Roma",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.16597489267588,
+          19.406744029479317
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "VEMO Hub Las Aguilas",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20693188905716,
+          19.365473713262737
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Aragon",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.03172942792597,
+          19.523343758295386
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Medical Zoo Charging Station",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.05358731746674,
+          19.40327245320478
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BYD 220",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.91337215900421,
+          19.281982407184834
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Inn Plaza Centra",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.095076,
+          19.378778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Atizapan",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.238598,
+          19.548499
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "VEMO Hub Petrarca",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18556439999999,
+          19.4367205
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Club de Golf Bellavista",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.242747,
+          19.527098
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sanborn's las Aguilas",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.232109,
+          19.347397
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "GOenergy Superchargers Interlomas",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.27907230446125,
+          19.391586240805
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "ELECTRONITY - Cargadores Rápidos Félix Cuevas",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.17807359999999,
+          19.3739833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Servicio Cever San Antonio",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.175779,
+          19.387218
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Walmart Lomas Toreo",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.21946,
+          19.450078
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Indios verdes 195",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.02900035987743,
+          19.3959232512124
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Patio Valle De Chalco",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -98.95229503512383,
+          19.29997424985489
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Reforma 2210 Estacionamento",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.226574,
+          19.406451
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Aeropuerto",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.088464,
+          19.423943
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Chevrolet Insurgentes",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.175537,
+          19.385246
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Tlalnepantla",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20055494475567,
+          19.53602937108051
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "CFE División Valle de México Norte",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.25541162946512,
+          19.487214784802806
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Gran Terraza Lomas Verdes - Soriana",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.246985,
+          19.49566
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "*Metrópoli Patriotismo",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.180658,
+          19.396857
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "GigaWatts 1.21 (Coming Soon)",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.26007843017578,
+          19.506240844726562
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Auto lavado Lupita",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.24186430871487,
+          19.57983579978068
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Plaza Mítikah",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.16868826221678,
+          19.358972377968556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "ELECTRONITY - Supercargador San Angel",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18158287579905,
+          19.363959524309234
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "E2 Portal San Angel",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.19129842278178,
+          19.360541099496412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Club de Golf Mexico",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.158925,
+          19.278972
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sanborn's",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.174241,
+          19.287811
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Volvo Suecia Car Satélite",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.22789972275496,
+          19.470694344839576
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Plaza Altavista",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.196728,
+          19.349466
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "yr (Coming Soon)",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1772958,
+          19.2724441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Letty y Rubén",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2187,
+          19.3328556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Destination Charging",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.211582,
+          19.316086
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "GOenergy Superchargers Mixcoac",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18783096405961,
+          19.3732761616726
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hotel MX Buenavista",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.15341,
+          19.447482
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "TK Terraza Grill",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.225314,
+          19.428617
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Universidad Anáhuac del Norte",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.263878,
+          19.402154
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Tecnológico de Monterrey Campus Santa Fe ",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.259077,
+          19.357678
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Camino A Santa Teresa",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.189663,
+          19.296508
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Cargador Euro-Mex",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.13796324282885,
+          19.373062060029813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Angel",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.23397861421108,
+          19.46547351367436
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Imagen Pedregal",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.215283,
+          19.324316
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Be Grand Park Bosques, Preventa de Departamentos",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.281154,
+          19.390222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Bosque Real",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.287257,
+          19.421264
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan San Cosme",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.15246,
+          19.438879
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "COPPEL Tacuba",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.18475706130266,
+          19.458021304629796
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "CFE Puente de Piedra",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.164971,
+          19.294072
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Calle Niño Jesús Estacionamiento / Carga",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.161092,
+          19.288765
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hub VEMO",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1593759984363,
+          19.43205586737625
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Energy EV",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.21244315803051,
+          19.272701381433812
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Fiesta Inn Tlalnepantla",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.200144,
+          19.539395
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Artz Pedregal",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2192939,
+          19.3135357
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sanborn's Taxquena",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.149345,
+          19.342994
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Imperio Xochimilco",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.11216575652361,
+          19.26013511222021
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Starbucks satélite",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.23732822664098,
+          19.507436173005214
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "MG Cuajimalpa",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2928812341075,
+          19.354540855798756
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hyatt House Santa Fe",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2835566421804,
+          19.357464314425147
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Walmart Plateros",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.19356154959868,
+          19.369282106775064
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "parque la mexicana",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2695914,
+          19.3570737
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Revillagigedo 18 Parking",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.145724,
+          19.434441
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BYD Mariano Escobedo",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1800132393837,
+          19.455866251860975
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Encuentro Fortuna",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.133095,
+          19.4840381
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Centro Comercial El Triangulo",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.251014,
+          19.411155
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Estacionamiento Vizcainas",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.141543,
+          19.427648
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Momentum",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.219085,
+          19.533131
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "LIT Charge San Bernabe",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.21425452404624,
+          19.33513781111037
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hotel y Villas Patriotismo",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.178501,
+          19.403458
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Club Mundet",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.211539,
+          19.439599
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Estacionamiento El sope",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.204681,
+          19.417045
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Centro Escolar Cedros (Estacionamiento)",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.182019,
+          19.350615
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "MG Miramontes",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.12420082837343,
+          19.312088476081232
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "BMW Coapa Motors",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.123289,
+          19.303668
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Imperio Coapa",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.118988,
+          19.30181
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Universidad Panamericana",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.182769,
+          19.373957
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "La Comer Del Valle",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1672455,
+          19.3754266
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Blend Mexico",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.212507,
+          19.429425
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Portales Sur",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.15297554232788,
+          19.36172321065573
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hotel W",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.195326,
+          19.427433
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Miyana",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20037078857422,
+          19.439651489257812
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Padelite",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2630755629761,
+          19.340449263610477
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hospital Angeles Lindavista",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.12936818753079,
+          19.486559592576132
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Corporativo VICAL",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2205947265029,
+          19.454375053654324
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Plaza Tlalne Fashion Mall",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.206331,
+          19.539044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Grupo Modelo",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.189213,
+          19.441636
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Satelite",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.233308,
+          19.483012
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Nissan Soni Universidad",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.165389,
+          19.365151
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Paseo Interlomas",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.2819467145593,
+          19.39745863264128
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Mercedes-Benz Autosat Insurgentes",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.176317,
+          19.381254
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "GOenergy Superchargers Aeropuerto",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.09374937415123,
+          19.42395629878461
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "La Cocina el Tras",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.254927,
+          19.381156
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Town Center El Rosario",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20250806871869,
+          19.50400785775977
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hotel Quinto Elemento",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20530979509782,
+          19.337717995335403
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "CASA",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.17575977564644,
+          19.43282467757118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Restaurante Loma Linda",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.218099,
+          19.420118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "CFE Olivar de los Padres",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20888975826645,
+          19.33906803700915
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Cafe del Abuelo (Coming Soon)",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1859467,
+          19.3655495
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Electrolinera VEMO",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.19024251401424,
+          19.364118648053946
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Estacionamiento Copemsa",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.207599,
+          19.302793
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "ELECTRONITY- NOMAD Toreo",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.21699,
+          19.453551
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Plaza Lilas",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.247817,
+          19.387987
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Evergo Paseo Arcos Bosques",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.25228737294674,
+          19.38714436882705
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Mitsubishi Universidad",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.160249,
+          19.378427
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Gran Sur",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.16632,
+          19.3059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Estacionamiento Bajio",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.168158,
+          19.402665
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Sanborn's",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.191979,
+          19.364127
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Centro Comercial Sentura",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.21650305618128,
+          19.54017409309377
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Hotel Hotsson Condesa Sur",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.1848002,
+          19.4054931
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Espacio Sur",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.199834,
+          19.358376
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Pasaje las aguilas",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.20291747350318,
+          19.359882471370746
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Walmart Supercenter",
+        "red": "PlugShare"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -99.288466,
+          19.398819
+        ]
+      }
+    }
+  ]
+}
