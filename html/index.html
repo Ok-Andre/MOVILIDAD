@@ -4,74 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa de Viabilidad - CDMX</title>
+    <title>Viabilidad para Estaciones de Carga - CDMX</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .mapa {
-            width: 1000px;
-            height: 1000px;
-            max-width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        .leaflet-popup-content {
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .popup-title {
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 5px;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 3px;
-        }
-
-        .controls {
-            margin-bottom: 20px;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            margin: 0 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        
-        .btn.active {
-            background-color: #28a745;
-        }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body>
@@ -86,108 +26,38 @@
     <!-- Contenedor del mapa -->
     <div id="map" class="mapa"></div>
 
+    <!-- Gráficas abajo del mapa -->
+    <div class="charts-container">
+        <div class="chart-box">
+            <h2>Viabilidad Promedio por Alcaldía</h2>
+            <div class="chart-wrapper">
+                <canvas id="chart-alcaldia"></canvas>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-box">
+                <h2>Electrolineras por Red</h2>
+                <div class="chart-wrapper">
+                    <canvas id="chart-chargers"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-box">
+                <h2>Desglose de Componentes del Modelo</h2>
+                <div class="chart-wrapper">
+                    <canvas id="chart-components"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts Leaflet, MarkerCluster, Chart.js y Lógica -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-
-    <script>
-        // Coordenadas centrales de CDMX: 19.4326, -99.1332
-        const map = L.map('map').setView([19.38, -99.15], 11);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Función para determinar el color basado en la viabilidad
-        function getColor(viabilidad) {
-            if (viabilidad > 0.8) {
-                return '#2ca25f'; // Verde (Alta viabilidad)
-            } else if (viabilidad > 0.4) {
-                return '#ffeda0'; // Amarillo (Media viabilidad)
-            } else {
-                return '#de2d26'; // Rojo (Baja viabilidad)
-            }
-        }
-
-        function style(feature) {
-            return {
-                fillColor: getColor(feature.properties.viabilidad),
-                weight: 1,
-                opacity: 1,
-                color: 'white',
-                fillOpacity: 0.7
-            };
-        }
-
-        let isSinDestinosMap = false;
-
-        function onEachFeature(feature, layer) {
-            if (feature.properties) {
-                const props = feature.properties;
-                const alcaldia = props.NOM_MUN || 'Desconocida';
-                const viviendasAuto = props.VPH_AUTOM !== null ? props.VPH_AUTOM : 'N/D';
-                const viabilidad = (props.viabilidad !== null && props.viabilidad !== undefined)
-                    ? props.viabilidad.toFixed(4) : 'N/D';
-
-                let popupContent = `
-                    <div class="popup-title">Alcaldía: ${alcaldia}</div>
-                    <div><b>Viviendas con auto:</b> ${viviendasAuto}</div>
-                `;
-
-                if (!isSinDestinosMap) {
-                    const destinos = props.destinos_raw !== null ? props.destinos_raw : 'N/D';
-                    popupContent += `<div><b>Destinos contados:</b> ${destinos}</div>`;
-                }
-
-                popupContent += `<div><b>Puntaje de viabilidad:</b> ${viabilidad}</div>`;
-
-                layer.bindPopup(popupContent);
-            }
-        }
-
-        let currentLayer = null;
-
-        function loadMapData(filename) {
-            if (currentLayer) {
-                map.removeLayer(currentLayer);
-            }
-            fetch(filename)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error al cargar el archivo GeoJSON');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Añadir los datos al mapa
-                    currentLayer = L.geoJSON(data, {
-                        style: style,
-                        onEachFeature: onEachFeature
-                    }).addTo(map);
-                })
-                .catch(error => {
-                    console.error('Hubo un problema con la petición Fetch:', error);
-                });
-        }
-
-        // Cargar mapa por defecto
-        loadMapData('./viabilidad_cdmx_v2.geojson');
-
-        // Lógica de los botones
-        document.getElementById('btn-original').addEventListener('click', function() {
-            document.getElementById('btn-original').classList.add('active');
-            document.getElementById('btn-no-destinos').classList.remove('active');
-            isSinDestinosMap = false;
-            loadMapData('./viabilidad_cdmx_v2.geojson');
-        });
-
-        document.getElementById('btn-no-destinos').addEventListener('click', function() {
-            document.getElementById('btn-no-destinos').classList.add('active');
-            document.getElementById('btn-original').classList.remove('active');
-            isSinDestinosMap = true;
-            loadMapData('./viabilidad_cdmx_v2_no_destinos.geojson');
-        });
-    </script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>
