@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forma Gym</title>
+
+    <!-- Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../html/assets/css/styleHome.css">
+    <link rel="stylesheet" href="../html/assets/css/base.css">
+    <link rel="stylesheet" href="../html/assets/css/mapa.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+</head>
+
+<body>
+    <div class="sidebar2 close" id="sidebar">
+        <div class="logo-details">
+            <img src="assets/img/logo_CDMX.png" alt="">
+            <span class="logo_name">ELECTRA</span>
+        </div>
+
+        <ul class="nav-links">
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span class="link_name">Mapa</span>
+                </a>
+            </li>
+
+            <!-- Dashboard -->
+            <li>
+                <a href="administrador/clientes.html">
+                    <i class="fa-solid fa-chart-column"></i>
+                    <span class="link_name">Dashboard</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="administrador/clientes.html">
+                    <i class="fa-solid fa-brain"></i>
+                    <span class="link_name">Predicciones</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-book"></i>
+                    <span class="link_name">Electrolineras</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <span class="link_name">Gastos</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-gear"></i>
+                    <span class="link_name">Configuracion</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" id="toggleSidebarBtn">
+                    <i class="fa-solid fa-bars"></i>
+                    <span class="link_name">Cerrar Menu</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+    <section class="home-section">
+        <!-- Contenedor del mapa -->
+        <div id="map" class="mapa"></div>
+        
+    </section>
+
+    <script src="./assets/js/sidebar.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./assets/js/main.js"></script>
+</body>
+
+</html>

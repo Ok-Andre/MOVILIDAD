@@ -1,0 +1,22 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Las variables de colores de la CDMX segun yo jajaja */
+    --primary-color:  #1B1324;
+    --fourt-color:    #2D2040; 
+    --tertiary-color: #E6007E; 
+    --text-color:     #F2EDF7;  
+
+    /* Variables extras que podemos ocupar */
+    --secondary-color: #8C1D40; /* guinda institucional (botones, encabezados) */
+    --gold-color:      #D4A537; /* detalles, badges, gráficas */
+    --muted-color:     #A99BB8; /* texto secundario */
+    --success-color:   #2FBF71;
+    --warning-color:   #F5A524;
+    --danger-color:    #E5484D;
+    --info-color:      #3E8EDE;
+}
