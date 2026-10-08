@@ -4,7 +4,7 @@ import pandas as pd
 import shutil
 from config import *
 from data import build_zones
-from simulate import financieros
+from simulate import financieros, capex_total
 from incertidumbre import tabla_zonas, reporte
 
 def predict_all(zones=None, resumen_out=None) -> pd.DataFrame:
@@ -14,13 +14,22 @@ def predict_all(zones=None, resumen_out=None) -> pd.DataFrame:
     t, resumen = tabla_zonas(zones, PRED_YEARS)
     if resumen_out is not None:
         resumen_out.update(resumen)
-    df = t.merge(zones[["zona", "alcaldia", "lat", "lon", "n_total"]], on="zona", how="left")
+    df = t.merge(zones[["zona", "alcaldia", "lat", "lon", "n_total", "poblacion"]], on="zona", how="left")
 
     df["ganancia_max"], df["ganancia_min"] = df["ganancia_p90"], df["ganancia_p10"]
     # Cargadores = DECISIÓN con el caso base (igual en max y min); 0 = no conviene.
     df["n_cargadores_max"] = df["n_base"].astype(int)
     df["n_cargadores_min"] = df["n_base"].astype(int)
     df["neta_max"], df["neta_min"] = df["neta_p90"], df["neta_p10"]
+
+    # ---- Indicadores para las gráficas temáticas (sustentabilidad/economía) ----
+    # Inversión del sitio (0 si el caso base no construiría). Coincide con simulate.capex_total.
+    df["capex_total"] = capex_total(df["n_cargadores_max"])
+    # Empleos directos estimados (SUPUESTO: config.EMPLEOS_POR_CARGADOR).
+    df["empleo_est"] = df["n_cargadores_max"] * EMPLEOS_POR_CARGADOR
+    # CO2 evitado (SUPUESTO: config.CO2_KG_POR_KWH_EVITADO) a partir del kWh servido.
+    df["co2_evitado"] = df["kwh_p50"] * CO2_KG_POR_KWH_EVITADO
+    df["poblacion"] = df["poblacion"].fillna(0)
 
     for k in ("max", "min"):
         g, n, ne = df[f"ganancia_{k}"], df[f"n_cargadores_{k}"], df["n_eval"]
@@ -42,11 +51,15 @@ def predict_all(zones=None, resumen_out=None) -> pd.DataFrame:
     cols = ["zona", "año", "ganancia_max", "ganancia_min", "ganancia_p50",
             "prob_rentable", "score_viabilidad",
             "n_cargadores_max", "n_cargadores_min", "viable_max", "viable_min",
-            "nuevos_max", "nuevos_min", "n_total",
+            "nuevos_max", "nuevos_min", "n_total", "poblacion",
             "payback_max", "payback_min", "neta_max", "neta_min", "neta_p50", *sens,
+            "kwh_p10", "kwh_p50", "kwh_p90", "co2_evitado", "capex_total", "empleo_est",
             "escenario", "alcaldia", "lat", "lon"]
     return out[cols].round({"ganancia_max": 0, "ganancia_min": 0, "ganancia_p50": 0,
                             "neta_max": 0, "neta_min": 0, "neta_p50": 0,
+                            "kwh_p10": 0, "kwh_p50": 0, "kwh_p90": 0,
+                            "co2_evitado": 0, "capex_total": 0, "empleo_est": 1,
+                            "poblacion": 0,
                             "payback_max": 1, "payback_min": 1, **{c: 1 for c in sens},
                             "prob_rentable": 3,
                             "score_viabilidad": 4, "lat": 5, "lon": 5})
