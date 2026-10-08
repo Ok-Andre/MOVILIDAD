@@ -111,6 +111,15 @@
                     <option value="payback_min">Payback, caso pesimista (P10)</option>
                 </select>
             </label>
+            <label>Cargadores propuestos:
+                <input id="sim-cargadores" type="number" min="1" max="20" step="1" value="1">
+            </label>
+            <button id="btn-simular" class="btn" type="button" aria-pressed="false">
+                <i class="fa-solid fa-location-dot" aria-hidden="true"></i> Probar ubicación
+            </button>
+            <button id="btn-limpiar-simulacion" class="btn" type="button" disabled>
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i> Quitar prueba
+            </button>
         </div>
 
         <p class="nota">Modelos originales: los colores se asignan por percentil entre las AGEB de la CDMX (verde = 20 %
@@ -159,6 +168,7 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/modelo_electra.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 

@@ -135,6 +135,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnIds = ['btn-original', 'btn-no-destinos', 'btn-2030', 'btn-2035'];
     const aviso = document.getElementById('aviso');
     const opciones = document.getElementById('opciones');
+    const simButton = document.getElementById('btn-simular');
+    const clearSimButton = document.getElementById('btn-limpiar-simulacion');
+    const simChargersInput = document.getElementById('sim-cargadores');
 
     function setActive(id) {
         btnIds.forEach(b => document.getElementById(b).classList.remove('active'));
@@ -173,9 +176,17 @@ document.addEventListener('DOMContentLoaded', () => {
         maxClusterRadius: 45
     });
 
+    let CHARGERS_PROMISE = null;
+    function getChargersGeo() {
+        return CHARGERS_PROMISE ??= fetch('./all_chargers_geo.json')
+            .then(res => {
+                if (!res.ok) throw new Error('Error al cargar las electrolineras');
+                return res.json();
+            });
+    }
+
     function loadChargersData() {
-        fetch('./all_chargers_geo.json')
-            .then(res => res.json())
+        getChargersGeo()
             .then(data => {
                 let teslaCount = 0;
                 let evergoCount = 0;
@@ -446,10 +457,96 @@ document.addEventListener('DOMContentLoaded', () => {
             return r.json();
         });
 
+    let MODEL_ZONES_PROMISE = null;
+    const getModelZones = () => MODEL_ZONES_PROMISE ??= Promise.all([getGeo(), getChargersGeo()])
+        .then(([geo, chargers]) => ElectraModelo.prepararZonas(geo, chargers));
+
     const mxn = n => (n === null || n === undefined) ? 'N/D'
         : (n < 0 ? '-' : '') + '$' + Math.abs(Math.round(n)).toLocaleString('es-MX');
     // payback null = la ganancia operativa no es positiva
     const años = v => (v === null || v === undefined) ? 'No recupera' : v.toFixed(1) + ' años';
+
+    let placingSimulation = false;
+    let simulationMarker = null;
+    let simulationZone = null;
+    let simulationChargers = 1;
+
+    function setPlacementMode(active) {
+        placingSimulation = active;
+        if (simButton) {
+            simButton.classList.toggle('active', active);
+            simButton.setAttribute('aria-pressed', String(active));
+        }
+        map.getContainer().style.cursor = active ? 'crosshair' : '';
+        if (aviso) aviso.textContent = active ? 'Haz clic dentro de una zona para probar la ubicación.' : '';
+    }
+
+    function simulationPopup() {
+        const esc = document.getElementById('sel-escenario').value;
+        const estacion = ElectraModelo.estacion(
+            simulationZone, predAño, esc, simulationChargers, simulationChargers
+        );
+        const restante = ElectraModelo.zonaPrediccion(simulationZone, predAño, esc, {
+            extraComp: simulationChargers * ElectraModelo.PESO.Propia
+        });
+        const prob = (estacion.prob_rentable * 100).toFixed(0) + ' %';
+        const probRestante = (restante.prob_rentable * 100).toFixed(0) + ' %';
+        return `
+            <div class="popup-title">Prueba de ubicación — ${simulationZone.alcaldia} (${predAño})</div>
+            <div><b>Tu estación:</b> ${simulationChargers} cargador(es)</div>
+            <div><b>Ganancia anual P10–P90:</b> ${mxn(estacion.ganancia_min)} a ${mxn(estacion.ganancia_max)}</div>
+            <div><b>Ganancia neta mediana:</b> ${mxn(estacion.neta_p50)}</div>
+            <div><b>Probabilidad de rentabilidad:</b> ${prob}</div>
+            <div><b>Payback optimista:</b> ${años(estacion.payback_max)}</div>
+            <div class="popup-sec">Oportunidad restante en la zona</div>
+            <div><b>Cargadores recomendados adicionales:</b> ${restante.nBase}</div>
+            <div><b>Probabilidad de rentabilidad restante:</b> ${probRestante}</div>
+        `;
+    }
+
+    function refreshSimulationPopup() {
+        if (!simulationMarker || !simulationZone || !predAño) return;
+        simulationMarker.setPopupContent(simulationPopup());
+    }
+
+    function clearSimulation() {
+        setPlacementMode(false);
+        if (simulationMarker) map.removeLayer(simulationMarker);
+        simulationMarker = null;
+        simulationZone = null;
+        if (clearSimButton) clearSimButton.disabled = true;
+    }
+
+    async function placeSimulation(event) {
+        if (!placingSimulation) return;
+        setPlacementMode(false);
+        simulationChargers = Number.parseInt(simChargersInput.value, 10);
+        if (!Number.isInteger(simulationChargers) || simulationChargers < 1 || simulationChargers > 20) {
+            if (aviso) aviso.textContent = 'El número de cargadores debe estar entre 1 y 20.';
+            return;
+        }
+
+        try {
+            const { localizar } = await getModelZones();
+            simulationZone = localizar(event.latlng.lat, event.latlng.lng);
+            if (!simulationZone) {
+                if (aviso) aviso.textContent = 'El punto está fuera de las zonas disponibles.';
+                return;
+            }
+
+            if (simulationMarker) map.removeLayer(simulationMarker);
+            simulationMarker = L.circleMarker(event.latlng, {
+                radius: 8, color: '#075b48', weight: 2, fillColor: '#36a879', fillOpacity: 0.9
+            }).addTo(map).bindPopup(simulationPopup()).openPopup();
+            if (clearSimButton) clearSimButton.disabled = false;
+            if (aviso) aviso.textContent = 'Simulación local: los resultados dependen de los supuestos del modelo.';
+        } catch (error) {
+            console.error('Error al preparar la simulación:', error);
+            if (aviso) aviso.textContent = 'No se pudo preparar la simulación. Revisa los datos del modelo.';
+        }
+    }
+
+    map.on('click', placeSimulation);
 
     function popupPrediccion(p, año) {
         const prob = (p.prob_rentable !== null && p.prob_rentable !== undefined)
@@ -520,9 +617,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 onEachFeature: (f, layer) => {
                     const p = porZona[f.properties.CVEGEO];
                     if (!p) return;
-                    layer.bindPopup(popupPrediccion(p, año));
+                    layer.on('click', event => {
+                        if (placingSimulation) {
+                            L.DomEvent.stopPropagation(event.originalEvent);
+                            placeSimulation(event);
+                            return;
+                        }
+                        L.popup().setLatLng(event.latlng).setContent(popupPrediccion(p, año)).openOn(map);
+                    });
                 }
             }).addTo(map);
+            refreshSimulationPopup();
         } catch (e) {
             console.error('Error al cargar la predicción:', e);
             aviso.textContent = 'Error al cargar la predicción. Revisa la consola.';
@@ -534,6 +639,7 @@ document.addEventListener('DOMContentLoaded', () => {
         predAño = null;
         aviso.textContent = '';
         opciones.classList.add('off');
+        clearSimulation();
         renderLegend('pct');
     }
 
@@ -572,5 +678,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById(id).addEventListener('change', () => {
                 if (predAño) loadPrediction(predAño);
             }));
+    }
+
+    if (simButton) {
+        simButton.disabled = true;
+        simButton.addEventListener('click', () => {
+            if (!predAño) return;
+            setPlacementMode(!placingSimulation);
+        });
+        clearSimButton.addEventListener('click', clearSimulation);
+        document.getElementById('btn-2030').addEventListener('click', () => { simButton.disabled = false; });
+        document.getElementById('btn-2035').addEventListener('click', () => { simButton.disabled = false; });
     }
 });
