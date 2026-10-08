@@ -245,6 +245,18 @@ En `config.py`, `USE_RF = False` usa solo regresión lineal.
 - Quitar `lru_cache` o invalidarlo al reentrenar.
 - Habilitar CORS para el origen del front.
 
+## Buscador del mapa
+
+Arriba a la izquierda del mapa (`html/index.html`) hay una barra de búsqueda que resalta los pines de electrolineras cercanos a lo que busques:
+
+- **Coordenadas:** `19.4326, -99.1332` (también acepta `lon, lat` y lo corrige solo).
+- **Dirección de texto:** se geocodifica con **Nominatim (OpenStreetMap)**, sesgado a la CDMX. Requiere internet.
+- **Nombre de electrolinera:** busca sobre `all_chargers_geo.json` (sin acentos y sin importar mayúsculas).
+
+Al elegir un resultado, el mapa vuela al punto y resalta con un anillo los pines que estén dentro del **radio de cercanía** (100 m, 300 m, 500 m o 1 km; por defecto 300 m). Si **no hay ningún pin** en ese radio, se crea un **punto personalizado** en el lugar buscado.
+
+Los puntos personalizados se guardan en `localStorage` (clave `electra_puntos_personalizados`) y se vuelven a mostrar al recargar. **No** tienen pesos, viabilidad ni predicción, y **no** afectan las gráficas ni el modelo. La búsqueda de direcciones necesita el geocodificador en línea; las coordenadas y los nombres siguen funcionando sin internet.
+
 ## Limitaciones conocidas
 
 - La ganancia es simulada, no real.

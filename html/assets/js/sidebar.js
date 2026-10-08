@@ -106,9 +106,9 @@ navItems.forEach(li => {
 // Submenú de Predicciones: dispara los botones del mapa (solo existen en index.html)
 document.querySelectorAll('.sub-menu .pred-btn').forEach(a => {
     a.addEventListener('click', (e) => {
-        e.preventDefault();
         const btn = document.getElementById(a.dataset.target);
-        if (!btn) return;
+        if (!btn) return;                 // sin botón en esta página: deja navegar (href)
+        e.preventDefault();
         btn.click();
         setActiveLink(a.closest('li.has-submenu'));
         if (isMobile()) setSidebar(true);

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrolineras - ELECTRA CDMX</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/styleHome.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar2 close" id="sidebar">
+        <div class="logo-details">
+            <img src="assets/img/logo_CDMX.png" alt="ELECTRA">
+            <span class="logo_name">ELECTRA</span>
+        </div>
+
+        <ul class="nav-links">
+            <li id="nav-mapa">
+                <a href="index.html">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span class="link_name">Mapa</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
+                    <i class="fa-solid fa-chart-column"></i>
+                    <span class="link_name">Dashboard</span>
+                </a>
+            </li>
+
+            <li class="has-submenu" id="nav-predicciones">
+                <a href="#">
+                    <i class="fa-solid fa-brain"></i>
+                    <span class="link_name">Predicciones</span>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="index.html" class="pred-btn" data-target="btn-2030">Escenario 2030</a></li>
+                    <li><a href="index.html" class="pred-btn" data-target="btn-2035">Escenario 2035</a></li>
+                </ul>
+            </li>
+
+            <li class="active" id="nav-electrolineras">
+                <a href="electrolineras.html">
+                    <i class="fa-solid fa-charging-station"></i>
+                    <span class="link_name">Electrolineras</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <span class="link_name">Gastos</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
+                    <i class="fa-solid fa-gear"></i>
+                    <span class="link_name">Configuracion</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" id="toggleSidebarBtn">
+                    <i class="fa-solid fa-bars"></i>
+                    <span class="link_name">Cerrar Menu</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <section class="home-section dashboard-section">
+        <header class="dashboard-header">
+            <h1>Electrolineras disponibles</h1>
+            <p class="dashboard-subtitle">Red de carga pública registrada en la CDMX. Usa el pin para ubicarla en el mapa.</p>
+        </header>
+
+        <!-- KPIs -->
+        <div class="kpi-row" id="kpi-row">
+            <div class="kpi-card kpi-card--total">
+                <i class="fa-solid fa-charging-station"></i>
+                <div class="kpi-card__body">
+                    <span class="kpi-card__value" id="kpi-total">-</span>
+                    <span class="kpi-card__label">Sitios totales</span>
+                </div>
+            </div>
+            <div class="kpi-card kpi-card--tesla">
+                <i class="fa-solid fa-bolt"></i>
+                <div class="kpi-card__body">
+                    <span class="kpi-card__value" id="kpi-tesla">-</span>
+                    <span class="kpi-card__label">Tesla</span>
+                </div>
+            </div>
+            <div class="kpi-card kpi-card--evergo">
+                <i class="fa-solid fa-plug-circle-bolt"></i>
+                <div class="kpi-card__body">
+                    <span class="kpi-card__value" id="kpi-evergo">-</span>
+                    <span class="kpi-card__label">Evergo</span>
+                </div>
+            </div>
+            <div class="kpi-card kpi-card--plugshare">
+                <i class="fa-solid fa-plug"></i>
+                <div class="kpi-card__body">
+                    <span class="kpi-card__value" id="kpi-plugshare">-</span>
+                    <span class="kpi-card__label">PlugShare</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Herramientas -->
+        <div class="toolbar">
+            <div class="toolbar__search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="buscador" autocomplete="off" spellcheck="false"
+                    placeholder="Buscar por nombre…">
+            </div>
+            <label class="toolbar__select">
+                Red:
+                <select id="filtro-red">
+                    <option value="todas">Todas</option>
+                    <option value="Tesla">Tesla</option>
+                    <option value="Evergo">Evergo</option>
+                    <option value="PlugShare">PlugShare</option>
+                </select>
+            </label>
+            <span class="toolbar__count" id="contador">-</span>
+        </div>
+
+        <!-- Tabla -->
+        <div class="tabla-box">
+            <table class="tabla-electrolineras">
+                <thead>
+                    <tr>
+                        <th class="col-num">#</th>
+                        <th class="col-nombre">Nombre</th>
+                        <th class="col-red">Red</th>
+                        <th class="col-coords">Coordenadas</th>
+                        <th class="col-pin">Mapa</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-body"></tbody>
+            </table>
+            <p class="tabla-vacia" id="tabla-vacia">Cargando electrolineras…</p>
+        </div>
+    </section>
+
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/electrolineras.js"></script>
+</body>
+
+</html>

@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
         maxBoundsViscosity: 0.75
     });
 
+    // El zoom va a la derecha para dejar libre la esquina superior izquierda (búsqueda)
+    map.zoomControl.setPosition('topright');
+
     // Capa de Mapa: Esri World Light Gray (gratuita, limpia y sin API Key)
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
@@ -135,9 +138,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnIds = ['btn-original', 'btn-no-destinos', 'btn-2030', 'btn-2035'];
     const aviso = document.getElementById('aviso');
     const opciones = document.getElementById('opciones');
-    const simButton = document.getElementById('btn-simular');
-    const clearSimButton = document.getElementById('btn-limpiar-simulacion');
-    const simChargersInput = document.getElementById('sim-cargadores');
+
+    // ---------- Formulario "Nueva Electrolinera" ----------
+    const estRed = document.getElementById('est-red');
+    const estNombre = document.getElementById('est-nombre');
+    const estLat = document.getElementById('est-lat');
+    const estLon = document.getElementById('est-lon');
+    const estConectores = document.getElementById('est-conectores');
+    const btnUbicarMapa = document.getElementById('btn-ubicar-mapa');
+    const btnPredecir = document.getElementById('btn-predecir');
+    const btnQuitarPrueba = document.getElementById('btn-quitar-prueba');
+    const stationResult = document.getElementById('station-result');
 
     function setActive(id) {
         btnIds.forEach(b => document.getElementById(b).classList.remove('active'));
@@ -169,12 +180,32 @@ document.addEventListener('DOMContentLoaded', () => {
         className: 'custom-pin-icon'
     });
 
+    // Pin para puntos creados desde la búsqueda (sin datos de predicción)
+    const pinPersonalizadoIcon = L.icon({
+        iconUrl: 'assets/img/pin_personalizado.svg',
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
+        popupAnchor: [0, -45],
+        className: 'custom-pin-icon'
+    });
+
+    // Marcador temporal del punto buscado
+    const searchPointIcon = L.divIcon({
+        className: 'search-point-icon',
+        html: '<i class="fa-solid fa-crosshairs" style="color:#E6007E;font-size:28px;text-shadow:0 0 4px #fff, 0 0 2px #fff;"></i>',
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
+    });
+
     const chargersCluster = L.markerClusterGroup({
         chunkedLoading: true,
         spiderfyOnMaxZoom: true,
         showCoverageOnHover: false,
         maxClusterRadius: 45
     });
+
+    // Datos de todos los pines (incluye los personalizados) para búsqueda y distancias
+    const chargersData = [];
 
     let CHARGERS_PROMISE = null;
     function getChargersGeo() {
@@ -186,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadChargersData() {
-        getChargersGeo()
+        return getChargersGeo()
             .then(data => {
                 let teslaCount = 0;
                 let evergoCount = 0;
@@ -218,6 +249,29 @@ document.addEventListener('DOMContentLoaded', () => {
                         .bindPopup(popupHtml);
 
                     chargersCluster.addLayer(marker);
+                    chargersData.push({
+                        nombre: nombre,
+                        red: red,
+                        lat: coords[1],
+                        lon: coords[0],
+                        marker: marker,
+                        custom: false
+                    });
+                });
+
+                // Puntos personalizados guardados en el navegador (no cuentan en la gráfica)
+                leerPuntosPersonalizados().forEach(punto => {
+                    if (typeof punto.lat !== 'number' || typeof punto.lon !== 'number') return;
+                    const marker = crearMarcadorPunto(punto);
+                    chargersCluster.addLayer(marker);
+                    chargersData.push({
+                        nombre: punto.nombre || 'Punto buscado',
+                        red: 'Personalizado',
+                        lat: punto.lat,
+                        lon: punto.lon,
+                        marker: marker,
+                        custom: true
+                    });
                 });
 
                 map.addLayer(chargersCluster);
@@ -226,6 +280,482 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => {
                 console.error('Error cargando electrolineras:', err);
             });
+    }
+
+    // Vuelve desde el dashboard de electrolineras: index.html?lat=..&lon=..&nombre=..
+    function applyPinFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const lat = parseFloat(params.get('lat'));
+        const lon = parseFloat(params.get('lon'));
+        if (!isFinite(lat) || !isFinite(lon)) return;
+        const nombre = params.get('nombre') || 'Electrolinera';
+
+        // Busca el marcador exacto del clúster (mismo sitio)
+        let encontrado = null;
+        let mejor = Infinity;
+        chargersData.forEach(c => {
+            const d = haversine(lat, lon, c.lat, c.lon);
+            if (d < mejor) { mejor = d; encontrado = c; }
+        });
+
+        const highlight = L.layerGroup().addTo(map);
+
+        if (encontrado && mejor <= 30) {
+            L.circle([encontrado.lat, encontrado.lon], {
+                radius: 25,
+                color: '#E6007E',
+                weight: 3,
+                opacity: 1,
+                fillColor: '#E6007E',
+                fillOpacity: 0.25,
+                interactive: false,
+                className: 'search-ring'
+            }).addTo(highlight);
+            chargersCluster.zoomToShowLayer(encontrado.marker, () => encontrado.marker.openPopup());
+        } else {
+            const marker = L.marker([lat, lon], { icon: searchPointIcon, zIndexOffset: 1000 })
+                .bindPopup(`<div class="popup-title">${escapeHtml(nombre)}</div>
+                    <div><b>Coordenadas:</b> ${lat.toFixed(5)}, ${lon.toFixed(5)}</div>`)
+                .addTo(map);
+            map.setView([lat, lon], 16);
+            marker.openPopup();
+        }
+
+        // Limpia los params para no re-disparar al recargar
+        history.replaceState(null, '', window.location.pathname);
+    }
+
+    // ---------- Búsqueda: dirección, coordenadas o electrolinera ----------
+    const LS_KEY = 'electra_puntos_personalizados';
+    const RADIO_DEFAULT = 300;
+    const CDMX_VIEWBOX = [-99.65, 19.85, -98.65, 18.80]; // oeste, norte, este, sur
+
+    function leerPuntosPersonalizados() {
+        try {
+            const raw = localStorage.getItem(LS_KEY);
+            const arr = raw ? JSON.parse(raw) : [];
+            return Array.isArray(arr) ? arr : [];
+        } catch (e) {
+            console.warn('No se pudieron leer los puntos personalizados:', e);
+            return [];
+        }
+    }
+
+    function guardarPuntosPersonalizados(arr) {
+        try {
+            localStorage.setItem(LS_KEY, JSON.stringify(arr));
+        } catch (e) {
+            console.warn('No se pudieron guardar los puntos personalizados:', e);
+        }
+    }
+
+    function crearMarcadorPunto(punto) {
+        const marker = L.marker([punto.lat, punto.lon], { icon: pinPersonalizadoIcon });
+        marker.bindPopup(`
+            <div class="popup-title">${escapeHtml(punto.nombre || 'Punto buscado')}</div>
+            <div><b>Red:</b> Personalizado</div>
+            <div><b>Coordenadas:</b> ${punto.lat.toFixed(5)}, ${punto.lon.toFixed(5)}</div>
+            <div class="popup-no">Punto creado desde la búsqueda. Sin datos de pesos ni predicción.</div>
+        `);
+        return marker;
+    }
+
+    function guardarPunto(punto) {
+        const arr = leerPuntosPersonalizados();
+        arr.push(punto);
+        guardarPuntosPersonalizados(arr);
+        const marker = crearMarcadorPunto(punto);
+        chargersCluster.addLayer(marker);
+        chargersData.push({
+            nombre: punto.nombre,
+            red: 'Personalizado',
+            lat: punto.lat,
+            lon: punto.lon,
+            marker: marker,
+            custom: true
+        });
+        return marker;
+    }
+
+    // Normaliza texto: minúsculas y sin acentos
+    function norm(s) {
+        return (s || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    }
+
+    function escapeHtml(s) {
+        return (s === null || s === undefined ? '' : String(s))
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function haversine(lat1, lon1, lat2, lon2) {
+        const R = 6371000;
+        const rad = d => d * Math.PI / 180;
+        const dLat = rad(lat2 - lat1);
+        const dLon = rad(lon2 - lon1);
+        const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLon / 2) ** 2;
+        return 2 * R * Math.asin(Math.sqrt(a));
+    }
+
+    function fmtDist(m) {
+        return m < 1000 ? Math.round(m) + ' m' : (m / 1000).toFixed(1) + ' km';
+    }
+
+    function debounce(fn, ms) {
+        let t;
+        return function (...args) {
+            clearTimeout(t);
+            t = setTimeout(() => fn.apply(this, args), ms);
+        };
+    }
+
+    // Acepta "lat, lon" o "lat lon" y corrige el orden si viene "lon, lat"
+    function parseCoords(q) {
+        const m = q.match(/^\s*(-?\d+(?:\.\d+)?)\s*[,;\s]\s*(-?\d+(?:\.\d+)?)\s*$/);
+        if (!m) return null;
+        let a = parseFloat(m[1]);
+        let b = parseFloat(m[2]);
+        if (Math.abs(a) > 90 && Math.abs(b) <= 90) { const t = a; a = b; b = t; }
+        if (Math.abs(a) > 90 || Math.abs(b) > 180) return null;
+        return { lat: a, lon: b };
+    }
+
+    function buscarPorNombre(q, limit) {
+        limit = limit || 6;
+        const nq = norm(q);
+        if (nq.length < 2) return [];
+        const tokens = nq.split(/\s+/).filter(Boolean);
+        const scored = [];
+        chargersData.forEach(c => {
+            const n = norm(c.nombre);
+            let score = -1;
+            if (n === nq) score = 100;
+            else if (n.startsWith(nq)) score = 80;
+            else if (n.includes(nq)) score = 60;
+            else if (tokens.length && tokens.every(t => n.includes(t))) score = 40;
+            if (score > 0) scored.push({ c: c, score: score });
+        });
+        scored.sort((x, y) => y.score - x.score);
+        return scored.slice(0, limit).map(s => s.c);
+    }
+
+    function pinesCercanos(lat, lon, radio) {
+        return chargersData
+            .map(c => ({
+                nombre: c.nombre,
+                red: c.red,
+                lat: c.lat,
+                lon: c.lon,
+                marker: c.marker,
+                custom: c.custom,
+                dist: haversine(lat, lon, c.lat, c.lon)
+            }))
+            .filter(c => c.dist <= radio)
+            .sort((a, b) => a.dist - b.dist);
+    }
+
+    function initSearch() {
+        let input, btn, suggestions, statusEl, radiusSelect;
+        let searchMarker = null;
+        let highlightLayer = null;
+        let geoCtl = null;
+
+        function setStatus(msg, cls) {
+            if (!statusEl) return;
+            statusEl.textContent = msg || '';
+            statusEl.className = 'map-search__status' +
+                (msg ? ' show' : '') + (cls ? ' ' + cls : '');
+        }
+
+        function ocultarSugerencias() {
+            if (suggestions) {
+                suggestions.innerHTML = '';
+                suggestions.classList.remove('show');
+            }
+        }
+
+        function limpiarResaltado() {
+            if (highlightLayer) { map.removeLayer(highlightLayer); highlightLayer = null; }
+            if (searchMarker) { map.removeLayer(searchMarker); searchMarker = null; }
+        }
+
+        function renderSugerencias(items) {
+            suggestions.innerHTML = '';
+            if (!items.length) {
+                const li = document.createElement('li');
+                li.className = 'map-search__empty';
+                li.textContent = 'Sin sugerencias.';
+                suggestions.appendChild(li);
+                suggestions.classList.add('show');
+                return;
+            }
+            items.forEach(it => {
+                const li = document.createElement('li');
+                li.className = 'map-search__item';
+                const sub = it.sub ? `<span class="map-search__sub">${escapeHtml(it.sub)}</span>` : '';
+                const dist = (typeof it.dist === 'number') ? `<span class="map-search__dist">${fmtDist(it.dist)}</span>` : '';
+                li.innerHTML = `<i class="fa-solid ${it.icon || 'fa-location-dot'}"></i><span>${escapeHtml(it.label)}${sub}</span>${dist}`;
+                li.addEventListener('click', () => {
+                    ocultarSugerencias();
+                    if (it.type === 'address') {
+                        input.value = it.query;
+                        buscarDireccion(it.query);
+                    } else {
+                        input.value = it.label;
+                        ejecutarBusqueda(it.lat, it.lon, it.label, it.type);
+                    }
+                });
+                suggestions.appendChild(li);
+            });
+            suggestions.classList.add('show');
+        }
+
+        function dibujarRadio(lat, lon, radio) {
+            L.circle([lat, lon], {
+                radius: radio,
+                color: '#8C1D40',
+                weight: 1.5,
+                dashArray: '5,6',
+                fillColor: '#8C1D40',
+                fillOpacity: 0.06,
+                interactive: false
+            }).addTo(highlightLayer);
+        }
+
+        function mostrarCercanos(cerca, radio) {
+            suggestions.innerHTML = '';
+            cerca.forEach(c => {
+                const li = document.createElement('li');
+                li.className = 'map-search__item';
+                li.innerHTML = `<i class="fa-solid fa-location-dot"></i>
+                    <span>${escapeHtml(c.nombre)}<span class="map-search__sub">${escapeHtml(c.red)}</span></span>
+                    <span class="map-search__dist">${fmtDist(c.dist)}</span>`;
+                li.addEventListener('click', () => {
+                    chargersCluster.zoomToShowLayer(c.marker, () => c.marker.openPopup());
+                });
+                suggestions.appendChild(li);
+            });
+            suggestions.classList.add('show');
+        }
+
+        function ejecutarBusqueda(lat, lon, etiqueta, origen) {
+            limpiarResaltado();
+            highlightLayer = L.layerGroup().addTo(map);
+            const radio = parseInt(radiusSelect.value, 10) || RADIO_DEFAULT;
+
+            searchMarker = L.marker([lat, lon], { icon: searchPointIcon, zIndexOffset: 1000 })
+                .bindPopup(`<div class="popup-title">${escapeHtml(etiqueta || 'Punto buscado')}</div>
+                    <div><b>Coordenadas:</b> ${lat.toFixed(5)}, ${lon.toFixed(5)}</div>`)
+                .addTo(map);
+
+            if (cdmxBounds.contains(L.latLng(lat, lon))) {
+                map.flyTo([lat, lon], Math.max(map.getZoom(), 15), { duration: 0.6 });
+            } else {
+                map.setView([lat, lon], 15);
+            }
+
+            dibujarRadio(lat, lon, radio);
+
+            const cerca = pinesCercanos(lat, lon, radio);
+
+            if (cerca.length > 0) {
+                cerca.forEach(c => {
+                    L.circle([c.lat, c.lon], {
+                        radius: 25,
+                        color: '#E6007E',
+                        weight: 3,
+                        opacity: 1,
+                        fillColor: '#E6007E',
+                        fillOpacity: 0.25,
+                        interactive: false,
+                        className: 'search-ring'
+                    }).addTo(highlightLayer);
+                });
+                chargersCluster.zoomToShowLayer(cerca[0].marker, () => cerca[0].marker.openPopup());
+                mostrarCercanos(cerca, radio);
+                setStatus(`${cerca.length} pin(es) dentro de ${fmtDist(radio)}.`, 'is-ok');
+            } else {
+                const punto = {
+                    nombre: (etiqueta || `Punto ${lat.toFixed(4)}, ${lon.toFixed(4)}`).slice(0, 120),
+                    red: 'Personalizado',
+                    custom: true,
+                    lat: lat,
+                    lon: lon,
+                    origen: origen || 'desconocido',
+                    fecha: new Date().toISOString()
+                };
+                guardarPunto(punto);
+                setStatus(`Sin pines en ${fmtDist(radio)} — se agregó un punto personalizado.`, 'is-warn');
+            }
+        }
+
+        async function geocodificar(q) {
+            if (geoCtl) geoCtl.abort();
+            geoCtl = new AbortController();
+            const url = 'https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5'
+                + '&countrycodes=mx&accept-language=es'
+                + '&viewbox=' + CDMX_VIEWBOX.join(',') + '&bounded=1'
+                + '&q=' + encodeURIComponent(q);
+            const res = await fetch(url, { signal: geoCtl.signal, headers: { 'Accept': 'application/json' } });
+            if (!res.ok) throw new Error('Nominatim HTTP ' + res.status);
+            return res.json();
+        }
+
+        async function buscarDireccion(q) {
+            setStatus('Buscando dirección…', '');
+            try {
+                const resultados = await geocodificar(q);
+                if (!resultados.length) {
+                    ocultarSugerencias();
+                    setStatus('No se encontró esa dirección.', 'is-warn');
+                    return;
+                }
+                if (resultados.length === 1) {
+                    const r = resultados[0];
+                    ejecutarBusqueda(parseFloat(r.lat), parseFloat(r.lon), r.display_name || q, 'texto');
+                    return;
+                }
+                renderSugerencias(resultados.map(r => ({
+                    type: 'texto',
+                    icon: 'fa-location-dot',
+                    label: r.display_name,
+                    lat: parseFloat(r.lat),
+                    lon: parseFloat(r.lon)
+                })));
+                setStatus(resultados.length + ' resultados.', '');
+            } catch (e) {
+                if (e.name === 'AbortError') return;
+                console.error('Geocodificación:', e);
+                ocultarSugerencias();
+                setStatus('No se pudo consultar el geocodificador (¿sin internet?). Usa coordenadas o nombres de electrolineras.', 'is-error');
+            }
+        }
+
+        function onInput() {
+            const q = input.value.trim();
+            if (!q) { ocultarSugerencias(); setStatus('', ''); return; }
+
+            const coords = parseCoords(q);
+            if (coords) {
+                renderSugerencias([{
+                    type: 'coords',
+                    icon: 'fa-crosshairs',
+                    label: `Ir a ${coords.lat}, ${coords.lon}`,
+                    lat: coords.lat,
+                    lon: coords.lon
+                }]);
+                return;
+            }
+
+            const items = buscarPorNombre(q).map(c => ({
+                type: 'electrolinera',
+                icon: 'fa-charging-station',
+                label: c.nombre,
+                sub: 'Electrolinera · ' + c.red,
+                lat: c.lat,
+                lon: c.lon
+            }));
+            items.push({
+                type: 'address',
+                icon: 'fa-map-location-dot',
+                label: `Buscar dirección: "${q}"`,
+                query: q
+            });
+            renderSugerencias(items);
+        }
+
+        function onSubmit() {
+            const q = input.value.trim();
+            if (!q) return;
+            const coords = parseCoords(q);
+            if (coords) {
+                ejecutarBusqueda(coords.lat, coords.lon, `Coordenadas ${coords.lat}, ${coords.lon}`, 'coords');
+                ocultarSugerencias();
+                return;
+            }
+            const nombres = buscarPorNombre(q, 1);
+            if (nombres.length) {
+                ejecutarBusqueda(nombres[0].lat, nombres[0].lon, nombres[0].nombre, 'electrolinera');
+                ocultarSugerencias();
+                return;
+            }
+            buscarDireccion(q);
+        }
+
+        const control = L.control({ position: 'topleft' });
+        control.onAdd = function () {
+            const cont = L.DomUtil.create('div', 'map-search-container');
+            cont.innerHTML = `
+                <button type="button" class="map-search-toggle-btn" id="map-search-toggle-btn" title="Buscar en el mapa">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <div class="map-search" id="map-search-box">
+                    <div class="map-search__form">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" class="map-search__input" autocomplete="off" spellcheck="false"
+                            placeholder="Dirección, coordenadas o electrolinera…">
+                        <button type="button" class="map-search__btn" title="Buscar">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button type="button" class="map-search__close-btn" title="Cerrar búsqueda">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="map-search__radius">
+                        <label>Radio de cercanía
+                            <select class="map-search__radius-select">
+                                <option value="100">100 m</option>
+                                <option value="300" selected>300 m</option>
+                                <option value="500">500 m</option>
+                                <option value="1000">1 km</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="map-search__status" role="status"></div>
+                    <ul class="map-search__suggestions"></ul>
+                </div>
+            `;
+
+            const toggleBtn = cont.querySelector('.map-search-toggle-btn');
+            const closeBtn = cont.querySelector('.map-search__close-btn');
+            input = cont.querySelector('.map-search__input');
+            btn = cont.querySelector('.map-search__btn');
+            suggestions = cont.querySelector('.map-search__suggestions');
+            statusEl = cont.querySelector('.map-search__status');
+            radiusSelect = cont.querySelector('.map-search__radius-select');
+
+            function toggleSearch(open) {
+                const isOpen = (typeof open === 'boolean') ? open : !cont.classList.contains('is-open');
+                cont.classList.toggle('is-open', isOpen);
+                if (isOpen) {
+                    setTimeout(() => input.focus(), 80);
+                } else {
+                    ocultarSugerencias();
+                }
+            }
+
+            L.DomEvent.on(toggleBtn, 'click', e => {
+                L.DomEvent.stop(e);
+                toggleSearch(true);
+            });
+
+            L.DomEvent.on(closeBtn, 'click', e => {
+                L.DomEvent.stop(e);
+                toggleSearch(false);
+            });
+
+            L.DomEvent.disableClickPropagation(cont);
+            L.DomEvent.disableScrollPropagation(cont);
+            L.DomEvent.on(input, 'keydown', e => {
+                if (e.key === 'Enter') { e.preventDefault(); onSubmit(); }
+                else if (e.key === 'Escape') { ocultarSugerencias(); toggleSearch(false); }
+            });
+            L.DomEvent.on(btn, 'click', e => { L.DomEvent.stop(e); onSubmit(); });
+            L.DomEvent.on(input, 'input', debounce(onInput, 250));
+            return cont;
+        };
+        control.addTo(map);
     }
 
     // ---------- Gráficas (Chart.js) ----------
@@ -326,7 +856,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 labels: ['Tesla', 'Evergo', 'PlugShare'],
                 datasets: [{
                     data: [tesla, evergo, plugshare],
-                    backgroundColor: ['#e82127', '#00a859', '#f59e0b']
+                    backgroundColor: ['#E5484D', '#2FBF71', '#D4A537']
                 }]
             },
             options: {
@@ -354,9 +884,9 @@ document.addEventListener('DOMContentLoaded', () => {
             data: {
                 labels: labels,
                 datasets: [
-                    { label: 'Poder Adquisitivo', data: riqueza, backgroundColor: '#007bff' },
-                    { label: 'Destinos', data: destinos, backgroundColor: '#28a745' },
-                    { label: 'Competencia', data: competencia, backgroundColor: '#dc3545' }
+                    { label: 'Poder Adquisitivo', data: riqueza, backgroundColor: '#8C1D40' },
+                    { label: 'Destinos', data: destinos, backgroundColor: '#2FBF71' },
+                    { label: 'Competencia', data: competencia, backgroundColor: '#E5484D' }
                 ]
             },
             options: {
@@ -407,6 +937,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentLayer) {
             map.removeLayer(currentLayer);
         }
+        if (window.ZonePanel) window.ZonePanel.close();
         const id = ++reqId;
         fetch(filename)
             .then(response => {
@@ -466,34 +997,45 @@ document.addEventListener('DOMContentLoaded', () => {
     // payback null = la ganancia operativa no es positiva
     const años = v => (v === null || v === undefined) ? 'No recupera' : v.toFixed(1) + ' años';
 
-    let placingSimulation = false;
     let simulationMarker = null;
     let simulationZone = null;
     let simulationChargers = 1;
+    let simulationAño = null;
+    let punteroManual = null;
+    let ubicandoEnMapa = false;
 
-    function setPlacementMode(active) {
-        placingSimulation = active;
-        if (simButton) {
-            simButton.classList.toggle('active', active);
-            simButton.setAttribute('aria-pressed', String(active));
-        }
-        map.getContainer().style.cursor = active ? 'crosshair' : '';
-        if (aviso) aviso.textContent = active ? 'Haz clic dentro de una zona para probar la ubicación.' : '';
+    function simulationInputs() {
+        const lat = parseFloat(((estLat && estLat.value) || '').replace(',', '.'));
+        const lon = parseFloat(((estLon && estLon.value) || '').replace(',', '.'));
+        const n = Number.parseInt(estConectores && estConectores.value, 10);
+        return { lat, lon, n };
     }
 
-    function simulationPopup() {
-        const esc = document.getElementById('sel-escenario').value;
-        const estacion = ElectraModelo.estacion(
-            simulationZone, predAño, esc, simulationChargers, simulationChargers
-        );
-        const restante = ElectraModelo.zonaPrediccion(simulationZone, predAño, esc, {
-            extraComp: simulationChargers * ElectraModelo.PESO.Propia
+    function formularioVisible() {
+        const panel = document.getElementById('station-side-panel');
+        return panel && panel.classList.contains('open') && panel.dataset.mode === 'form';
+    }
+
+    // Economía de la estación del usuario y oportunidad restante en la zona
+    function calcularEstacion(zone, año, esc, n) {
+        const estacion = ElectraModelo.estacion(zone, año, esc, n, n);
+        const restante = ElectraModelo.zonaPrediccion(zone, año, esc, {
+            extraComp: n * ElectraModelo.PESO.Propia
         });
+        return { estacion, restante };
+    }
+
+    function simulationPopupHtml() {
+        if (!simulationZone || !simulationAño) return '';
+        const esc = document.getElementById('sel-escenario').value;
+        const { estacion, restante } = calcularEstacion(simulationZone, simulationAño, esc, simulationChargers);
+        const nombre = (estNombre && estNombre.value.trim()) || 'Nueva electrolinera';
+        const red = (estRed && estRed.value.trim()) || 'Sin red';
         const prob = (estacion.prob_rentable * 100).toFixed(0) + ' %';
         const probRestante = (restante.prob_rentable * 100).toFixed(0) + ' %';
         return `
-            <div class="popup-title">Prueba de ubicación — ${simulationZone.alcaldia} (${predAño})</div>
-            <div><b>Tu estación:</b> ${simulationChargers} cargador(es)</div>
+            <div class="popup-title">${escapeHtml(nombre)} — ${escapeHtml(simulationZone.alcaldia)} (${simulationAño})</div>
+            <div><b>Red:</b> ${escapeHtml(red)} · <b>Conectores:</b> ${simulationChargers}</div>
             <div><b>Ganancia anual P10–P90:</b> ${mxn(estacion.ganancia_min)} a ${mxn(estacion.ganancia_max)}</div>
             <div><b>Ganancia neta mediana:</b> ${mxn(estacion.neta_p50)}</div>
             <div><b>Probabilidad de rentabilidad:</b> ${prob}</div>
@@ -504,75 +1046,209 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
+    function simulationResultHtml() {
+        if (!simulationZone || !simulationAño) return '';
+        const esc = document.getElementById('sel-escenario').value;
+        const { estacion, restante } = calcularEstacion(simulationZone, simulationAño, esc, simulationChargers);
+        const fmtPct = p => (p * 100).toFixed(0) + ' %';
+        const nombre = (estNombre && estNombre.value.trim()) || 'Nueva electrolinera';
+        return `
+            <h4>Resultado de tu electrolinera</h4>
+            <p class="station-result__sub">${escapeHtml(nombre)} · AGEB ${escapeHtml(simulationZone.cve)} · ${simulationAño} · adopción ${esc}</p>
+            <div class="station-result__kpis">
+                <div class="station-result__kpi"><span>Ganancia P50</span><b>${mxn(estacion.ganancia_p50)}</b></div>
+                <div class="station-result__kpi"><span>Rango P10–P90</span><b>${mxn(estacion.ganancia_min)} – ${mxn(estacion.ganancia_max)}</b></div>
+                <div class="station-result__kpi"><span>Neta mediana</span><b>${mxn(estacion.neta_p50)}</b></div>
+                <div class="station-result__kpi"><span>Prob. rentable</span><b>${fmtPct(estacion.prob_rentable)}</b></div>
+                <div class="station-result__kpi"><span>Payback (P90)</span><b>${años(estacion.payback_max)}</b></div>
+                <div class="station-result__kpi"><span>Cargadores recomendados</span><b>${restante.nBase}</b></div>
+            </div>
+            <p class="station-result__note">Oportunidad restante en la zona: ${restante.nBase} cargador(es), prob. ${fmtPct(restante.prob_rentable)}. Simulación local; depende de los supuestos del modelo.</p>
+        `;
+    }
+
     function refreshSimulationPopup() {
-        if (!simulationMarker || !simulationZone || !predAño) return;
-        simulationMarker.setPopupContent(simulationPopup());
+        if (!simulationMarker || !simulationZone) return;
+        if (predAño) simulationAño = predAño;
+        simulationMarker.setPopupContent(simulationPopupHtml());
+        if (stationResult) {
+            stationResult.innerHTML = simulationResultHtml();
+            stationResult.hidden = false;
+        }
     }
 
     function clearSimulation() {
-        setPlacementMode(false);
+        quitarPuntero();
         if (simulationMarker) map.removeLayer(simulationMarker);
         simulationMarker = null;
         simulationZone = null;
-        if (clearSimButton) clearSimButton.disabled = true;
+        simulationAño = null;
+        if (stationResult) { stationResult.innerHTML = ''; stationResult.hidden = true; }
+        if (btnQuitarPrueba) btnQuitarPrueba.hidden = true;
     }
 
-    async function placeSimulation(event) {
-        if (!placingSimulation) return;
-        setPlacementMode(false);
-        simulationChargers = Number.parseInt(simChargersInput.value, 10);
-        if (!Number.isInteger(simulationChargers) || simulationChargers < 1 || simulationChargers > 20) {
-            if (aviso) aviso.textContent = 'El número de cargadores debe estar entre 1 y 20.';
+    async function predecirNuevaEstacion() {
+        const { lat, lon, n } = simulationInputs();
+        if (!isFinite(lat) || !isFinite(lon)) {
+            aviso.textContent = 'Captura latitud y longitud válidas (o haz clic en el mapa).';
+            return;
+        }
+        if (!Number.isInteger(n) || n < 1 || n > 50) {
+            aviso.textContent = 'El número de conectores debe estar entre 1 y 50.';
             return;
         }
 
+        let año = predAño;
+        let sinAño = false;
+        if (!año) { año = 2030; sinAño = true; }
+
         try {
             const { localizar } = await getModelZones();
-            simulationZone = localizar(event.latlng.lat, event.latlng.lng);
-            if (!simulationZone) {
-                if (aviso) aviso.textContent = 'El punto está fuera de las zonas disponibles.';
+            const zone = localizar(lat, lon);
+            if (!zone) {
+                aviso.textContent = 'El punto está fuera de las zonas disponibles de la CDMX.';
                 return;
             }
 
+            simulationZone = zone;
+            simulationChargers = n;
+            simulationAño = año;
+            quitarPuntero();
             if (simulationMarker) map.removeLayer(simulationMarker);
-            simulationMarker = L.circleMarker(event.latlng, {
-                radius: 8, color: '#075b48', weight: 2, fillColor: '#36a879', fillOpacity: 0.9
-            }).addTo(map).bindPopup(simulationPopup()).openPopup();
-            if (clearSimButton) clearSimButton.disabled = false;
-            if (aviso) aviso.textContent = 'Simulación local: los resultados dependen de los supuestos del modelo.';
+            simulationMarker = L.marker([lat, lon], { icon: pinPersonalizadoIcon, zIndexOffset: 1000 })
+                .addTo(map)
+                .bindPopup(simulationPopupHtml())
+                .openPopup();
+            map.setView([lat, lon], Math.max(map.getZoom(), 15));
+            refreshSimulationPopup();
+            if (btnQuitarPrueba) btnQuitarPrueba.hidden = false;
+            aviso.textContent = sinAño
+                ? 'No había año activo: se usó 2030.'
+                : 'Simulación local: los resultados dependen de los supuestos del modelo.';
         } catch (error) {
-            console.error('Error al preparar la simulación:', error);
-            if (aviso) aviso.textContent = 'No se pudo preparar la simulación. Revisa los datos del modelo.';
+            console.error('Error al preparar la predicción:', error);
+            aviso.textContent = 'No se pudo preparar la predicción. Revisa los datos del modelo.';
         }
     }
 
-    map.on('click', placeSimulation);
+    if (btnPredecir) btnPredecir.addEventListener('click', predecirNuevaEstacion);
+    if (btnQuitarPrueba) btnQuitarPrueba.addEventListener('click', clearSimulation);
+
+    // Puntero manual: botón + clic en el mapa (además de escribir lat/lon)
+    function setUbicando(active) {
+        ubicandoEnMapa = active;
+        if (btnUbicarMapa) {
+            btnUbicarMapa.classList.toggle('active', active);
+            btnUbicarMapa.setAttribute('aria-pressed', String(active));
+        }
+        map.getContainer().style.cursor = active ? 'crosshair' : '';
+        if (active) aviso.textContent = 'Haz clic en el mapa para colocar el puntero de tu electrolinera.';
+    }
+
+    function colocarPuntero(lat, lon) {
+        if (estLat) estLat.value = lat.toFixed(6);
+        if (estLon) estLon.value = lon.toFixed(6);
+        if (punteroManual) map.removeLayer(punteroManual);
+        punteroManual = L.marker([lat, lon], { icon: searchPointIcon, zIndexOffset: 900 })
+            .addTo(map)
+            .bindPopup(`<div class="popup-title">Ubicación seleccionada</div>
+                <div><b>Coordenadas:</b> ${lat.toFixed(6)}, ${lon.toFixed(6)}</div>`)
+            .openPopup();
+    }
+
+    function quitarPuntero() {
+        if (punteroManual) { map.removeLayer(punteroManual); punteroManual = null; }
+        setUbicando(false);
+    }
+
+    if (btnUbicarMapa) btnUbicarMapa.addEventListener('click', () => setUbicando(!ubicandoEnMapa));
+
+    // Con el formulario abierto, un clic en el mapa llena lat/lon y coloca el puntero
+    map.on('click', (e) => {
+        if (!formularioVisible()) {
+            if (ubicandoEnMapa) setUbicando(false);
+            return;
+        }
+        colocarPuntero(e.latlng.lat, e.latlng.lng);
+        if (ubicandoEnMapa) setUbicando(false);
+        aviso.textContent = 'Coordenadas capturadas del mapa. Presiona "Predecir".';
+    });
 
     function popupPrediccion(p, año) {
         const prob = (p.prob_rentable !== null && p.prob_rentable !== undefined)
             ? (p.prob_rentable * 100).toFixed(0) + ' %' : 'N/D';
+        const probPct = (p.prob_rentable !== null && p.prob_rentable !== undefined)
+            ? Math.max(0, Math.min(100, p.prob_rentable * 100)) : 0;
         const obra = p.viable_max
             ? `<div class="popup-sec">Cargadores a construir</div><div>${p.n_cargadores_max} (nuevos netos: ${p.nuevos_max ?? 'N/D'})</div>`
             : `<div class="popup-no">Con el caso base no conviene construir aquí.</div>`;
+
+        // Barra de rango P10–P90 de la ganancia (con marca en 0 si aplica)
+        let rango = '';
+        if (p.ganancia_min !== null && p.ganancia_max !== null &&
+            p.ganancia_min !== undefined && p.ganancia_max !== undefined) {
+            const lo = Math.min(0, p.ganancia_min);
+            const hi = Math.max(0, p.ganancia_max);
+            const span = (hi - lo) || 1;
+            const left = ((p.ganancia_min - lo) / span) * 100;
+            const width = Math.max(((p.ganancia_max - p.ganancia_min) / span) * 100, 0.5);
+            const zero = ((0 - lo) / span) * 100;
+            rango = `
+                <div class="range-bar" title="Rango P10–P90 de la ganancia">
+                    <span class="range-bar__fill" style="left:${left}%;width:${width}%"></span>
+                    <span class="range-bar__zero" style="left:${zero}%"></span>
+                </div>
+                <div class="range-legend"><span>${mxn(p.ganancia_min)}</span><span>P50 ${mxn(p.ganancia_p50)}</span><span>${mxn(p.ganancia_max)}</span></div>`;
+        }
+
+        const co2 = (p.co2_evitado !== null && p.co2_evitado !== undefined)
+            ? (p.co2_evitado / 1000).toFixed(1) + ' t/año' : 'N/D';
+
         return `
             <div class="popup-title">${p.alcaldia} — ${año} (adopción ${p.escenario ?? ''})</div>
             <div><b>Probabilidad de ser rentable:</b> ${prob}</div>
+            <div class="prob-bar"><span style="width:${probPct}%"></span></div>
             <div><b>Ganancia mediana:</b> ${mxn(p.ganancia_p50)}</div>
-            <div><b>Ganancia P10 a P90:</b> ${mxn(p.ganancia_min)} a ${mxn(p.ganancia_max)}</div>
+            ${rango}
+            <div class="popup-kpis">
+                <span class="popup-chip"><b>Inversión:</b> ${mxn(p.capex_total)}</span>
+                <span class="popup-chip"><b>CO₂:</b> ${co2}</span>
+                <span class="popup-chip"><b>Empleos:</b> ${p.empleo_est ?? 'N/D'}</span>
+            </div>
             <div><b>Percentil de viabilidad:</b> ${(p.score_viabilidad * 100).toFixed(0)}</div>
             ${obra}
             <div class="popup-sec">Payback (capex base)</div>
             <div>Optimista: ${años(p.payback_max)} · Pesimista: ${años(p.payback_min)}</div>
-            <div class="popup-sec">Sensibilidad al capex (optimista)</div>
-            <div>×0.5: ${años(p.payback_max_capex50)} · ×2: ${años(p.payback_max_capex200)}</div>
-            <div class="popup-sec">Ganancia neta anualizada</div>
-            <div>Mediana: ${mxn(p.neta_p50)}</div>
-            <div>P10: ${mxn(p.neta_min)} · P90: ${mxn(p.neta_max)}</div>
+            <div class="popup-hint"><i class="fa-solid fa-chart-simple"></i> Clic en la zona para ver el análisis</div>
         `;
+    }
+
+    
+    // ---------- Sincronización con la Línea de Tiempo ----------
+    const sliderTiempo = document.getElementById('slider-tiempo');
+    const labelTiempo = document.getElementById('linea_tiempo_label');
+
+    function sincronizarTimeline(año) {
+        if (sliderTiempo && parseInt(sliderTiempo.value) !== año) {
+            sliderTiempo.value = año;
+        }
+        if (labelTiempo) {
+            labelTiempo.textContent = año;
+        }
     }
 
     async function loadPrediction(año) {
         predAño = año;
+        sincronizarTimeline(año);
+        if (año === 2030) setActive('btn-2030');
+        else if (año === 2035) setActive('btn-2035');
+        else if (año === 2026) setActive('btn-original');
+        else {
+            btnIds.forEach(b => {
+                const el = document.getElementById(b);
+                if (el) el.classList.remove('active');
+            });
+        }
         const id = ++reqId;
         aviso.textContent = '';
         opciones.classList.remove('off');
@@ -598,6 +1274,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const porZona = {};
             PRED.filter(r => r['año'] === año).forEach(r => { porZona[r.zona] = r; });
 
+            // Geo para las comparaciones de equidad en el panel de zona
+            if (window.ZonePanel) window.ZonePanel.setGeo(geo.features);
+
             geo.features.forEach(f => {
                 const p = porZona[f.properties.CVEGEO];
                 if (metrica === 'score') {
@@ -618,16 +1297,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const p = porZona[f.properties.CVEGEO];
                     if (!p) return;
                     layer.on('click', event => {
-                        if (placingSimulation) {
-                            L.DomEvent.stopPropagation(event.originalEvent);
-                            placeSimulation(event);
-                            return;
-                        }
+                        if (formularioVisible()) return;   // el clic solo llena lat/lon (map.on('click'))
                         L.popup().setLatLng(event.latlng).setContent(popupPrediccion(p, año)).openOn(map);
+                        const rows = PRED.filter(r => r.zona === f.properties.CVEGEO);
+                        if (window.StationPanel) window.StationPanel.open('zone');
+                        if (window.ZonePanel) window.ZonePanel.open({ rows, year: año, props: f.properties });
                     });
                 }
             }).addTo(map);
             refreshSimulationPopup();
+
+            // Gráficas temáticas agregadas (CO₂ y equidad de cobertura)
+            if (window.ELECTRA_AGG) window.ELECTRA_AGG.render(PRED);
         } catch (e) {
             console.error('Error al cargar la predicción:', e);
             aviso.textContent = 'Error al cargar la predicción. Revisa la consola.';
@@ -641,27 +1322,53 @@ document.addEventListener('DOMContentLoaded', () => {
         opciones.classList.add('off');
         clearSimulation();
         renderLegend('pct');
+        if (window.ZonePanel) window.ZonePanel.close();
     }
 
     // ---------- Arranque ----------
     loadMapData('./viabilidad_cdmx_v2.geojson');
-    loadChargersData();
+    loadChargersData().then(applyPinFromUrl);
+    initSearch();
+
+    // Gráficas temáticas con el escenario por defecto (aunque no se abra la predicción)
+    getPred('media').then(PRED => {
+        if (PRED && window.ELECTRA_AGG) window.ELECTRA_AGG.render(PRED);
+    });
 
     // ---------- Botones (solo en index.html) ----------
     if (document.getElementById('btn-original')) {
         document.getElementById('btn-original').addEventListener('click', function () {
             setActive('btn-original');
+            sincronizarTimeline(2026);
             modoOriginal();
             isSinDestinosMap = false;
             loadMapData('./viabilidad_cdmx_v2.geojson');
         });
 
-        document.getElementById('btn-no-destinos').addEventListener('click', function () {
-            setActive('btn-no-destinos');
-            modoOriginal();
-            isSinDestinosMap = true;
-            loadMapData('./viabilidad_cdmx_v2_no_destinos.geojson');
-        });
+        if (document.getElementById('btn-no-destinos')) {
+            document.getElementById('btn-no-destinos').addEventListener('click', function () {
+                setActive('btn-no-destinos');
+                sincronizarTimeline(2026);
+                modoOriginal();
+                isSinDestinosMap = true;
+                loadMapData('./viabilidad_cdmx_v2_no_destinos.geojson');
+            });
+        }
+
+        // Listener de la Línea de Tiempo (slider 2026 a 2035)
+        if (sliderTiempo) {
+            const containerTiempo = document.querySelector('.linea_tiempo');
+            if (containerTiempo && window.L) {
+                L.DomEvent.disableClickPropagation(containerTiempo);
+                L.DomEvent.disableScrollPropagation(containerTiempo);
+            }
+
+            sliderTiempo.addEventListener('input', function (e) {
+                const año = parseInt(e.target.value);
+                if (labelTiempo) labelTiempo.textContent = año;
+                loadPrediction(año);
+            });
+        }
 
         document.getElementById('btn-2030').addEventListener('click', function () {
             setActive('btn-2030');
@@ -677,17 +1384,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ['sel-escenario', 'sel-metrica'].forEach(id =>
             document.getElementById(id).addEventListener('change', () => {
                 if (predAño) loadPrediction(predAño);
+                else refreshSimulationPopup();
             }));
-    }
-
-    if (simButton) {
-        simButton.disabled = true;
-        simButton.addEventListener('click', () => {
-            if (!predAño) return;
-            setPlacementMode(!placingSimulation);
-        });
-        clearSimButton.addEventListener('click', clearSimulation);
-        document.getElementById('btn-2030').addEventListener('click', () => { simButton.disabled = false; });
-        document.getElementById('btn-2035').addEventListener('click', () => { simButton.disabled = false; });
     }
 });

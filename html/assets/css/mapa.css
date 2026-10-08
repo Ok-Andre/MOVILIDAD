@@ -43,6 +43,44 @@ h1 {
     margin-bottom: 25px;
 }
 
+/* Contenedor del mapa + panel lateral derecho */
+.map-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Botón "Añadir Electrolinera" */
+.btn-demo-add {
+    position: absolute;
+    top: 12px;
+    right: 58px;
+    z-index: 1002;
+    background: #8C1D40;
+    color: #ffffff;
+    padding: 9px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    transition: background 0.2s, opacity 0.25s;
+}
+
+.btn-demo-add:hover {
+    background: #6f1530;
+}
+
+.map-wrapper.panel-open .btn-demo-add {
+    opacity: 0;
+    pointer-events: none;
+}
+
 .leaflet-popup-content {
     font-size: 14px;
     line-height: 1.5;
@@ -164,8 +202,679 @@ h1 {
     font-weight: 600;
 }
 
+/* ---------- Barra de búsqueda del mapa (plegable) ---------- */
+.map-search-container {
+    position: relative;
+    z-index: 1100;
+}
+
+/* Botón flotante con lupa */
+.map-search-toggle-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: #ffffff;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    color: #8C1D40;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.map-search-toggle-btn:hover {
+    background: #8C1D40;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+/* Panel de búsqueda (oculto por defecto) */
+.map-search {
+    display: none;
+    position: relative;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 350px;
+    max-width: calc(100vw - 30px);
+    color: #333;
+    animation: searchFadeIn 0.2s ease-out;
+}
+
+.map-search-container.is-open .map-search-toggle-btn {
+    display: none;
+}
+
+.map-search-container.is-open .map-search {
+    display: block;
+}
+
+.map-search__close-btn {
+    border: none;
+    background: transparent;
+    color: #888;
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    transition: color 0.2s, background 0.2s;
+    margin-left: 2px;
+}
+
+.map-search__close-btn:hover {
+    background: #f5e8ee;
+    color: #8C1D40;
+}
+
+@keyframes searchFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.map-search__form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+}
+
+.map-search__form i {
+    color: #8C1D40;
+    font-size: 15px;
+    min-width: 16px;
+    text-align: center;
+}
+
+.map-search__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    padding: 6px 2px;
+    background: transparent;
+    color: #333;
+    min-width: 0;
+}
+
+.map-search__btn {
+    border: none;
+    background: #8C1D40;
+    color: #fff;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.map-search__btn:hover {
+    background: #6f1530;
+}
+
+.map-search__radius {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 0 10px 6px;
+    font-size: 11px;
+    color: #777;
+}
+
+.map-search__radius select {
+    font-size: 11px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1px 4px;
+    color: #555;
+    background: #fff;
+}
+
+.map-search__status {
+    font-size: 11.5px;
+    line-height: 1.35;
+    padding: 0 10px 8px;
+    color: #555;
+    display: none;
+}
+
+.map-search__status.show {
+    display: block;
+}
+
+.map-search__status.is-warn {
+    color: #b45309;
+}
+
+.map-search__status.is-ok {
+    color: #217a45;
+}
+
+.map-search__status.is-error {
+    color: #c0392b;
+}
+
+.map-search__suggestions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    border-top: 1px solid #eee;
+    display: none;
+}
+
+.map-search__suggestions.show {
+    display: block;
+}
+
+.map-search__item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #f4f4f4;
+}
+
+.map-search__item:hover,
+.map-search__item.is-active {
+    background: #f5eff2;
+}
+
+.map-search__item i {
+    color: #8C1D40;
+    font-size: 12px;
+}
+
+.map-search__item .map-search__dist {
+    margin-left: auto;
+    color: #999;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.map-search__item .map-search__sub {
+    display: block;
+    color: #999;
+    font-size: 11px;
+}
+
+.map-search__empty {
+    padding: 10px 12px;
+    font-size: 12px;
+    color: #999;
+}
+
+/* Punto buscado (marcador temporal) */
+.search-point-icon {
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+}
+
+/* Anillo de resaltado sobre pines cercanos */
+.leaflet-interactive.search-ring {
+    animation: searchPulse 1.4s ease-out infinite;
+}
+
+@keyframes searchPulse {
+    0% { stroke-opacity: 1; }
+    70% { stroke-opacity: 0.15; }
+    100% { stroke-opacity: 1; }
+}
+
 @media (max-width: 768px) {
     .charts-row {
         grid-template-columns: 1fr;
+    }
+
+    .map-search {
+        width: calc(100vw - 24px);
+    }
+}
+
+
+/* ==========================================================================
+   LÍNEA DE TIEMPO - CONTROL DE AÑOS (2026 - 2035)
+   ========================================================================== */
+.linea_tiempo {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    z-index: 1000;
+    width: 250px;
+    background: rgba(26, 26, 38, 0.90);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 10px 16px 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.linea_tiempo:hover {
+    background: rgba(26, 26, 38, 0.96);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+}
+
+.linea_tiempo_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.linea_tiempo_tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: #9ca3af;
+    text-transform: uppercase;
+}
+
+.linea_tiempo_año {
+    font-size: 15px;
+    font-weight: 800;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.12);
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.linea_tiempo_track {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Custom Range Slider */
+.linea_tiempo input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 14px;
+    background: #b0b3b8;
+    border-radius: 8px;
+    outline: none;
+    margin: 4px 0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.linea_tiempo input[type=range]:hover {
+    background: #c4c7cc;
+}
+
+/* Chrome / Safari / Edge Thumb */
+.linea_tiempo input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #007bff;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.6);
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.linea_tiempo input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    background: #0069d9;
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.85);
+}
+
+/* Firefox Thumb */
+.linea_tiempo input[type=range]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #007bff;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.6);
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.linea_tiempo_ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #9ca3af;
+    font-weight: 600;
+    padding: 0 2px;
+}
+
+/* ==========================================================================
+   PANEL LATERAL DERECHO: formulario / gráficas
+   ========================================================================== */
+:root {
+    --station-panel-w: 380px;
+}
+
+.station-side-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1001;
+    width: var(--station-panel-w);
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: rgba(28, 23, 38, 0.97);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-left: 2px solid #8C1D40;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.4);
+    color: #f4f4f9;
+    transform: translateX(calc(100% + 24px));
+    transition: transform 0.35s ease;
+    pointer-events: none;
+}
+
+.station-side-panel.open {
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.station-panel__header {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 18px 18px 12px;
+    border-bottom: 1px solid #443b56;
+}
+
+.station-panel__header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.station-panel__header h3 i {
+    color: #E6007E;
+}
+
+.station-panel__close {
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: #443b56;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.station-panel__close:hover {
+    background: #5a4e73;
+}
+
+.station-panel__section {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.station-panel__toggle {
+    flex: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border: none;
+    border-bottom: 1px solid #3a3050;
+    background: #2D2040;
+    color: #f2edf7;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+}
+
+.station-panel__toggle:hover {
+    background: #372a4e;
+}
+
+.station-panel__toggle .arrow {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+.station-panel__section.collapsed .station-panel__toggle .arrow {
+    transform: rotate(-90deg);
+}
+
+.station-panel__section.collapsed #form-nueva-estacion {
+    display: none;
+}
+
+#form-nueva-estacion {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 14px 18px 20px;
+}
+
+/* Modos del panel */
+.station-side-panel[data-mode="form"] .station-panel__section--zone {
+    display: none;
+}
+
+.station-side-panel[data-mode="zone"] .station-panel__section--form {
+    display: none;
+}
+
+/* Panel de zona (antes bottom sheet) embebido en el sidebar */
+.station-side-panel #zone-panel {
+    position: static;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    transform: none;
+    max-height: none;
+    width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: #ffffff;
+    color: #2D2040;
+    pointer-events: auto;
+    display: none;
+}
+
+.station-side-panel #zone-panel.open {
+    display: flex;
+}
+
+.station-side-panel #zone-panel .zone-panel__handle,
+.station-side-panel #zone-panel .zone-panel__close {
+    display: none;
+}
+
+/* Controles de Leaflet desplazados cuando el panel está abierto */
+.map-wrapper .leaflet-top.leaflet-right,
+.map-wrapper .leaflet-bottom.leaflet-right {
+    transition: right 0.35s ease;
+}
+
+.map-wrapper.panel-open .leaflet-top.leaflet-right,
+.map-wrapper.panel-open .leaflet-bottom.leaflet-right {
+    right: var(--station-panel-w);
+}
+
+/* Acciones y resultado del formulario "Nueva Electrolinera" */
+.station-form__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.station-form__predict {
+    margin: 0;
+    width: 100%;
+    padding: 12px;
+    justify-content: center;
+    background: linear-gradient(135deg, #2ca25f, #1b783e);
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(44, 162, 95, 0.4);
+}
+
+.station-form__predict:hover {
+    background: linear-gradient(135deg, #238650, #14622f);
+}
+
+.station-form__map {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #8C1D40;
+    border-radius: 8px;
+    background: rgba(140, 29, 64, 0.18);
+    color: #f2d9e4;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.station-form__map:hover {
+    background: rgba(140, 29, 64, 0.35);
+    color: #fff;
+}
+
+.station-form__map.active {
+    background: #8C1D40;
+    color: #fff;
+    box-shadow: 0 0 0 2px rgba(230, 0, 126, 0.35);
+}
+
+.station-form__clear {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #5a4e73;
+    border-radius: 8px;
+    background: transparent;
+    color: #cfc6da;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.station-form__clear:hover {
+    background: #443b56;
+    color: #fff;
+}
+
+.station-form__clear[hidden] {
+    display: none;
+}
+
+.station-result {
+    flex: none;
+    margin: 0 18px 22px;
+    padding: 14px;
+    border: 1px solid #3a3050;
+    border-radius: 10px;
+    background: #211833;
+}
+
+.station-result[hidden] {
+    display: none;
+}
+
+.station-result h4 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    color: #fff;
+}
+
+.station-result__sub {
+    margin: 0 0 10px;
+    font-size: 11px;
+    color: #A99BB8;
+}
+
+.station-result__kpis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.station-result__kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #2D2040;
+}
+
+.station-result__kpi span {
+    font-size: 10.5px;
+    color: #A99BB8;
+}
+
+.station-result__kpi b {
+    font-size: 13px;
+    color: #fff;
+}
+
+.station-result__note {
+    margin: 10px 0 0;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #9a8faa;
+}
+
+@media (max-width: 900px) {
+    .station-side-panel {
+        width: min(90vw, var(--station-panel-w));
+    }
+
+    .map-wrapper.panel-open .leaflet-top.leaflet-right,
+    .map-wrapper.panel-open .leaflet-bottom.leaflet-right {
+        right: min(90vw, var(--station-panel-w));
     }
 }

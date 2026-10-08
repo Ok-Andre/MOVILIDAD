@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
 
-BASE = Path(r"/Users/andre/Documents/ELECTROMOV/Electrolineras")
+# Raíz del proyecto = carpeta que contiene modelo/, html/, clean/, datasets/
+BASE = Path(__file__).resolve().parents[1]
 ZONES_GEOJSON = BASE / "html" / "viabilidad_cdmx_v2.geojson"
 CENSUS_CSV    = BASE / "clean" / "RESAGEBURB_09CSV20.csv"
 CHARGERS_JSON = BASE / "datasets" / "all_chargers_geo.json"
@@ -23,7 +24,7 @@ METRICS_JSON = OUT / "metricas.json"
 # ---- Switches ----
 USE_RF = True            # False => solo regresión lineal (modo "sin tiempo")
 TRAIN_YEARS = list(range(2025, 2036))
-PRED_YEARS = [2030, 2035]
+PRED_YEARS = list(range(2026, 2036))
 SEED = 42
 
 # ---- Accesibilidad por pendiente (SUPUESTO; calibrar con datos viales) ----
@@ -67,6 +68,30 @@ PESO_MARCA = {"Tesla": 1.5, "Evergo": 1.0, "PlugShare": 0.7}  # peso competitivo
 
 # ---- Capacidad: cuántos cargadores caben en la demanda de una AGEB ----
 KW_CARGADOR = 50          # kW de un cargador DC (p. ej. los 3 de 50 kW de Evergo en Metrópoli Patriotismo)
+
+# ---- Indicadores de sustentabilidad y desarrollo económico ----
+# --- CO2 evitado (con fuentes) ---
+# Factor de emisión de la red (SEN) 2024: SEMARNAT, aviso del 28-feb-2025
+# (usar el factor 2024 en el reporte COA 2026 mientras se publica el de 2025).
+FACTOR_EMISION_SEN = 0.444            # kg CO2e/kWh
+# CO2 por litro de gasolina: INECC / Ecovehículos = 2,331.65 g/L.
+CO2_POR_LITRO_GASOLINA = 2.33         # kg CO2/L
+# Rendimiento de autos ligeros nuevos a gasolina: promedio 2011 (ICCT) y meta
+# NOM-163 para 2016. Equivale a ~178-160 g CO2/km, consistente con el 180 g/km
+# del ICCT/INE (2.33 / 13.1 = 0.178 kg/km).
+RENDIMIENTO_GASOLINA_KM_L = (13.1, 14.6)   # km/L
+# Consumo de un EV: LEDS LAC (2017), movilidad eléctrica en México.
+RENDIMIENTO_EV_KM_KWH = (5.4, 6.0)    # km/kWh
+# CO2 NETO evitado por kWh servido = (gasolina kg/km - red kg/km) x km/kWh.
+# Con los puntos medios (13.85 km/L y 5.7 km/kWh): (0.1682 - 0.0779) x 5.7
+# = ~0.515 kg/kWh. El rango completo va de ~0.42 a ~0.62 kg/kWh.
+CO2_KG_POR_KWH_EVITADO = round(
+    (CO2_POR_LITRO_GASOLINA / (sum(RENDIMIENTO_GASOLINA_KM_L) / 2)
+     - FACTOR_EMISION_SEN / (sum(RENDIMIENTO_EV_KM_KWH) / 2))
+    * (sum(RENDIMIENTO_EV_KM_KWH) / 2), 3)
+# SUPUESTO: empleos directos estimados por cargador instalado (operación y
+# mantenimiento). Reemplazar con datos de algún operador o cotización real.
+EMPLEOS_POR_CARGADOR = 0.5
 # Utilización con la que se DIMENSIONA un sitio. Ojo: el punto de equilibrio es
 # OPEX_FIJO / (margen * KW_CARGADOR * 8760) (≈4.6% en el caso min, ≈2.1% en el max).
 # Si UTIL_OBJETIVO queda cerca del equilibrio, la ganancia es ~0 y muy sensible.
