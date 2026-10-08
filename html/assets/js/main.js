@@ -145,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const estLat = document.getElementById('est-lat');
     const estLon = document.getElementById('est-lon');
     const estConectores = document.getElementById('est-conectores');
+    const btnUbicarMapa = document.getElementById('btn-ubicar-mapa');
     const btnPredecir = document.getElementById('btn-predecir');
     const btnQuitarPrueba = document.getElementById('btn-quitar-prueba');
     const stationResult = document.getElementById('station-result');
@@ -1000,6 +1001,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let simulationZone = null;
     let simulationChargers = 1;
     let simulationAño = null;
+    let punteroManual = null;
+    let ubicandoEnMapa = false;
 
     function simulationInputs() {
         const lat = parseFloat(((estLat && estLat.value) || '').replace(',', '.'));
@@ -1075,6 +1078,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function clearSimulation() {
+        quitarPuntero();
         if (simulationMarker) map.removeLayer(simulationMarker);
         simulationMarker = null;
         simulationZone = null;
@@ -1109,6 +1113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             simulationZone = zone;
             simulationChargers = n;
             simulationAño = año;
+            quitarPuntero();
             if (simulationMarker) map.removeLayer(simulationMarker);
             simulationMarker = L.marker([lat, lon], { icon: pinPersonalizadoIcon, zIndexOffset: 1000 })
                 .addTo(map)
@@ -1129,11 +1134,43 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnPredecir) btnPredecir.addEventListener('click', predecirNuevaEstacion);
     if (btnQuitarPrueba) btnQuitarPrueba.addEventListener('click', clearSimulation);
 
-    // Con el formulario abierto, un clic en el mapa llena lat/lon
+    // Puntero manual: botón + clic en el mapa (además de escribir lat/lon)
+    function setUbicando(active) {
+        ubicandoEnMapa = active;
+        if (btnUbicarMapa) {
+            btnUbicarMapa.classList.toggle('active', active);
+            btnUbicarMapa.setAttribute('aria-pressed', String(active));
+        }
+        map.getContainer().style.cursor = active ? 'crosshair' : '';
+        if (active) aviso.textContent = 'Haz clic en el mapa para colocar el puntero de tu electrolinera.';
+    }
+
+    function colocarPuntero(lat, lon) {
+        if (estLat) estLat.value = lat.toFixed(6);
+        if (estLon) estLon.value = lon.toFixed(6);
+        if (punteroManual) map.removeLayer(punteroManual);
+        punteroManual = L.marker([lat, lon], { icon: searchPointIcon, zIndexOffset: 900 })
+            .addTo(map)
+            .bindPopup(`<div class="popup-title">Ubicación seleccionada</div>
+                <div><b>Coordenadas:</b> ${lat.toFixed(6)}, ${lon.toFixed(6)}</div>`)
+            .openPopup();
+    }
+
+    function quitarPuntero() {
+        if (punteroManual) { map.removeLayer(punteroManual); punteroManual = null; }
+        setUbicando(false);
+    }
+
+    if (btnUbicarMapa) btnUbicarMapa.addEventListener('click', () => setUbicando(!ubicandoEnMapa));
+
+    // Con el formulario abierto, un clic en el mapa llena lat/lon y coloca el puntero
     map.on('click', (e) => {
-        if (!formularioVisible()) return;
-        if (estLat) estLat.value = e.latlng.lat.toFixed(6);
-        if (estLon) estLon.value = e.latlng.lng.toFixed(6);
+        if (!formularioVisible()) {
+            if (ubicandoEnMapa) setUbicando(false);
+            return;
+        }
+        colocarPuntero(e.latlng.lat, e.latlng.lng);
+        if (ubicandoEnMapa) setUbicando(false);
         aviso.textContent = 'Coordenadas capturadas del mapa. Presiona "Predecir".';
     });
 

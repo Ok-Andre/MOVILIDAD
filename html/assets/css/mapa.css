@@ -763,6 +763,31 @@ h1 {
     background: linear-gradient(135deg, #238650, #14622f);
 }
 
+.station-form__map {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #8C1D40;
+    border-radius: 8px;
+    background: rgba(140, 29, 64, 0.18);
+    color: #f2d9e4;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.station-form__map:hover {
+    background: rgba(140, 29, 64, 0.35);
+    color: #fff;
+}
+
+.station-form__map.active {
+    background: #8C1D40;
+    color: #fff;
+    box-shadow: 0 0 0 2px rgba(230, 0, 126, 0.35);
+}
+
 .station-form__clear {
     width: 100%;
     padding: 9px;
