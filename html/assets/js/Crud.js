@@ -12,7 +12,7 @@
 (() => {
   'use strict';
 
-  const STORAGE_KEY = 'electra.chargers.v1';
+  const STORAGE_KEY = 'electra.chargers.cdmx.v2';
   const SEED_URLS = [
     'all_chargers_geo.json',
     'data/all_chargers_geo.json',

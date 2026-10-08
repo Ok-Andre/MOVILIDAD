@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 from scipy.spatial import cKDTree
-from config import BASE, CHARGERS_JSON
+from config import BASE, CHARGERS_JSON, ZONES_GEOJSON
 
 DEDUP_M = 75   # metros: dos puntos más cerca que esto = mismo sitio
 
@@ -71,6 +71,10 @@ def _tesla():
 
 
 def build():
+    # 1. Cargar polígono exacto de la CDMX (unión de AGEBs)
+    zones = gpd.read_file(ZONES_GEOJSON)
+    cdmx_poly = zones.union_all() if hasattr(zones, "union_all") else zones.unary_union
+
     base = _dedup(_plugshare())              # PlugShare manda: trae # de puertos
     for extra in (_evergo(), _tesla()):
         red = extra["red"].iloc[0]
@@ -83,12 +87,19 @@ def build():
     gdf = gpd.GeoDataFrame(base[["nombre", "red", "n_puertos"]],
                            geometry=gpd.points_from_xy(base["lon"], base["lat"]),
                            crs=4326)
+
+    # Filtrar estrictamente a los puntos que caen dentro del polígono de la CDMX
+    dentro = gdf.within(cdmx_poly)
+    fuera = (~dentro).sum()
+    print(f"Filtrando cargadores: {len(gdf)} totales -> {dentro.sum()} dentro de CDMX ({fuera} descartados fuera de CDMX)")
+    gdf = gdf[dentro].reset_index(drop=True)
+
     for output in (CHARGERS_JSON, BASE / "html" / "all_chargers_geo.json"):
         output.parent.mkdir(exist_ok=True)
         output.unlink(missing_ok=True)        # to_file no sobrescribe bien en algunos casos
         gdf.to_file(output, driver="GeoJSON")
     print(gdf.groupby("red")["n_puertos"].agg(["count", "sum"]))
-    print(f"Total: {len(gdf)} sitios, {int(gdf['n_puertos'].sum())} puertos")
+    print(f"Total final: {len(gdf)} sitios, {int(gdf['n_puertos'].sum())} puertos dentro de la CDMX")
     return gdf
 
 
