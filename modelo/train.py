@@ -14,7 +14,8 @@ from simulate import simulate_targets
 # vph_autom, riqueza_norm y destinos_raw son los motores de la fórmula de simulate.py:
 # si el modelo no los ve, no puede aprender la relación.
 NUM = ["year", "dens_cargadores", "n_Tesla", "n_Evergo", "n_PlugShare",
-       "poblacion", "traffic_idx", "vph_autom", "riqueza_norm", "destinos_raw"]
+       "poblacion", "traffic_idx", "vph_autom", "riqueza_norm", "destinos_raw",
+       "accesibilidad_pendiente"]
 CAT = ["tipo_zona", "marca_dom", "alcaldia"]   # alcaldia = "zona" categórica
 FEATURES = NUM + CAT
 TARGETS = ["ganancia_max", "ganancia_min", "n_cargadores_max", "n_cargadores_min"]
