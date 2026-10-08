@@ -112,15 +112,6 @@
                     <option value="payback_min">Payback, caso pesimista (P10)</option>
                 </select>
             </label>
-            <label>Cargadores propuestos:
-                <input id="sim-cargadores" type="number" min="1" max="20" step="1" value="1">
-            </label>
-            <button id="btn-simular" class="btn" type="button" aria-pressed="false">
-                <i class="fa-solid fa-location-dot" aria-hidden="true"></i> Probar ubicación
-            </button>
-            <button id="btn-limpiar-simulacion" class="btn" type="button" disabled>
-                <i class="fa-solid fa-xmark" aria-hidden="true"></i> Quitar prueba
-            </button>
         </div>
 
         <p class="nota">Modelos originales: los colores se asignan por percentil entre las AGEB de la CDMX (verde = 20 %
@@ -185,14 +176,14 @@
                     <div>
                         <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Nombre de la
                             Empresa / Red:</label>
-                        <input type="text" placeholder="Ej. Tesla, Evergo, CFE..."
+                        <input type="text" id="est-red" placeholder="Ej. Tesla, Evergo, CFE..."
                             style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
                     </div>
 
                     <div>
                         <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Nombre del
                             Punto / Sitio:</label>
-                        <input type="text" placeholder="Ej. Hub Plaza Universidad"
+                        <input type="text" id="est-nombre" placeholder="Ej. Hub Plaza Universidad"
                             style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
                     </div>
 
@@ -200,13 +191,13 @@
                         <div style="flex: 1;">
                             <label
                                 style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Latitud:</label>
-                            <input type="text" placeholder="19.3800"
+                            <input type="text" id="est-lat" placeholder="19.3800"
                                 style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
                         </div>
                         <div style="flex: 1;">
                             <label
                                 style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Longitud:</label>
-                            <input type="text" placeholder="-99.1500"
+                            <input type="text" id="est-lon" placeholder="-99.1500"
                                 style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
                         </div>
                     </div>
@@ -214,7 +205,7 @@
                     <div>
                         <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Alcaldía
                             (CDMX):</label>
-                        <select
+                        <select id="est-alcaldia"
                             style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
                             <option value="">Seleccionar alcaldía...</option>
                             <option value="Álvaro Obregón">Álvaro Obregón</option>
@@ -239,7 +230,7 @@
                     <div>
                         <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Tipo de
                             Cargador / Conectores:</label>
-                        <select
+                        <select id="est-tipo"
                             style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
                             <option value="dc_fast">Carga Rápida DC (Supercharger / CCS1)</option>
                             <option value="ac_level2">Nivel 2 AC (240V - J1772)</option>
@@ -250,23 +241,29 @@
                     <div>
                         <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Núm.
                             Conectores:</label>
-                        <input type="number" min="1" max="50" placeholder="4"
+                        <input type="number" id="est-conectores" min="1" max="50" placeholder="4"
                             style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
                     </div>
 
                     <div>
                         <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Inversión
                             Estimada (CAPEX MXN):</label>
-                        <input type="text" placeholder="$1,500,000"
+                        <input type="text" id="est-capex" placeholder="$1,500,000"
                             style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
                     </div>
 
-                    <!-- Botón Predecir -->
-                    <button type="button" id="btn-predecir" class="btn"
-                        style="margin-top: 8px; width: 100%; padding: 12px; background: linear-gradient(135deg, #2ca25f, #1b783e); color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(44,162,95,0.4);">
-                        <i class="fa-solid fa-chart-line"></i> Predecir
-                    </button>
+                    <!-- Acciones -->
+                    <div class="station-form__actions">
+                        <button type="button" id="btn-predecir" class="btn station-form__predict">
+                            <i class="fa-solid fa-chart-line"></i> Predecir
+                        </button>
+                        <button type="button" id="btn-quitar-prueba" class="station-form__clear" hidden>
+                            <i class="fa-solid fa-xmark"></i> Quitar prueba
+                        </button>
+                    </div>
                     </form>
+
+                    <div id="station-result" class="station-result" hidden></div>
                 </section>
 
                 <section class="station-panel__section station-panel__section--zone" id="station-zone-section"></section>
