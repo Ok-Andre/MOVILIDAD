@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (v <= 6) return '#ffeda0';
         return '#de2d26';
     }
-
     // Probabilidad de ganancia neta > 0 (solo zonas que se construirían en el caso base)
     function colorProb(p) {
         if (!p || !p.viable_max) return '#bdbdbd';
@@ -76,11 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (val === null || val === undefined || isNaN(val)) return '#cccccc';
 
         const stops = [
-            { pos: 0.00, r: 222, g: 45,  b: 38 },   // #de2d26 Rojo
+            { pos: 0.00, r: 222, g: 45, b: 38 },   // #de2d26 Rojo
             { pos: 0.35, r: 244, g: 162, b: 97 },   // #f4a261 Naranja
             { pos: 0.55, r: 255, g: 237, b: 160 },  // #ffeda0 Amarillo
             { pos: 0.75, r: 120, g: 198, b: 121 },  // #78c679 Verde claro
-            { pos: 1.00, r: 44,  g: 162, b: 95 }    // #2ca25f Verde
+            { pos: 1.00, r: 44, g: 162, b: 95 }    // #2ca25f Verde
         ];
 
         let lower = stops[0];
@@ -145,21 +144,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---------- Electrolineras (clúster) ----------
     const teslaIcon = L.icon({
         iconUrl: 'assets/img/pin_tesla.svg',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -28],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
+        popupAnchor: [0, -45],
         className: 'custom-pin-icon'
     });
 
     const evergoIcon = L.icon({
         iconUrl: 'assets/img/pin_evergo.svg',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -28],
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
+        popupAnchor: [0, -45],
         className: 'custom-pin-icon'
     });
 
-    const plugshareIcon = new L.Icon.Default();
+    const plugshareIcon = L.icon({
+        iconUrl: 'assets/img/pin_plugshare.svg',
+        iconSize: [50, 50],
+        iconAnchor: [25, 50],
+        popupAnchor: [0, -45],
+        className: 'custom-pin-icon'
+    });
 
     const chargersCluster = L.markerClusterGroup({
         chunkedLoading: true,
