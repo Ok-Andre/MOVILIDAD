@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ---------- Estado de la interfaz ----------
-    const btnIds = ['btn-original', 'btn-no-destinos', 'btn-2030', 'btn-2035'];
+    const btnIds = ['btn-original', 'btn-2030', 'btn-2035'];
     const aviso = document.getElementById('aviso');
     const opciones = document.getElementById('opciones');
 
@@ -474,8 +474,32 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
+    
+    // ---------- Sincronización con la Línea de Tiempo ----------
+    const sliderTiempo = document.getElementById('slider-tiempo');
+    const labelTiempo = document.getElementById('linea_tiempo_label');
+
+    function sincronizarTimeline(año) {
+        if (sliderTiempo && parseInt(sliderTiempo.value) !== año) {
+            sliderTiempo.value = año;
+        }
+        if (labelTiempo) {
+            labelTiempo.textContent = año;
+        }
+    }
+
     async function loadPrediction(año) {
         predAño = año;
+        sincronizarTimeline(año);
+        if (año === 2030) setActive('btn-2030');
+        else if (año === 2035) setActive('btn-2035');
+        else if (año === 2026) setActive('btn-original');
+        else {
+            btnIds.forEach(b => {
+                const el = document.getElementById(b);
+                if (el) el.classList.remove('active');
+            });
+        }
         const id = ++reqId;
         aviso.textContent = '';
         opciones.classList.remove('off');
@@ -545,17 +569,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('btn-original')) {
         document.getElementById('btn-original').addEventListener('click', function () {
             setActive('btn-original');
+            sincronizarTimeline(2026);
             modoOriginal();
-            isSinDestinosMap = false;
             loadMapData('./viabilidad_cdmx_v2.geojson');
         });
 
-        document.getElementById('btn-no-destinos').addEventListener('click', function () {
-            setActive('btn-no-destinos');
-            modoOriginal();
-            isSinDestinosMap = true;
-            loadMapData('./viabilidad_cdmx_v2_no_destinos.geojson');
-        });
+        // Listener de la Línea de Tiempo (slider 2026 a 2035)
+        if (sliderTiempo) {
+            const containerTiempo = document.querySelector('.linea_tiempo');
+            if (containerTiempo && window.L) {
+                L.DomEvent.disableClickPropagation(containerTiempo);
+                L.DomEvent.disableScrollPropagation(containerTiempo);
+            }
+
+            sliderTiempo.addEventListener('input', function (e) {
+                const año = parseInt(e.target.value);
+                if (labelTiempo) labelTiempo.textContent = año;
+                loadPrediction(año);
+            });
+        }
 
         document.getElementById('btn-2030').addEventListener('click', function () {
             setActive('btn-2030');

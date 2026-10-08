@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-BASE = Path(r"/Users/andre/Documents/ELECTROMOV/Electrolineras")
+BASE = Path(__file__).resolve().parent.parent
 ZONES_GEOJSON = BASE / "html" / "viabilidad_cdmx_v2.geojson"
 CENSUS_CSV    = BASE / "clean" / "RESAGEBURB_09CSV20.csv"
 CHARGERS_JSON = BASE / "datasets" / "all_chargers_geo.json"
@@ -22,7 +22,7 @@ METRICS_JSON = OUT / "metricas.json"
 # ---- Switches ----
 USE_RF = True            # False => solo regresión lineal (modo "sin tiempo")
 TRAIN_YEARS = list(range(2025, 2036))
-PRED_YEARS = [2030, 2035]
+PRED_YEARS = list(range(2026, 2036))
 SEED = 42
 
 # ---- Supuestos de la simulación (EDITABLES; son SUPUESTOS, no datos) ----

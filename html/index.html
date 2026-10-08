@@ -88,8 +88,7 @@
         <h1>Viabilidad para Estaciones de Carga - CDMX</h1>
 
         <div class="controls">
-            <button id="btn-original" class="btn active">Modelo Original (Con Destinos)</button>
-            <button id="btn-no-destinos" class="btn">Modelo sin Destinos</button>
+            <button id="btn-original" class="btn active">Modelo Original (2026)</button>
             <button id="btn-2030" class="btn">Predicción 2030</button>
             <button id="btn-2035" class="btn">Predicción 2035</button>
         </div>
@@ -123,7 +122,26 @@
         <p id="aviso"></p>
 
         <!-- Contenedor del mapa -->
-        <div id="map" class="mapa"></div>
+                <!-- Contenedor del mapa -->
+        <div id="map" class="mapa">
+            <!-- Línea de tiempo (scroll de años 2026 a 2035) -->
+            <div class="linea_tiempo">
+                <div class="linea_tiempo_header">
+                    <span class="linea_tiempo_tag">LÍNEA DE TIEMPO</span>
+                    <span class="linea_tiempo_año" id="linea_tiempo_label">2026</span>
+                </div>
+                <div class="linea_tiempo_track">
+                    <input type="range" id="slider-tiempo" min="2026" max="2035" step="1" value="2026" aria-label="Año de predicción">
+                </div>
+                <div class="linea_tiempo_ticks">
+                    <span>2026</span>
+                    <span>2028</span>
+                    <span>2030</span>
+                    <span>2032</span>
+                    <span>2035</span>
+                </div>
+            </div>
+        </div>
 
         <!-- Gráficas abajo del mapa -->
         <div class="charts-container">

@@ -169,3 +169,121 @@ h1 {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* ==========================================================================
+   LÍNEA DE TIEMPO - CONTROL DE AÑOS (2026 - 2035)
+   ========================================================================== */
+.linea_tiempo {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    z-index: 1000;
+    width: 250px;
+    background: rgba(26, 26, 38, 0.90);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 10px 16px 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.linea_tiempo:hover {
+    background: rgba(26, 26, 38, 0.96);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+}
+
+.linea_tiempo_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.linea_tiempo_tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: #9ca3af;
+    text-transform: uppercase;
+}
+
+.linea_tiempo_año {
+    font-size: 15px;
+    font-weight: 800;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.12);
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.linea_tiempo_track {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Custom Range Slider */
+.linea_tiempo input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 14px;
+    background: #b0b3b8;
+    border-radius: 8px;
+    outline: none;
+    margin: 4px 0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.linea_tiempo input[type=range]:hover {
+    background: #c4c7cc;
+}
+
+/* Chrome / Safari / Edge Thumb */
+.linea_tiempo input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #007bff;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.6);
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.linea_tiempo input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    background: #0069d9;
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.85);
+}
+
+/* Firefox Thumb */
+.linea_tiempo input[type=range]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #007bff;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.6);
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.linea_tiempo_ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #9ca3af;
+    font-weight: 600;
+    padding: 0 2px;
+}
