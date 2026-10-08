@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
 
-BASE = Path(r"/Users/andre/Documents/ELECTROMOV/Electrolineras")
+# Raíz del proyecto = carpeta que contiene modelo/, html/, clean/, datasets/
+BASE = Path(__file__).resolve().parents[1]
 ZONES_GEOJSON = BASE / "html" / "viabilidad_cdmx_v2.geojson"
 CENSUS_CSV    = BASE / "clean" / "RESAGEBURB_09CSV20.csv"
 CHARGERS_JSON = BASE / "datasets" / "all_chargers_geo.json"
@@ -62,6 +63,15 @@ PESO_MARCA = {"Tesla": 1.5, "Evergo": 1.0, "PlugShare": 0.7}  # peso competitivo
 
 # ---- Capacidad: cuántos cargadores caben en la demanda de una AGEB ----
 KW_CARGADOR = 50          # kW de un cargador DC (p. ej. los 3 de 50 kW de Evergo en Metrópoli Patriotismo)
+
+# ---- Indicadores de sustentabilidad y desarrollo económico (PLACEHOLDERS) ----
+# SUPUESTO: kg de CO2e evitados por cada kWh servido en un EV en lugar de un
+# auto a gasolina. No proviene de una fuente; reemplazar con el factor de
+# emisión de la red (p. ej. Programa GEI México / CFE) antes de citarlo.
+CO2_KG_POR_KWH_EVITADO = 0.4
+# SUPUESTO: empleos directos estimados por cargador instalado (operación y
+# mantenimiento). Reemplazar con datos de algún operador o cotización real.
+EMPLEOS_POR_CARGADOR = 0.5
 # Utilización con la que se DIMENSIONA un sitio. Ojo: el punto de equilibrio es
 # OPEX_FIJO / (margen * KW_CARGADOR * 8760) (≈4.6% en el caso min, ≈2.1% en el max).
 # Si UTIL_OBJETIVO queda cerca del equilibrio, la ganancia es ~0 y muy sensible.
