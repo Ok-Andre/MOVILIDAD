@@ -115,7 +115,8 @@
         </div>
 
         <p class="nota">Modelos originales: los colores se asignan por percentil entre las AGEB de la CDMX (verde = 20 %
-            superior, amarillo = 40–80 %, rojo = 40 % inferior). Las predicciones 2030/2035 son una simulación Monte Carlo
+            superior, amarillo = 40–80 %, rojo = 40 % inferior). Las predicciones 2030/2035 son una simulación Monte
+            Carlo
             con supuestos provisionales (precios, capex, adopción de EVs), no un pronóstico calibrado: el rango va del
             percentil 10 (pesimista) al 90 (optimista). El número de cargadores se decide con el caso base y la
             probabilidad de ser rentable es la de que la ganancia neta anualizada sea positiva. Payback = años para
@@ -123,13 +124,159 @@
 
         <p id="aviso"></p>
 
-        <!-- Contenedor del mapa -->
-        <div id="map" class="mapa"></div>
+        <!-- Contenedor del mapa y panel lateral -->
+        <div class="map-wrapper">
+            <!-- Botón para abrir el panel de nueva electrolinera -->
+            <button type="button" class="btn-demo-add" id="btn-add-station-demo">
+                <i class="fa-solid fa-plus-circle"></i>
+                <span>Añadir Electrolinera</span>
+            </button>
 
-        <!-- Gráficas abajo del mapa -->
+            <!-- Contenedor del mapa -->
+            <div id="map" class="mapa">
+                <!-- Línea de tiempo (scroll de años 2026 a 2035) -->
+                <div class="linea_tiempo">
+                    <div class="linea_tiempo_header">
+                        <span class="linea_tiempo_tag">LÍNEA DE TIEMPO</span>
+                        <span class="linea_tiempo_año" id="linea_tiempo_label">2026</span>
+                    </div>
+                    <div class="linea_tiempo_track">
+                        <input type="range" id="slider-tiempo" min="2026" max="2035" step="1" value="2026" aria-label="Año de predicción">
+                    </div>
+                    <div class="linea_tiempo_ticks">
+                        <span>2026</span>
+                        <span>2028</span>
+                        <span>2030</span>
+                        <span>2032</span>
+                        <span>2035</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel lateral derecho: formulario o gráficas -->
+            <aside class="station-side-panel" id="station-side-panel" aria-hidden="true">
+                <div class="station-panel__header">
+                    <h3>
+                        <i class="fa-solid fa-charging-station"></i>
+                        <span id="station-panel-title">Nueva Electrolinera</span>
+                    </h3>
+                    <button type="button" class="station-panel__close" id="station-panel-close" aria-label="Cerrar panel">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <section class="station-panel__section station-panel__section--form" id="station-form-section">
+                    <button type="button" class="station-panel__toggle" id="station-form-toggle" aria-expanded="true">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>Datos de la nueva electrolinera</span>
+                        <i class="fa-solid fa-chevron-down arrow"></i>
+                    </button>
+                    <form id="form-nueva-estacion" onsubmit="event.preventDefault();"
+                    style="display: flex; flex-direction: column; gap: 12px;">
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Nombre de la
+                            Empresa / Red:</label>
+                        <input type="text" id="est-red" placeholder="Ej. Tesla, Evergo, CFE..."
+                            style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Nombre del
+                            Punto / Sitio:</label>
+                        <input type="text" id="est-nombre" placeholder="Ej. Hub Plaza Universidad"
+                            style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label
+                                style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Latitud:</label>
+                            <input type="text" id="est-lat" placeholder="19.3800"
+                                style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label
+                                style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Longitud:</label>
+                            <input type="text" id="est-lon" placeholder="-99.1500"
+                                style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Alcaldía
+                            (CDMX):</label>
+                        <select id="est-alcaldia"
+                            style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                            <option value="">Seleccionar alcaldía...</option>
+                            <option value="Álvaro Obregón">Álvaro Obregón</option>
+                            <option value="Azcapotzalco">Azcapotzalco</option>
+                            <option value="Benito Juárez">Benito Juárez</option>
+                            <option value="Coyoacán">Coyoacán</option>
+                            <option value="Cuajimalpa de Morelos">Cuajimalpa de Morelos</option>
+                            <option value="Cuauhtémoc">Cuauhtémoc</option>
+                            <option value="Gustavo A. Madero">Gustavo A. Madero</option>
+                            <option value="Iztacalco">Iztacalco</option>
+                            <option value="Iztapalapa">Iztapalapa</option>
+                            <option value="La Magdalena Contreras">La Magdalena Contreras</option>
+                            <option value="Miguel Hidalgo">Miguel Hidalgo</option>
+                            <option value="Milpa Alta">Milpa Alta</option>
+                            <option value="Tláhuac">Tláhuac</option>
+                            <option value="Tlalpan">Tlalpan</option>
+                            <option value="Venustiano Carranza">Venustiano Carranza</option>
+                            <option value="Xochimilco">Xochimilco</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Tipo de
+                            Cargador / Conectores:</label>
+                        <select id="est-tipo"
+                            style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                            <option value="dc_fast">Carga Rápida DC (Supercharger / CCS1)</option>
+                            <option value="ac_level2">Nivel 2 AC (240V - J1772)</option>
+                            <option value="ultra_fast">Ultra-rápido (150kW - 350kW)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Núm.
+                            Conectores:</label>
+                        <input type="number" id="est-conectores" min="1" max="50" placeholder="4"
+                            style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Inversión
+                            Estimada (CAPEX MXN):</label>
+                        <input type="text" id="est-capex" placeholder="$1,500,000"
+                            style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="station-form__actions">
+                        <button type="button" id="btn-ubicar-mapa" class="station-form__map" aria-pressed="false">
+                            <i class="fa-solid fa-location-crosshairs"></i> Señalar en el mapa
+                        </button>
+                        <button type="button" id="btn-predecir" class="btn station-form__predict">
+                            <i class="fa-solid fa-chart-line"></i> Predecir
+                        </button>
+                        <button type="button" id="btn-quitar-prueba" class="station-form__clear" hidden>
+                            <i class="fa-solid fa-xmark"></i> Quitar prueba
+                        </button>
+                    </div>
+                    </form>
+
+                    <div id="station-result" class="station-result" hidden></div>
+                </section>
+
+                <section class="station-panel__section station-panel__section--zone" id="station-zone-section"></section>
+            </aside>
+        </div>
+
+        <!-- Gráficas generales (debajo del mapa) -->
         <div class="charts-container">
             <div class="chart-box">
-                <h2>Viabilidad Promedio por Alcaldía</h2>
+                <h2>Viabilidad Promedio por Alcaldía <span class="chart-tag chart-tag--econ">Económico</span></h2>
                 <div class="chart-wrapper">
                     <canvas id="chart-alcaldia"></canvas>
                 </div>
@@ -144,9 +291,25 @@
                 </div>
 
                 <div class="chart-box">
-                    <h2>Desglose de Componentes del Modelo</h2>
+                    <h2>Desglose de Componentes del Modelo <span class="chart-tag chart-tag--econ">Económico</span></h2>
                     <div class="chart-wrapper">
                         <canvas id="chart-components"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-row">
+                <div class="chart-box">
+                    <h2>CO₂ Evitado por Año <span class="chart-tag chart-tag--sust">Sustentabilidad</span></h2>
+                    <div class="chart-wrapper">
+                        <canvas id="chart-sustentabilidad"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <h2>Zonas de Alto Potencial sin Cobertura <span class="chart-tag chart-tag--eq">Equidad</span></h2>
+                    <div class="chart-wrapper">
+                        <canvas id="chart-equidad"></canvas>
                     </div>
                 </div>
             </div>
@@ -274,6 +437,8 @@
     <script src="assets/js/crud.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/charts.js"></script>
+    <script src="assets/js/modelo_electra.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 
