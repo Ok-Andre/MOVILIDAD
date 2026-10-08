@@ -96,10 +96,14 @@
                     <p class="zp-note">Simulación Monte Carlo con supuestos provisionales. La ganancia, el CO₂
                         evitado y el empleo son estimaciones (rangos P10–P90); no son datos reales.</p>
                 </div>`;
-            document.body.appendChild(el);
+            const host = document.getElementById('station-zone-section') || document.body;
+            host.appendChild(el);
             this._el = el;
 
-            el.querySelector('#zp-close').addEventListener('click', () => this.close());
+            el.querySelector('#zp-close').addEventListener('click', () => {
+                this.close();
+                if (window.StationPanel) window.StationPanel.close();
+            });
             el.querySelectorAll('.zone-panel__tabs button').forEach(btn => {
                 btn.addEventListener('click', () => this.showTab(btn.dataset.tab));
             });
@@ -131,9 +135,9 @@
 
             this._built = {};
             this._destroyCharts();
-            this.showTab('economico');
             this._el.classList.add('open');
             this._el.setAttribute('aria-hidden', 'false');
+            this.showTab('economico');
         },
 
         close() {
@@ -347,10 +351,10 @@
 
         open(mode) {
             if (!this._el) return;
-            const m = mode === 'charts' ? 'charts' : 'form';
+            const m = (mode === 'zone' || mode === 'charts') ? 'zone' : 'form';
             this._el.dataset.mode = m;
             if (this._title) {
-                this._title.textContent = m === 'charts' ? 'Gráficas' : 'Nueva Electrolinera';
+                this._title.textContent = m === 'zone' ? 'Análisis de zona' : 'Nueva Electrolinera';
             }
             this._el.classList.add('open');
             this._el.setAttribute('aria-hidden', 'false');

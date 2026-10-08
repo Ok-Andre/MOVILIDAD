@@ -621,48 +621,41 @@ h1 {
     padding: 14px 18px 20px;
 }
 
-.station-panel__section-title {
-    flex: none;
-    margin: 0;
-    padding: 14px 18px 10px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: #A99BB8;
+/* Modos del panel */
+.station-side-panel[data-mode="form"] .station-panel__section--zone {
+    display: none;
 }
 
-.station-panel__section--charts .charts-container {
+.station-side-panel[data-mode="zone"] .station-panel__section--form {
+    display: none;
+}
+
+/* Panel de zona (antes bottom sheet) embebido en el sidebar */
+.station-side-panel #zone-panel {
+    position: static;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    transform: none;
+    max-height: none;
+    width: 100%;
     flex: 1 1 auto;
     min-height: 0;
-    width: 100%;
-    margin: 0;
-    padding: 0 14px 24px;
-    gap: 14px;
-    overflow-y: auto;
-}
-
-/* Modos del panel */
-.station-side-panel[data-mode="form"] .station-panel__section--charts {
+    border-radius: 0;
+    box-shadow: none;
+    background: #ffffff;
+    color: #2D2040;
+    pointer-events: auto;
     display: none;
 }
 
-.station-side-panel[data-mode="charts"] .station-panel__section--form {
+.station-side-panel #zone-panel.open {
+    display: flex;
+}
+
+.station-side-panel #zone-panel .zone-panel__handle,
+.station-side-panel #zone-panel .zone-panel__close {
     display: none;
-}
-
-/* Gráficas compactas dentro del panel */
-.station-side-panel .chart-box {
-    padding: 12px 12px 8px;
-    border-radius: 10px;
-}
-
-.station-side-panel .chart-box h2 {
-    font-size: 13px;
-    margin-bottom: 8px;
-}
-
-.station-side-panel .chart-wrapper {
-    height: 190px;
 }
 
 /* Controles de Leaflet desplazados cuando el panel está abierto */
@@ -674,11 +667,6 @@ h1 {
 .map-wrapper.panel-open .leaflet-top.leaflet-right,
 .map-wrapper.panel-open .leaflet-bottom.leaflet-right {
     right: var(--station-panel-w);
-}
-
-/* El panel de zona (bottom sheet) siempre por encima del panel lateral */
-.zone-panel {
-    z-index: 1300;
 }
 
 @media (max-width: 900px) {
