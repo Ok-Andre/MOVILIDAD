@@ -314,6 +314,61 @@
     window.ZonePanel = ZonePanel;
 
     // ---------------------------------------------------------------
+    // Panel lateral derecho: formulario / gráficas
+    // ---------------------------------------------------------------
+    const StationPanel = {
+        init() {
+            this._el = document.getElementById('station-side-panel');
+            if (!this._el) return;
+            this._wrapper = document.querySelector('.map-wrapper');
+            this._title = document.getElementById('station-panel-title');
+
+            const btnAdd = document.getElementById('btn-add-station-demo');
+            const btnClose = document.getElementById('station-panel-close');
+            const btnToggle = document.getElementById('station-form-toggle');
+            const formSection = document.getElementById('station-form-section');
+
+            if (btnAdd) btnAdd.addEventListener('click', () => this.open('form'));
+            if (btnClose) btnClose.addEventListener('click', () => this.close());
+            if (btnToggle && formSection) {
+                btnToggle.addEventListener('click', () => {
+                    const collapsed = formSection.classList.toggle('collapsed');
+                    btnToggle.setAttribute('aria-expanded', String(!collapsed));
+                });
+            }
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.isOpen()) this.close();
+            });
+        },
+
+        isOpen() {
+            return this._el && this._el.classList.contains('open');
+        },
+
+        open(mode) {
+            if (!this._el) return;
+            const m = mode === 'charts' ? 'charts' : 'form';
+            this._el.dataset.mode = m;
+            if (this._title) {
+                this._title.textContent = m === 'charts' ? 'Gráficas' : 'Nueva Electrolinera';
+            }
+            this._el.classList.add('open');
+            this._el.setAttribute('aria-hidden', 'false');
+            if (this._wrapper) this._wrapper.classList.add('panel-open');
+            // Chart.js recalcula sobre el contenedor ya visible
+            setTimeout(() => window.dispatchEvent(new Event('resize')), 380);
+        },
+
+        close() {
+            if (!this._el) return;
+            this._el.classList.remove('open');
+            this._el.setAttribute('aria-hidden', 'true');
+            if (this._wrapper) this._wrapper.classList.remove('panel-open');
+        }
+    };
+    window.StationPanel = StationPanel;
+
+    // ---------------------------------------------------------------
     // Gráficas agregadas temáticas (bajo el mapa)
     // ---------------------------------------------------------------
     const Agg = {
@@ -409,5 +464,6 @@
     document.addEventListener('DOMContentLoaded', () => {
         setupTheme();
         ZonePanel.init();
+        StationPanel.init();
     });
 })();

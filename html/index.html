@@ -124,17 +124,13 @@
 
         <p id="aviso"></p>
 
-        <!-- Contenedor del mapa y panel de demostración -->
-        <div class="map-wrapper" style="position: relative; width: 100%;">
-            <!-- Checkbox para simular el toggle del panel lateral -->
-            <input type="checkbox" id="toggle-add-panel" class="toggle-add-panel" style="display: none;">
-
-            <!-- Botón en la parte superior derecha del mapa (Demo) -->
-            <label for="toggle-add-panel" class="btn-demo-add" id="btn-add-station-demo"
-                style="position: absolute; top: 12px; right: 55px; z-index: 1000; background: #8C1D40; color: #ffffff; padding: 9px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.2); user-select: none;">
+        <!-- Contenedor del mapa y panel lateral -->
+        <div class="map-wrapper">
+            <!-- Botón para abrir el panel de nueva electrolinera -->
+            <button type="button" class="btn-demo-add" id="btn-add-station-demo">
                 <i class="fa-solid fa-plus-circle"></i>
                 <span>Añadir Electrolinera</span>
-            </label>
+            </button>
 
             <!-- Contenedor del mapa -->
             <div id="map" class="mapa">
@@ -157,19 +153,25 @@
                 </div>
             </div>
 
-            <!-- Panel lateral derecho de información de la electrolinera -->
-            <aside class="station-side-panel" id="station-side-panel"
-                style="position: absolute; top: 0; right: 0; width: 340px; max-width: 90vw; height: 100%; background: rgba(28, 23, 38, 0.96); backdrop-filter: blur(8px); border-left: 2px solid #8C1D40; z-index: 1001; padding: 20px; box-sizing: border-box; overflow-y: auto; color: #f4f4f9; display: none; box-shadow: -5px 0 20px rgba(0,0,0,0.4); border-radius: 0 12px 12px 0;">
-                <div
-                    style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #443b56; padding-bottom: 10px; margin-bottom: 16px;">
-                    <h3 style="margin: 0; font-size: 16px; color: #fff; display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-charging-station" style="color: #E6007E;"></i> Nueva Electrolinera
+            <!-- Panel lateral derecho: formulario o gráficas -->
+            <aside class="station-side-panel" id="station-side-panel" aria-hidden="true">
+                <div class="station-panel__header">
+                    <h3>
+                        <i class="fa-solid fa-charging-station"></i>
+                        <span id="station-panel-title">Nueva Electrolinera</span>
                     </h3>
-                    <label for="toggle-add-panel"
-                        style="cursor: pointer; font-size: 20px; color: #aaa; line-height: 1;">&times;</label>
+                    <button type="button" class="station-panel__close" id="station-panel-close" aria-label="Cerrar panel">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
 
-                <form id="form-nueva-estacion" onsubmit="event.preventDefault();"
+                <section class="station-panel__section station-panel__section--form" id="station-form-section">
+                    <button type="button" class="station-panel__toggle" id="station-form-toggle" aria-expanded="true">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>Datos de la nueva electrolinera</span>
+                        <i class="fa-solid fa-chevron-down arrow"></i>
+                    </button>
+                    <form id="form-nueva-estacion" onsubmit="event.preventDefault();"
                     style="display: flex; flex-direction: column; gap: 12px;">
                     <div>
                         <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Nombre de la
@@ -277,61 +279,49 @@
                         style="margin-top: 8px; width: 100%; padding: 12px; background: linear-gradient(135deg, #2ca25f, #1b783e); color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(44,162,95,0.4);">
                         <i class="fa-solid fa-chart-line"></i> Predecir
                     </button>
-                </form>
+                    </form>
+                </section>
+
+                <section class="station-panel__section station-panel__section--charts" id="station-charts-section">
+                    <h4 class="station-panel__section-title">Gráficas</h4>
+                    <div class="charts-container">
+                        <div class="chart-box">
+                            <h2>Viabilidad Promedio por Alcaldía <span class="chart-tag chart-tag--econ">Económico</span></h2>
+                            <div class="chart-wrapper">
+                                <canvas id="chart-alcaldia"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-box">
+                            <h2>Electrolineras por Red</h2>
+                            <div class="chart-wrapper">
+                                <canvas id="chart-chargers"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-box">
+                            <h2>Desglose de Componentes del Modelo <span class="chart-tag chart-tag--econ">Económico</span></h2>
+                            <div class="chart-wrapper">
+                                <canvas id="chart-components"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-box">
+                            <h2>CO₂ Evitado por Año <span class="chart-tag chart-tag--sust">Sustentabilidad</span></h2>
+                            <div class="chart-wrapper">
+                                <canvas id="chart-sustentabilidad"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-box">
+                            <h2>Zonas de Alto Potencial sin Cobertura <span class="chart-tag chart-tag--eq">Equidad</span></h2>
+                            <div class="chart-wrapper">
+                                <canvas id="chart-equidad"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </aside>
-        </div>
-
-        <style>
-            /* Regla CSS pura para alternar el panel con el checkbox */
-            #toggle-add-panel:checked~#station-side-panel {
-                display: block !important;
-            }
-
-            #toggle-add-panel:checked~#btn-add-station-demo {
-                background: #60142b;
-            }
-        </style>
-
-        <!-- Gráficas abajo del mapa -->
-        <div class="charts-container">
-            <div class="chart-box">
-                <h2>Viabilidad Promedio por Alcaldía <span class="chart-tag chart-tag--econ">Económico</span></h2>
-                <div class="chart-wrapper">
-                    <canvas id="chart-alcaldia"></canvas>
-                </div>
-            </div>
-
-            <div class="charts-row">
-                <div class="chart-box">
-                    <h2>Electrolineras por Red</h2>
-                    <div class="chart-wrapper">
-                        <canvas id="chart-chargers"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-box">
-                    <h2>Desglose de Componentes del Modelo <span class="chart-tag chart-tag--econ">Económico</span></h2>
-                    <div class="chart-wrapper">
-                        <canvas id="chart-components"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="charts-row">
-                <div class="chart-box">
-                    <h2>CO₂ Evitado por Año <span class="chart-tag chart-tag--sust">Sustentabilidad</span></h2>
-                    <div class="chart-wrapper">
-                        <canvas id="chart-sustentabilidad"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-box">
-                    <h2>Zonas de Alto Potencial sin Cobertura <span class="chart-tag chart-tag--eq">Equidad</span></h2>
-                    <div class="chart-wrapper">
-                        <canvas id="chart-equidad"></canvas>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </section>

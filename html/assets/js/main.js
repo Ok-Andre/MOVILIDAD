@@ -1068,9 +1068,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!p) return;
                     layer.bindPopup(popupPrediccion(p, año));
                     layer.on('click', () => {
-                        if (!window.ZonePanel) return;
                         const rows = PRED.filter(r => r.zona === f.properties.CVEGEO);
-                        window.ZonePanel.open({ rows, year: año, props: f.properties });
+                        if (window.ZonePanel) window.ZonePanel.open({ rows, year: año, props: f.properties });
+                        if (window.StationPanel) window.StationPanel.open('charts');
                     });
                 }
             }).addTo(map);
