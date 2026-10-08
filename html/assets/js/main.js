@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chargersData = [];
 
     function loadChargersData() {
-        fetch('./all_chargers_geo.json')
+        return fetch('./all_chargers_geo.json')
             .then(res => res.json())
             .then(data => {
                 let teslaCount = 0;
@@ -261,6 +261,49 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => {
                 console.error('Error cargando electrolineras:', err);
             });
+    }
+
+    // Vuelve desde el dashboard de electrolineras: index.html?lat=..&lon=..&nombre=..
+    function applyPinFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const lat = parseFloat(params.get('lat'));
+        const lon = parseFloat(params.get('lon'));
+        if (!isFinite(lat) || !isFinite(lon)) return;
+        const nombre = params.get('nombre') || 'Electrolinera';
+
+        // Busca el marcador exacto del clúster (mismo sitio)
+        let encontrado = null;
+        let mejor = Infinity;
+        chargersData.forEach(c => {
+            const d = haversine(lat, lon, c.lat, c.lon);
+            if (d < mejor) { mejor = d; encontrado = c; }
+        });
+
+        const highlight = L.layerGroup().addTo(map);
+
+        if (encontrado && mejor <= 30) {
+            L.circle([encontrado.lat, encontrado.lon], {
+                radius: 25,
+                color: '#E6007E',
+                weight: 3,
+                opacity: 1,
+                fillColor: '#E6007E',
+                fillOpacity: 0.25,
+                interactive: false,
+                className: 'search-ring'
+            }).addTo(highlight);
+            chargersCluster.zoomToShowLayer(encontrado.marker, () => encontrado.marker.openPopup());
+        } else {
+            const marker = L.marker([lat, lon], { icon: searchPointIcon, zIndexOffset: 1000 })
+                .bindPopup(`<div class="popup-title">${escapeHtml(nombre)}</div>
+                    <div><b>Coordenadas:</b> ${lat.toFixed(5)}, ${lon.toFixed(5)}</div>`)
+                .addTo(map);
+            map.setView([lat, lon], 16);
+            marker.openPopup();
+        }
+
+        // Limpia los params para no re-disparar al recargar
+        history.replaceState(null, '', window.location.pathname);
     }
 
     // ---------- Búsqueda: dirección, coordenadas o electrolinera ----------
@@ -980,8 +1023,32 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
+    
+    // ---------- Sincronización con la Línea de Tiempo ----------
+    const sliderTiempo = document.getElementById('slider-tiempo');
+    const labelTiempo = document.getElementById('linea_tiempo_label');
+
+    function sincronizarTimeline(año) {
+        if (sliderTiempo && parseInt(sliderTiempo.value) !== año) {
+            sliderTiempo.value = año;
+        }
+        if (labelTiempo) {
+            labelTiempo.textContent = año;
+        }
+    }
+
     async function loadPrediction(año) {
         predAño = año;
+        sincronizarTimeline(año);
+        if (año === 2030) setActive('btn-2030');
+        else if (año === 2035) setActive('btn-2035');
+        else if (año === 2026) setActive('btn-original');
+        else {
+            btnIds.forEach(b => {
+                const el = document.getElementById(b);
+                if (el) el.classList.remove('active');
+            });
+        }
         const id = ++reqId;
         aviso.textContent = '';
         opciones.classList.remove('off');
@@ -1031,9 +1098,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!p) return;
                     layer.bindPopup(popupPrediccion(p, año));
                     layer.on('click', () => {
-                        if (!window.ZonePanel) return;
                         const rows = PRED.filter(r => r.zona === f.properties.CVEGEO);
-                        window.ZonePanel.open({ rows, year: año, props: f.properties });
+                        if (window.StationPanel) window.StationPanel.open('zone');
+                        if (window.ZonePanel) window.ZonePanel.open({ rows, year: año, props: f.properties });
                     });
                 }
             }).addTo(map);
@@ -1057,7 +1124,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---------- Arranque ----------
     loadMapData('./viabilidad_cdmx_v2.geojson');
-    loadChargersData();
+    loadChargersData().then(applyPinFromUrl);
     initSearch();
 
     // Gráficas temáticas con el escenario por defecto (aunque no se abra la predicción)
@@ -1069,17 +1136,36 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('btn-original')) {
         document.getElementById('btn-original').addEventListener('click', function () {
             setActive('btn-original');
+            sincronizarTimeline(2026);
             modoOriginal();
             isSinDestinosMap = false;
             loadMapData('./viabilidad_cdmx_v2.geojson');
         });
 
-        document.getElementById('btn-no-destinos').addEventListener('click', function () {
-            setActive('btn-no-destinos');
-            modoOriginal();
-            isSinDestinosMap = true;
-            loadMapData('./viabilidad_cdmx_v2_no_destinos.geojson');
-        });
+        if (document.getElementById('btn-no-destinos')) {
+            document.getElementById('btn-no-destinos').addEventListener('click', function () {
+                setActive('btn-no-destinos');
+                sincronizarTimeline(2026);
+                modoOriginal();
+                isSinDestinosMap = true;
+                loadMapData('./viabilidad_cdmx_v2_no_destinos.geojson');
+            });
+        }
+
+        // Listener de la Línea de Tiempo (slider 2026 a 2035)
+        if (sliderTiempo) {
+            const containerTiempo = document.querySelector('.linea_tiempo');
+            if (containerTiempo && window.L) {
+                L.DomEvent.disableClickPropagation(containerTiempo);
+                L.DomEvent.disableScrollPropagation(containerTiempo);
+            }
+
+            sliderTiempo.addEventListener('input', function (e) {
+                const año = parseInt(e.target.value);
+                if (labelTiempo) labelTiempo.textContent = año;
+                loadPrediction(año);
+            });
+        }
 
         document.getElementById('btn-2030').addEventListener('click', function () {
             setActive('btn-2030');

@@ -81,7 +81,26 @@
 
     <section class="home-section">
         <!-- Contenedor del mapa -->
-        <div id="map" class="mapa"></div>
+                <!-- Contenedor del mapa -->
+        <div id="map" class="mapa">
+            <!-- Línea de tiempo (scroll de años 2026 a 2035) -->
+            <div class="linea_tiempo">
+                <div class="linea_tiempo_header">
+                    <span class="linea_tiempo_tag">LÍNEA DE TIEMPO</span>
+                    <span class="linea_tiempo_año" id="linea_tiempo_label">2026</span>
+                </div>
+                <div class="linea_tiempo_track">
+                    <input type="range" id="slider-tiempo" min="2026" max="2035" step="1" value="2026" aria-label="Año de predicción">
+                </div>
+                <div class="linea_tiempo_ticks">
+                    <span>2026</span>
+                    <span>2028</span>
+                    <span>2030</span>
+                    <span>2032</span>
+                    <span>2035</span>
+                </div>
+            </div>
+        </div>
         
     </section>
 
