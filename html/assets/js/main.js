@@ -677,41 +677,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const control = L.control({ position: 'topleft' });
         control.onAdd = function () {
-            const cont = L.DomUtil.create('div', 'map-search');
+            const cont = L.DomUtil.create('div', 'map-search-container');
             cont.innerHTML = `
-                <div class="map-search__form">
+                <button type="button" class="map-search-toggle-btn" id="map-search-toggle-btn" title="Buscar en el mapa">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" class="map-search__input" autocomplete="off" spellcheck="false"
-                        placeholder="Dirección, coordenadas o electrolinera…">
-                    <button type="button" class="map-search__btn" title="Buscar">
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
+                </button>
+                <div class="map-search" id="map-search-box">
+                    <div class="map-search__form">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" class="map-search__input" autocomplete="off" spellcheck="false"
+                            placeholder="Dirección, coordenadas o electrolinera…">
+                        <button type="button" class="map-search__btn" title="Buscar">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button type="button" class="map-search__close-btn" title="Cerrar búsqueda">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    <div class="map-search__radius">
+                        <label>Radio de cercanía
+                            <select class="map-search__radius-select">
+                                <option value="100">100 m</option>
+                                <option value="300" selected>300 m</option>
+                                <option value="500">500 m</option>
+                                <option value="1000">1 km</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="map-search__status" role="status"></div>
+                    <ul class="map-search__suggestions"></ul>
                 </div>
-                <div class="map-search__radius">
-                    <label>Radio de cercanía
-                        <select class="map-search__radius-select">
-                            <option value="100">100 m</option>
-                            <option value="300" selected>300 m</option>
-                            <option value="500">500 m</option>
-                            <option value="1000">1 km</option>
-                        </select>
-                    </label>
-                </div>
-                <div class="map-search__status" role="status"></div>
-                <ul class="map-search__suggestions"></ul>
             `;
 
+            const toggleBtn = cont.querySelector('.map-search-toggle-btn');
+            const closeBtn = cont.querySelector('.map-search__close-btn');
             input = cont.querySelector('.map-search__input');
             btn = cont.querySelector('.map-search__btn');
             suggestions = cont.querySelector('.map-search__suggestions');
             statusEl = cont.querySelector('.map-search__status');
             radiusSelect = cont.querySelector('.map-search__radius-select');
 
+            function toggleSearch(open) {
+                const isOpen = (typeof open === 'boolean') ? open : !cont.classList.contains('is-open');
+                cont.classList.toggle('is-open', isOpen);
+                if (isOpen) {
+                    setTimeout(() => input.focus(), 80);
+                } else {
+                    ocultarSugerencias();
+                }
+            }
+
+            L.DomEvent.on(toggleBtn, 'click', e => {
+                L.DomEvent.stop(e);
+                toggleSearch(true);
+            });
+
+            L.DomEvent.on(closeBtn, 'click', e => {
+                L.DomEvent.stop(e);
+                toggleSearch(false);
+            });
+
             L.DomEvent.disableClickPropagation(cont);
             L.DomEvent.disableScrollPropagation(cont);
             L.DomEvent.on(input, 'keydown', e => {
                 if (e.key === 'Enter') { e.preventDefault(); onSubmit(); }
-                else if (e.key === 'Escape') { ocultarSugerencias(); }
+                else if (e.key === 'Escape') { ocultarSugerencias(); toggleSearch(false); }
             });
             L.DomEvent.on(btn, 'click', e => { L.DomEvent.stop(e); onSubmit(); });
             L.DomEvent.on(input, 'input', debounce(onInput, 250));
