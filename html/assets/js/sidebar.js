@@ -120,7 +120,7 @@ const syncActive = (btnId, liId) => {
     const btn = document.getElementById(btnId);
     if (btn) btn.addEventListener('click', () => setActiveLink(document.getElementById(liId)));
 };
-['btn-original'].forEach(id => syncActive(id, 'nav-mapa'));
+['btn-original', 'btn-no-destinos'].forEach(id => syncActive(id, 'nav-mapa'));
 ['btn-2030', 'btn-2035'].forEach(id => syncActive(id, 'nav-predicciones'));
 
 // ===== Init =====

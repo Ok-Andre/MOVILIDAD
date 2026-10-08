@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ---------- Estado de la interfaz ----------
-    const btnIds = ['btn-original', 'btn-2030', 'btn-2035'];
+    const btnIds = ['btn-original', 'btn-no-destinos', 'btn-2030', 'btn-2035'];
     const aviso = document.getElementById('aviso');
     const opciones = document.getElementById('opciones');
 
@@ -1108,8 +1108,19 @@ document.addEventListener('DOMContentLoaded', () => {
             setActive('btn-original');
             sincronizarTimeline(2026);
             modoOriginal();
+            isSinDestinosMap = false;
             loadMapData('./viabilidad_cdmx_v2.geojson');
         });
+
+        if (document.getElementById('btn-no-destinos')) {
+            document.getElementById('btn-no-destinos').addEventListener('click', function () {
+                setActive('btn-no-destinos');
+                sincronizarTimeline(2026);
+                modoOriginal();
+                isSinDestinosMap = true;
+                loadMapData('./viabilidad_cdmx_v2_no_destinos.geojson');
+            });
+        }
 
         // Listener de la Línea de Tiempo (slider 2026 a 2035)
         if (sliderTiempo) {
