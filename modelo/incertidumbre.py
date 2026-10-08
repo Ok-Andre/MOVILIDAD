@@ -1,5 +1,6 @@
 """Incertidumbre: reemplaza 'máximo / mínimo' fijos por rangos estadísticos.
 
+
 1) Tornado: cambia UN supuesto a la vez (de su mínimo a su máximo) y mide cuánto
    se mueve la ganancia neta total. Dice qué supuesto importa más.
 2) Monte Carlo: sortea TODOS los supuestos a la vez N veces y guarda, por zona,
@@ -75,7 +76,8 @@ def _arrays(z: pd.DataFrame) -> dict:
     comp = (z["n_Tesla"] * PESO_MARCA["Tesla"] + z["n_Evergo"] * PESO_MARCA["Evergo"]
             + z["n_PlugShare"] * PESO_MARCA["PlugShare"])
     return dict(V=z["vph_autom"].to_numpy(float), R=z["riqueza_norm"].to_numpy(float),
-                T=z["traffic_idx"].to_numpy(float), comp=comp.to_numpy(float))
+                T=z["traffic_idx"].to_numpy(float), comp=comp.to_numpy(float),
+                acceso=z["accesibilidad_pendiente"].to_numpy(float))
 
 
 def _anual(tasa):
@@ -86,7 +88,7 @@ def _kwh_captado(a: dict, year: int, p: dict):
     ad = ADOPT_BASE + p["adopt_max"] / (1 + np.exp(-ADOPT_K * (year - p["adopt_mid"])))
     kwh = (a["V"] * ad * (1 + a["R"]) * p["kwh_ev"] * p["public_share"]
            + a["T"] * p["dest_kwh"] * (ad / ADOPT_REF))
-    return kwh / (1 + p["comp_k"] * a["comp"]) * p["captura"]
+    return kwh * a["acceso"] / (1 + p["comp_k"] * a["comp"]) * p["captura"]
 
 
 def dimensionar(a: dict, year: int, p: dict):

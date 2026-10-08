@@ -24,6 +24,33 @@ def _load_chargers():
     ch["n_puertos"] = ch["n_puertos"].fillna(1).clip(lower=1)
     return ch
 
+def _load_pendiente():
+    if not PENDIENTE_CSV.exists():
+        raise FileNotFoundError(
+            f"No encontré {PENDIENTE_CSV}. Genera el dataset primero con "
+            "`python pendiente.py` desde la carpeta modelo."
+        )
+    pendiente = pd.read_csv(PENDIENTE_CSV, dtype={"zona": str})
+    requeridas = {"zona", "pendiente_media"}
+    if not requeridas.issubset(pendiente.columns):
+        raise ValueError(
+            f"{PENDIENTE_CSV} debe incluir las columnas "
+            f"{', '.join(sorted(requeridas))}."
+        )
+    pendiente["zona"] = pendiente["zona"].str.zfill(13)
+    if pendiente["zona"].duplicated().any():
+        raise ValueError(f"{PENDIENTE_CSV} contiene zonas duplicadas.")
+    pendiente["pendiente_media"] = pd.to_numeric(
+        pendiente["pendiente_media"], errors="coerce"
+    )
+    if (~np.isfinite(pendiente["pendiente_media"])).any() or (
+        pendiente["pendiente_media"] < 0
+    ).any():
+        raise ValueError(
+            f"{PENDIENTE_CSV} contiene pendientes faltantes, no numéricas o negativas."
+        )
+    return pendiente[["zona", "pendiente_media"]]
+
 def _tipo_zona(r):
     if r["destinos_raw"] >= 3:
         return "comercial"
@@ -35,7 +62,23 @@ def _tipo_zona(r):
 
 def build_zones() -> pd.DataFrame:
     z = gpd.read_file(ZONES_GEOJSON)
+    z["CVEGEO"] = z["CVEGEO"].astype(str).str.zfill(13)
     z = z.merge(_load_census(), on="CVEGEO", how="left")
+    z = z.merge(
+        _load_pendiente().rename(columns={"zona": "CVEGEO"}),
+        on="CVEGEO",
+        how="left",
+    )
+    sin_pendiente = z["pendiente_media"].isna()
+    if sin_pendiente.any():
+        zonas = z.loc[sin_pendiente, "CVEGEO"].tolist()
+        raise ValueError(
+            f"Falta pendiente para {len(zonas)} AGEB en {PENDIENTE_CSV}; "
+            f"ejemplos: {', '.join(zonas[:5])}."
+        )
+    z["accesibilidad_pendiente"] = np.exp(
+        -np.log(2) * z["pendiente_media"] / PENDIENTE_MITAD_ACCESIBILIDAD_PCT
+    )
 
     zm = z.to_crs(32614)
     z["area_km2"] = zm.area / 1e6
@@ -73,5 +116,6 @@ def build_zones() -> pd.DataFrame:
     cols = ["zona", "alcaldia", "lat", "lon", "poblacion", "vph_autom",
             "destinos_raw", "riqueza_norm", "area_km2", "n_Tesla", "n_Evergo",
             "n_PlugShare", "n_total", "dens_cargadores", "marca_dom",
-            "tipo_zona", "traffic_idx"]
+            "tipo_zona", "traffic_idx", "pendiente_media",
+            "accesibilidad_pendiente"]
     return pd.DataFrame(z[cols]).reset_index(drop=True)
