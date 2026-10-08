@@ -122,8 +122,128 @@
 
         <p id="aviso"></p>
 
-        <!-- Contenedor del mapa -->
-        <div id="map" class="mapa"></div>
+        <!-- Contenedor del mapa y panel de demostración -->
+        <div class="map-wrapper" style="position: relative; width: 100%;">
+            <!-- Checkbox para simular el toggle del panel lateral -->
+            <input type="checkbox" id="toggle-add-panel" class="toggle-add-panel" style="display: none;">
+
+            <!-- Botón en la parte superior derecha del mapa (Demo) -->
+            <label for="toggle-add-panel" class="btn-demo-add" id="btn-add-station-demo" style="position: absolute; top: 12px; right: 55px; z-index: 1000; background: #8C1D40; color: #ffffff; padding: 9px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.2); user-select: none;">
+                <i class="fa-solid fa-plus-circle"></i>
+                <span>Añadir Electrolinera (Demo)</span>
+            </label>
+
+            <!-- Contenedor del mapa -->
+            <div id="map" class="mapa"></div>
+
+            <!-- Panel lateral derecho de información de la electrolinera -->
+            <aside class="station-side-panel" id="station-side-panel" style="position: absolute; top: 0; right: 0; width: 340px; max-width: 90vw; height: 100%; background: rgba(28, 23, 38, 0.96); backdrop-filter: blur(8px); border-left: 2px solid #8C1D40; z-index: 1001; padding: 20px; box-sizing: border-box; overflow-y: auto; color: #f4f4f9; display: none; box-shadow: -5px 0 20px rgba(0,0,0,0.4); border-radius: 0 12px 12px 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #443b56; padding-bottom: 10px; margin-bottom: 16px;">
+                    <h3 style="margin: 0; font-size: 16px; color: #fff; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-charging-station" style="color: #E6007E;"></i> Nueva Electrolinera
+                    </h3>
+                    <label for="toggle-add-panel" style="cursor: pointer; font-size: 20px; color: #aaa; line-height: 1;">&times;</label>
+                </div>
+
+                <form id="form-nueva-estacion" onsubmit="event.preventDefault();" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Nombre de la Empresa / Red:</label>
+                        <input type="text" placeholder="Ej. Tesla, Evergo, CFE..." style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Nombre del Punto / Sitio:</label>
+                        <input type="text" placeholder="Ej. Hub Plaza Universidad" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Latitud:</label>
+                            <input type="text" placeholder="19.3800" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Longitud:</label>
+                            <input type="text" placeholder="-99.1500" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Alcaldía (CDMX):</label>
+                        <select style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                            <option value="">Seleccionar alcaldía...</option>
+                            <option value="Álvaro Obregón">Álvaro Obregón</option>
+                            <option value="Azcapotzalco">Azcapotzalco</option>
+                            <option value="Benito Juárez">Benito Juárez</option>
+                            <option value="Coyoacán">Coyoacán</option>
+                            <option value="Cuajimalpa de Morelos">Cuajimalpa de Morelos</option>
+                            <option value="Cuauhtémoc">Cuauhtémoc</option>
+                            <option value="Gustavo A. Madero">Gustavo A. Madero</option>
+                            <option value="Iztacalco">Iztacalco</option>
+                            <option value="Iztapalapa">Iztapalapa</option>
+                            <option value="La Magdalena Contreras">La Magdalena Contreras</option>
+                            <option value="Miguel Hidalgo">Miguel Hidalgo</option>
+                            <option value="Milpa Alta">Milpa Alta</option>
+                            <option value="Tláhuac">Tláhuac</option>
+                            <option value="Tlalpan">Tlalpan</option>
+                            <option value="Venustiano Carranza">Venustiano Carranza</option>
+                            <option value="Xochimilco">Xochimilco</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Tipo de Cargador / Conectores:</label>
+                        <select style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                            <option value="dc_fast">Carga Rápida DC (Supercharger / CCS1)</option>
+                            <option value="ac_level2">Nivel 2 AC (240V - J1772)</option>
+                            <option value="ultra_fast">Ultra-rápido (150kW - 350kW)</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Núm. Conectores:</label>
+                            <input type="number" min="1" max="50" placeholder="4" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Potencia (kW):</label>
+                            <input type="number" min="7" max="500" placeholder="150" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Tipo de Ubicación:</label>
+                        <select style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                            <option value="mall">Centro Comercial</option>
+                            <option value="supermarket">Supermercado</option>
+                            <option value="gas_station">Gasolinera / Estación de Servicio</option>
+                            <option value="public_parking">Estacionamiento Público</option>
+                            <option value="hotel">Hotel / Corporativo</option>
+                            <option value="street">Vía Pública</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 4px; color: #cfc6da;">Inversión Estimada (CAPEX MXN):</label>
+                        <input type="text" placeholder="$1,500,000" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #443b56; background: #120e1c; color: #fff; box-sizing: border-box; font-size: 13px;">
+                    </div>
+
+                    <!-- Botón Predecir -->
+                    <button type="button" id="btn-predecir" class="btn" style="margin-top: 8px; width: 100%; padding: 12px; background: linear-gradient(135deg, #2ca25f, #1b783e); color: #ffffff; border: none; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 10px rgba(44,162,95,0.4);">
+                        <i class="fa-solid fa-chart-line"></i> Predecir
+                    </button>
+                </form>
+            </aside>
+        </div>
+
+        <style>
+            /* Regla CSS pura para alternar el panel con el checkbox */
+            #toggle-add-panel:checked ~ #station-side-panel {
+                display: block !important;
+            }
+            #toggle-add-panel:checked ~ #btn-add-station-demo {
+                background: #60142b;
+            }
+        </style>
 
         <!-- Gráficas abajo del mapa -->
         <div class="charts-container">
