@@ -850,6 +850,135 @@ h1 {
     right: var(--station-panel-w);
 }
 
+/* Acciones y resultado del formulario "Nueva Electrolinera" */
+.station-form__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.station-form__predict {
+    margin: 0;
+    width: 100%;
+    padding: 12px;
+    justify-content: center;
+    background: linear-gradient(135deg, #2ca25f, #1b783e);
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(44, 162, 95, 0.4);
+}
+
+.station-form__predict:hover {
+    background: linear-gradient(135deg, #238650, #14622f);
+}
+
+.station-form__map {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #8C1D40;
+    border-radius: 8px;
+    background: rgba(140, 29, 64, 0.18);
+    color: #f2d9e4;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.station-form__map:hover {
+    background: rgba(140, 29, 64, 0.35);
+    color: #fff;
+}
+
+.station-form__map.active {
+    background: #8C1D40;
+    color: #fff;
+    box-shadow: 0 0 0 2px rgba(230, 0, 126, 0.35);
+}
+
+.station-form__clear {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #5a4e73;
+    border-radius: 8px;
+    background: transparent;
+    color: #cfc6da;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.station-form__clear:hover {
+    background: #443b56;
+    color: #fff;
+}
+
+.station-form__clear[hidden] {
+    display: none;
+}
+
+.station-result {
+    flex: none;
+    margin: 0 18px 22px;
+    padding: 14px;
+    border: 1px solid #3a3050;
+    border-radius: 10px;
+    background: #211833;
+}
+
+.station-result[hidden] {
+    display: none;
+}
+
+.station-result h4 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    color: #fff;
+}
+
+.station-result__sub {
+    margin: 0 0 10px;
+    font-size: 11px;
+    color: #A99BB8;
+}
+
+.station-result__kpis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.station-result__kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #2D2040;
+}
+
+.station-result__kpi span {
+    font-size: 10.5px;
+    color: #A99BB8;
+}
+
+.station-result__kpi b {
+    font-size: 13px;
+    color: #fff;
+}
+
+.station-result__note {
+    margin: 10px 0 0;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #9a8faa;
+}
+
 @media (max-width: 900px) {
     .station-side-panel {
         width: min(90vw, var(--station-panel-w));

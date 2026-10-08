@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
         attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
         maxZoom: 16
     }).addTo(map);
-    // ---------- Leyenda (cambia según lo que se colorea) ----------
+
+    // ---------- Leyenda (cambia según lo que se colorea) ----------
     let legendDiv = null;
     function renderLegend(kind) {
         if (!legendDiv) return;
