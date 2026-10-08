@@ -1,0 +1,271 @@
+/* ============================================================
+   Gráficas temáticas ELECTRA
+   Paleta y estilos para el panel de zona y las gráficas del tablero.
+   ============================================================ */
+
+:root {
+    --chart-econ:  #D4A537; /* desarrollo económico */
+    --chart-sust:  #2FBF71; /* sustentabilidad */
+    --chart-eq:    #E6007E; /* equidad */
+}
+
+/* ---------- Mini visuales dentro de los popups ---------- */
+.popup-kpis {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0 2px;
+}
+
+.popup-chip {
+    background: #F7F4FB;
+    border: 1px solid #EDE7F4;
+    border-radius: 8px;
+    padding: 3px 7px;
+    font-size: 11px;
+    color: #5B5170;
+}
+
+.popup-chip b {
+    color: #2D2040;
+}
+
+.range-bar {
+    position: relative;
+    height: 10px;
+    background: #EEE9F4;
+    border-radius: 5px;
+    margin: 8px 0 4px;
+    overflow: hidden;
+}
+
+.range-bar__fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 5px;
+    background: linear-gradient(90deg, var(--chart-eq), var(--chart-econ), var(--chart-sust));
+}
+
+.range-bar__zero {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    width: 2px;
+    background: #8C1D40;
+    z-index: 2;
+}
+
+.range-legend {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #8A7F9B;
+}
+
+.prob-bar {
+    height: 8px;
+    background: #EEE9F4;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 4px 0 2px;
+}
+
+.prob-bar > span {
+    display: block;
+    height: 100%;
+    background: var(--chart-sust);
+    border-radius: 4px;
+}
+
+.popup-hint {
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+/* ---------- Panel inferior de zona (bottom sheet) ---------- */
+.zone-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 900;
+    display: flex;
+    flex-direction: column;
+    max-height: 52vh;
+    background: #ffffff;
+    color: #2D2040;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -10px 34px rgba(27, 19, 36, 0.35);
+    transform: translateY(108%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    pointer-events: none;
+}
+
+.zone-panel.open {
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.zone-panel__handle {
+    width: 46px;
+    height: 5px;
+    border-radius: 3px;
+    background: #D9D2E3;
+    margin: 8px auto 2px;
+    flex: none;
+}
+
+.zone-panel__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 4px 22px 10px;
+    border-bottom: 1px solid #EFEAF5;
+    flex: none;
+}
+
+.zone-panel__header h2 {
+    font-size: 17px;
+    margin: 0;
+    color: var(--secondary-color);
+}
+
+.zone-panel__subtitle {
+    font-size: 12px;
+    color: #7A6E8A;
+    margin: 3px 0 0;
+}
+
+.zone-panel__close {
+    flex: none;
+    border: none;
+    background: #F3EFF8;
+    color: var(--secondary-color);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.zone-panel__close:hover {
+    background: #E7DFF1;
+}
+
+.zone-panel__tabs {
+    display: flex;
+    gap: 6px;
+    padding: 10px 18px 0;
+    flex: none;
+}
+
+.zone-panel__tabs button {
+    flex: 1;
+    border: none;
+    background: #F3EFF8;
+    color: #5B5170;
+    padding: 9px 6px;
+    border-radius: 9px 9px 0 0;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: background 0.2s, color 0.2s;
+}
+
+.zone-panel__tabs button[data-tab="economico"].active {
+    color: var(--chart-econ);
+    border-bottom-color: var(--chart-econ);
+    background: #fff;
+}
+
+.zone-panel__tabs button[data-tab="sustentabilidad"].active {
+    color: #1E8A50;
+    border-bottom-color: var(--chart-sust);
+    background: #fff;
+}
+
+.zone-panel__tabs button[data-tab="equidad"].active {
+    color: var(--chart-eq);
+    border-bottom-color: var(--chart-eq);
+    background: #fff;
+}
+
+.zone-panel__body {
+    overflow: auto;
+    padding: 14px 22px 26px;
+}
+
+.zp-pane {
+    display: none;
+}
+
+.zp-pane.active {
+    display: block;
+}
+
+.zp-kpis {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.zp-kpi {
+    flex: 1 1 120px;
+    background: #F7F4FB;
+    border: 1px solid #EDE7F4;
+    border-radius: 10px;
+    padding: 8px 10px;
+}
+
+.zp-kpi__label {
+    font-size: 11px;
+    color: #7A6E8A;
+    display: block;
+}
+
+.zp-kpi__value {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2D2040;
+}
+
+.zp-chart {
+    position: relative;
+    height: 210px;
+}
+
+.zp-note {
+    font-size: 11px;
+    color: #9A8FAA;
+    margin-top: 10px;
+    line-height: 1.4;
+}
+
+/* ---------- Gráficas temáticas agregadas (bajo el mapa) ---------- */
+.chart-box h2 .chart-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.chart-tag--econ { background: #FBF3DE; color: #8A6A10; }
+.chart-tag--sust { background: #E2F6EA; color: #1E8A50; }
+.chart-tag--eq   { background: #FCE4F1; color: #B4006A; }
+
+@media (max-width: 768px) {
+    .zone-panel {
+        max-height: 68vh;
+    }
+}

@@ -764,7 +764,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 labels: ['Tesla', 'Evergo', 'PlugShare'],
                 datasets: [{
                     data: [tesla, evergo, plugshare],
-                    backgroundColor: ['#e82127', '#00a859', '#f59e0b']
+                    backgroundColor: ['#E5484D', '#2FBF71', '#D4A537']
                 }]
             },
             options: {
@@ -792,9 +792,9 @@ document.addEventListener('DOMContentLoaded', () => {
             data: {
                 labels: labels,
                 datasets: [
-                    { label: 'Poder Adquisitivo', data: riqueza, backgroundColor: '#007bff' },
-                    { label: 'Destinos', data: destinos, backgroundColor: '#28a745' },
-                    { label: 'Competencia', data: competencia, backgroundColor: '#dc3545' }
+                    { label: 'Poder Adquisitivo', data: riqueza, backgroundColor: '#8C1D40' },
+                    { label: 'Destinos', data: destinos, backgroundColor: '#2FBF71' },
+                    { label: 'Competencia', data: competencia, backgroundColor: '#E5484D' }
                 ]
             },
             options: {
@@ -845,6 +845,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentLayer) {
             map.removeLayer(currentLayer);
         }
+        if (window.ZonePanel) window.ZonePanel.close();
         const id = ++reqId;
         fetch(filename)
             .then(response => {
@@ -903,23 +904,49 @@ document.addEventListener('DOMContentLoaded', () => {
     function popupPrediccion(p, año) {
         const prob = (p.prob_rentable !== null && p.prob_rentable !== undefined)
             ? (p.prob_rentable * 100).toFixed(0) + ' %' : 'N/D';
+        const probPct = (p.prob_rentable !== null && p.prob_rentable !== undefined)
+            ? Math.max(0, Math.min(100, p.prob_rentable * 100)) : 0;
         const obra = p.viable_max
             ? `<div class="popup-sec">Cargadores a construir</div><div>${p.n_cargadores_max} (nuevos netos: ${p.nuevos_max ?? 'N/D'})</div>`
             : `<div class="popup-no">Con el caso base no conviene construir aquí.</div>`;
+
+        // Barra de rango P10–P90 de la ganancia (con marca en 0 si aplica)
+        let rango = '';
+        if (p.ganancia_min !== null && p.ganancia_max !== null &&
+            p.ganancia_min !== undefined && p.ganancia_max !== undefined) {
+            const lo = Math.min(0, p.ganancia_min);
+            const hi = Math.max(0, p.ganancia_max);
+            const span = (hi - lo) || 1;
+            const left = ((p.ganancia_min - lo) / span) * 100;
+            const width = Math.max(((p.ganancia_max - p.ganancia_min) / span) * 100, 0.5);
+            const zero = ((0 - lo) / span) * 100;
+            rango = `
+                <div class="range-bar" title="Rango P10–P90 de la ganancia">
+                    <span class="range-bar__fill" style="left:${left}%;width:${width}%"></span>
+                    <span class="range-bar__zero" style="left:${zero}%"></span>
+                </div>
+                <div class="range-legend"><span>${mxn(p.ganancia_min)}</span><span>P50 ${mxn(p.ganancia_p50)}</span><span>${mxn(p.ganancia_max)}</span></div>`;
+        }
+
+        const co2 = (p.co2_evitado !== null && p.co2_evitado !== undefined)
+            ? (p.co2_evitado / 1000).toFixed(1) + ' t/año' : 'N/D';
+
         return `
             <div class="popup-title">${p.alcaldia} — ${año} (adopción ${p.escenario ?? ''})</div>
             <div><b>Probabilidad de ser rentable:</b> ${prob}</div>
+            <div class="prob-bar"><span style="width:${probPct}%"></span></div>
             <div><b>Ganancia mediana:</b> ${mxn(p.ganancia_p50)}</div>
-            <div><b>Ganancia P10 a P90:</b> ${mxn(p.ganancia_min)} a ${mxn(p.ganancia_max)}</div>
+            ${rango}
+            <div class="popup-kpis">
+                <span class="popup-chip"><b>Inversión:</b> ${mxn(p.capex_total)}</span>
+                <span class="popup-chip"><b>CO₂:</b> ${co2}</span>
+                <span class="popup-chip"><b>Empleos:</b> ${p.empleo_est ?? 'N/D'}</span>
+            </div>
             <div><b>Percentil de viabilidad:</b> ${(p.score_viabilidad * 100).toFixed(0)}</div>
             ${obra}
             <div class="popup-sec">Payback (capex base)</div>
             <div>Optimista: ${años(p.payback_max)} · Pesimista: ${años(p.payback_min)}</div>
-            <div class="popup-sec">Sensibilidad al capex (optimista)</div>
-            <div>×0.5: ${años(p.payback_max_capex50)} · ×2: ${años(p.payback_max_capex200)}</div>
-            <div class="popup-sec">Ganancia neta anualizada</div>
-            <div>Mediana: ${mxn(p.neta_p50)}</div>
-            <div>P10: ${mxn(p.neta_min)} · P90: ${mxn(p.neta_max)}</div>
+            <div class="popup-hint"><i class="fa-solid fa-chart-simple"></i> Clic en la zona para ver el análisis</div>
         `;
     }
 
@@ -950,6 +977,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const porZona = {};
             PRED.filter(r => r['año'] === año).forEach(r => { porZona[r.zona] = r; });
 
+            // Geo para las comparaciones de equidad en el panel de zona
+            if (window.ZonePanel) window.ZonePanel.setGeo(geo.features);
+
             geo.features.forEach(f => {
                 const p = porZona[f.properties.CVEGEO];
                 if (metrica === 'score') {
@@ -970,8 +1000,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     const p = porZona[f.properties.CVEGEO];
                     if (!p) return;
                     layer.bindPopup(popupPrediccion(p, año));
+                    layer.on('click', () => {
+                        if (!window.ZonePanel) return;
+                        const rows = PRED.filter(r => r.zona === f.properties.CVEGEO);
+                        window.ZonePanel.open({ rows, year: año, props: f.properties });
+                    });
                 }
             }).addTo(map);
+
+            // Gráficas temáticas agregadas (CO₂ y equidad de cobertura)
+            if (window.ELECTRA_AGG) window.ELECTRA_AGG.render(PRED);
         } catch (e) {
             console.error('Error al cargar la predicción:', e);
             aviso.textContent = 'Error al cargar la predicción. Revisa la consola.';
@@ -984,12 +1022,18 @@ document.addEventListener('DOMContentLoaded', () => {
         aviso.textContent = '';
         opciones.classList.add('off');
         renderLegend('pct');
+        if (window.ZonePanel) window.ZonePanel.close();
     }
 
     // ---------- Arranque ----------
     loadMapData('./viabilidad_cdmx_v2.geojson');
     loadChargersData();
     initSearch();
+
+    // Gráficas temáticas con el escenario por defecto (aunque no se abra la predicción)
+    getPred('media').then(PRED => {
+        if (PRED && window.ELECTRA_AGG) window.ELECTRA_AGG.render(PRED);
+    });
 
     // ---------- Botones (solo en index.html) ----------
     if (document.getElementById('btn-original')) {

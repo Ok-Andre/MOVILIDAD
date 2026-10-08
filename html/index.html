@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/graficas.css">
 </head>
 
 <body>
@@ -128,7 +129,7 @@
         <!-- Gráficas abajo del mapa -->
         <div class="charts-container">
             <div class="chart-box">
-                <h2>Viabilidad Promedio por Alcaldía</h2>
+                <h2>Viabilidad Promedio por Alcaldía <span class="chart-tag chart-tag--econ">Económico</span></h2>
                 <div class="chart-wrapper">
                     <canvas id="chart-alcaldia"></canvas>
                 </div>
@@ -143,9 +144,25 @@
                 </div>
 
                 <div class="chart-box">
-                    <h2>Desglose de Componentes del Modelo</h2>
+                    <h2>Desglose de Componentes del Modelo <span class="chart-tag chart-tag--econ">Económico</span></h2>
                     <div class="chart-wrapper">
                         <canvas id="chart-components"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-row">
+                <div class="chart-box">
+                    <h2>CO₂ Evitado por Año <span class="chart-tag chart-tag--sust">Sustentabilidad</span></h2>
+                    <div class="chart-wrapper">
+                        <canvas id="chart-sustentabilidad"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <h2>Zonas de Alto Potencial sin Cobertura <span class="chart-tag chart-tag--eq">Equidad</span></h2>
+                    <div class="chart-wrapper">
+                        <canvas id="chart-equidad"></canvas>
                     </div>
                 </div>
             </div>
@@ -159,6 +176,7 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/charts.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 
