@@ -265,3 +265,92 @@ li.showMenu .sub-menu {
     left: 78px;
     width: calc(100% - 78px);
 }
+
+/* Link activo */
+.nav-links li.active {
+    background: var(--fourt-color);
+}
+
+.nav-links li.active > a .link_name,
+.nav-links li.active > a i {
+    color: var(--tertiary-color);
+}
+
+/* Links inactivos (próximamente) */
+.nav-links a.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* Flecha de submenú */
+.sidebar2 .nav-links li i.arrow {
+    min-width: auto;
+    height: auto;
+    line-height: 1;
+    font-size: 14px;
+    margin-left: auto;
+    margin-right: 18px;
+    transition: transform 0.3s ease;
+}
+
+/* Hamburguesa + backdrop (móvil) */
+.mobile-menu-btn {
+    display: none;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 120;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: var(--primary-color);
+    color: var(--text-color);
+    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+}
+
+.sidebar-backdrop.show {
+    display: block;
+}
+
+/* Móvil: sidebar como drawer superpuesto */
+@media (max-width: 768px) {
+    .sidebar2,
+    .sidebar2.close {
+        width: 260px;
+        transform: translateX(-100%);
+        box-shadow: 4px 0 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .sidebar2:not(.close) {
+        transform: translateX(0);
+    }
+
+    .home-section,
+    .sidebar2.close ~ .home-section {
+        left: 0;
+        width: 100%;
+    }
+
+    .sidebar2 .nav-links {
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: 30px;
+    }
+
+    .mobile-menu-btn {
+        display: inline-flex;
+    }
+}

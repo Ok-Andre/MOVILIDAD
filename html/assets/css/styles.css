@@ -1,13 +1,20 @@
 @import url("base.css");
 @import url("mapa.css");
+@import url("styleHome.css");
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f4f9;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    overflow-x: hidden;
+}
+
+/* Contraste del contenido sobre el fondo oscuro del home */
+.home-section {
+    padding: 24px 20px 0;
+}
+
+h1 {
+    color: var(--text-color);
 }
 
 .opciones {
@@ -18,7 +25,7 @@ body {
     gap: 16px;
     margin-bottom: 12px;
     font-size: 14px;
-    color: #333;
+    color: var(--text-color);
 }
 
 .opciones select {
@@ -33,14 +40,14 @@ body {
 
 .nota {
     max-width: 1000px;
-    color: #555;
+    color: #cfc6da;
     font-size: 13px;
     text-align: center;
     margin: 0 0 12px 0;
 }
 
 #aviso {
-    color: #b00020;
+    color: #ff6b81;
     font-size: 14px;
     min-height: 18px;
     margin: 0 0 8px 0;

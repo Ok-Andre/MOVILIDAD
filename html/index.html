@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Viabilidad para Estaciones de Carga - CDMX</title>
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Leaflet / MarkerCluster -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
@@ -16,77 +19,146 @@
 
 <body>
 
-    <h1>Viabilidad para Estaciones de Carga - CDMX</h1>
-
-    <div class="controls">
-        <button id="btn-original" class="btn active">Modelo Original (Con Destinos)</button>
-        <button id="btn-no-destinos" class="btn">Modelo sin Destinos</button>
-        <button id="btn-2030" class="btn">Predicción 2030</button>
-        <button id="btn-2035" class="btn">Predicción 2035</button>
-    </div>
-
-    <!-- Solo aplican a las predicciones 2030 / 2035 -->
-    <div id="opciones" class="opciones off">
-        <label>Escenario de adopción de EVs:
-            <select id="sel-escenario">
-                <option value="baja">Baja</option>
-                <option value="media" selected>Media</option>
-                <option value="alta">Alta</option>
-            </select>
-        </label>
-        <label>Colorear por:
-            <select id="sel-metrica">
-                <option value="score">Viabilidad (percentil)</option>
-                <option value="prob">Probabilidad de ser rentable</option>
-                <option value="payback_max">Payback, caso optimista (P90)</option>
-                <option value="payback_min">Payback, caso pesimista (P10)</option>
-            </select>
-        </label>
-    </div>
-
-    <p class="nota">Modelos originales: los colores se asignan por percentil entre las AGEB de la CDMX (verde = 20 %
-        superior, amarillo = 40–80 %, rojo = 40 % inferior). Las predicciones 2030/2035 son una simulación Monte Carlo
-        con supuestos provisionales (precios, capex, adopción de EVs), no un pronóstico calibrado: el rango va del
-        percentil 10 (pesimista) al 90 (optimista). El número de cargadores se decide con el caso base y la
-        probabilidad de ser rentable es la de que la ganancia neta anualizada sea positiva. Payback = años para
-        recuperar la inversión del sitio con la ganancia operativa.</p>
-
-    <p id="aviso"></p>
-
-    <!-- Contenedor del mapa -->
-    <div id="map" class="mapa"></div>
-
-    <!-- Gráficas abajo del mapa -->
-    <div class="charts-container">
-        <div class="chart-box">
-            <h2>Viabilidad Promedio por Alcaldía</h2>
-            <div class="chart-wrapper">
-                <canvas id="chart-alcaldia"></canvas>
-            </div>
+    <!-- Sidebar -->
+    <div class="sidebar2 close" id="sidebar">
+        <div class="logo-details">
+            <img src="assets/img/logo_CDMX.png" alt="ELECTRA">
+            <span class="logo_name">ELECTRA</span>
         </div>
 
-        <div class="charts-row">
+        <ul class="nav-links">
+            <li class="active" id="nav-mapa">
+                <a href="#map">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span class="link_name">Mapa</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
+                    <i class="fa-solid fa-chart-column"></i>
+                    <span class="link_name">Dashboard</span>
+                </a>
+            </li>
+
+            <li class="has-submenu" id="nav-predicciones">
+                <a href="#">
+                    <i class="fa-solid fa-brain"></i>
+                    <span class="link_name">Predicciones</span>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="#" class="pred-btn" data-target="btn-2030">Escenario 2030</a></li>
+                    <li><a href="#" class="pred-btn" data-target="btn-2035">Escenario 2035</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
+                    <i class="fa-solid fa-charging-station"></i>
+                    <span class="link_name">Electrolineras</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <span class="link_name">Gastos</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
+                    <i class="fa-solid fa-gear"></i>
+                    <span class="link_name">Configuracion</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" id="toggleSidebarBtn">
+                    <i class="fa-solid fa-bars"></i>
+                    <span class="link_name">Cerrar Menu</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <section class="home-section">
+
+        <h1>Viabilidad para Estaciones de Carga - CDMX</h1>
+
+        <div class="controls">
+            <button id="btn-original" class="btn active">Modelo Original (Con Destinos)</button>
+            <button id="btn-no-destinos" class="btn">Modelo sin Destinos</button>
+            <button id="btn-2030" class="btn">Predicción 2030</button>
+            <button id="btn-2035" class="btn">Predicción 2035</button>
+        </div>
+
+        <!-- Solo aplican a las predicciones 2030 / 2035 -->
+        <div id="opciones" class="opciones off">
+            <label>Escenario de adopción de EVs:
+                <select id="sel-escenario">
+                    <option value="baja">Baja</option>
+                    <option value="media" selected>Media</option>
+                    <option value="alta">Alta</option>
+                </select>
+            </label>
+            <label>Colorear por:
+                <select id="sel-metrica">
+                    <option value="score">Viabilidad (percentil)</option>
+                    <option value="prob">Probabilidad de ser rentable</option>
+                    <option value="payback_max">Payback, caso optimista (P90)</option>
+                    <option value="payback_min">Payback, caso pesimista (P10)</option>
+                </select>
+            </label>
+        </div>
+
+        <p class="nota">Modelos originales: los colores se asignan por percentil entre las AGEB de la CDMX (verde = 20 %
+            superior, amarillo = 40–80 %, rojo = 40 % inferior). Las predicciones 2030/2035 son una simulación Monte Carlo
+            con supuestos provisionales (precios, capex, adopción de EVs), no un pronóstico calibrado: el rango va del
+            percentil 10 (pesimista) al 90 (optimista). El número de cargadores se decide con el caso base y la
+            probabilidad de ser rentable es la de que la ganancia neta anualizada sea positiva. Payback = años para
+            recuperar la inversión del sitio con la ganancia operativa.</p>
+
+        <p id="aviso"></p>
+
+        <!-- Contenedor del mapa -->
+        <div id="map" class="mapa"></div>
+
+        <!-- Gráficas abajo del mapa -->
+        <div class="charts-container">
             <div class="chart-box">
-                <h2>Electrolineras por Red</h2>
+                <h2>Viabilidad Promedio por Alcaldía</h2>
                 <div class="chart-wrapper">
-                    <canvas id="chart-chargers"></canvas>
+                    <canvas id="chart-alcaldia"></canvas>
                 </div>
             </div>
 
-            <div class="chart-box">
-                <h2>Desglose de Componentes del Modelo</h2>
-                <div class="chart-wrapper">
-                    <canvas id="chart-components"></canvas>
+            <div class="charts-row">
+                <div class="chart-box">
+                    <h2>Electrolineras por Red</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="chart-chargers"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <h2>Desglose de Componentes del Modelo</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="chart-components"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+    </section>
 
     <!-- Scripts Leaflet, MarkerCluster, Chart.js y Lógica -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/sidebar.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 
