@@ -50,6 +50,7 @@ def simulate_targets(zones: pd.DataFrame, years=TRAIN_YEARS, seed=SEED):
     evs = df["vph_autom"] * ad * (1 + df["riqueza_norm"])
     kwh = (evs * KWH_EV_ANIO * PUBLIC_SHARE
            + df["traffic_idx"] * DEST_KWH_BASE * (ad / ADOPT_REF))
+    kwh *= df["accesibilidad_pendiente"]
 
     comp = (df["n_Tesla"] * PESO_MARCA["Tesla"]
             + df["n_Evergo"] * PESO_MARCA["Evergo"]

@@ -135,11 +135,18 @@ Predice la ganancia anual (máxima y mínima) por AGEB para **2030 y 2035**, y u
 
 ```bash
 cd modelo
-pip install geopandas pandas numpy scikit-learn matplotlib scipy
-python build_chargers.py   # 1) une y limpia los cargadores
-python run_all.py          # 2) entrena, predice y exporta
-python validate.py         # 3) revisa contra cargadores reales
+pip install geopandas pandas numpy scikit-learn matplotlib scipy rasterio
+python pendiente.py        # 1) calcula la pendiente media por AGEB desde el DEM
+python build_chargers.py   # 2) une y limpia los cargadores
+python run_all.py          # 3) entrena, predice y exporta
+python validate.py         # 4) revisa contra cargadores reales
 ```
+
+`pendiente.py` busca el DEM GeoTIFF `09_Ciuda*r15m*.tif` dentro del proyecto y
+genera `datasets/pendiente_ageb.csv`; coloca el DEM en `datasets/`. Las predicciones aplican una reducción
+gradual de demanda por pendiente: como supuesto inicial, 15 % de pendiente media
+reduce a la mitad la demanda accesible. Este factor es un proxy topográfico,
+no una medición de caminos transitables, y debe calibrarse con datos viales.
 
 Genera en `salidas/`: `modelo.pkl`, `metricas.json`, `predicciones.csv`, `predicciones.json` y gráficas `.png`.
 `export.py` también copia `predicciones.json` a `html/`.
@@ -198,6 +205,7 @@ censo (POBTOT) ─────────────┼─> data.py <───
 - **Zona:** AGEB (`CVEGEO`) y alcaldía.
 - **Cargadores:** densidad por km² y número de puertos por marca (Tesla, Evergo, PlugShare).
 - **Demanda:** población, viviendas con auto, riqueza y destinos.
+- **Accesibilidad:** pendiente media por AGEB convertida en un factor gradual de demanda.
 - **Tipo de zona:** comercial, residencial alto, residencial medio o periferia.
 - **Tráfico:** proxy (destinos + viviendas con auto). No hay datos de aforos.
 
