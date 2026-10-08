@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ELECTRA CDMX</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/styleHome.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar2 close" id="sidebar">
+        <div class="logo-details">
+            <img src="assets/img/logo_CDMX.png" alt="ELECTRA">
+            <span class="logo_name">ELECTRA</span>
+        </div>
+
+        <ul class="nav-links">
+            <li id="nav-mapa">
+                <a href="index.html">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span class="link_name">Mapa</span>
+                </a>
+            </li>
+
+            <li class="active" id="nav-dashboard">
+                <a href="dashboard.html">
+                    <i class="fa-solid fa-chart-column"></i>
+                    <span class="link_name">Dashboard</span>
+                </a>
+            </li>
+
+            <li class="has-submenu" id="nav-predicciones">
+                <a href="#">
+                    <i class="fa-solid fa-brain"></i>
+                    <span class="link_name">Predicciones</span>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="index.html" class="pred-btn" data-target="btn-2030">Escenario 2030</a></li>
+                    <li><a href="index.html" class="pred-btn" data-target="btn-2035">Escenario 2035</a></li>
+                </ul>
+            </li>
+
+            <li id="nav-electrolineras">
+                <a href="electrolineras.html">
+                    <i class="fa-solid fa-charging-station"></i>
+                    <span class="link_name">Electrolineras</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <span class="link_name">Gastos</span>
+                </a>
+            </li>
+
+            <li id="nav-configuracion">
+                <a href="index.html?openConfig=true" id="btn-sidebar-config">
+                    <i class="fa-solid fa-gear"></i>
+                    <span class="link_name">Configuración</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" id="toggleSidebarBtn">
+                    <i class="fa-solid fa-bars"></i>
+                    <span class="link_name">Cerrar Menu</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <section class="home-section dashboard-section">
+        <header class="dashboard-header">
+            <h1>Dashboard General de Movilidad Eléctrica</h1>
+            <p class="dashboard-subtitle">Estadísticas agregadas, distribución de electrolineras por alcaldía, redes y proyecciones territoriales en la CDMX.</p>
+        </header>
+
+        <!-- Menú de Selección de Gráficas -->
+        <nav class="dashboard-menu" id="dashboard-menu">
+            <button type="button" class="dash-menu-btn active" data-target="panel-chargers-by-alcaldia">
+                <i class="fa-solid fa-ranking-star"></i>
+                <span>Electrolineras por Alcaldía</span>
+            </button>
+            <button type="button" class="dash-menu-btn" data-target="panel-chargers-by-network">
+                <i class="fa-solid fa-pie-chart"></i>
+                <span>Distribución por Red</span>
+            </button>
+            <button type="button" class="dash-menu-btn" data-target="panel-avg-viability">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span>Viabilidad Promedio por Alcaldía</span>
+            </button>
+            <button type="button" class="dash-menu-btn" data-target="panel-model-components">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Desglose de Componentes</span>
+            </button>
+            <button type="button" class="dash-menu-btn" data-target="panel-chargers-projection">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+                <span>Proyección de Nuevos Cargadores (2026–2035)</span>
+            </button>
+            <button type="button" class="dash-menu-btn" data-target="panel-equity-gaps">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <span>Zonas de Alto Potencial sin Cobertura</span>
+            </button>
+            <button type="button" class="dash-menu-btn" data-target="panel-all">
+                <i class="fa-solid fa-table-cells-large"></i>
+                <span>Ver Todas</span>
+            </button>
+        </nav>
+
+        <!-- Contenedor de Paneles de Gráficas -->
+        <div class="dashboard-panels" id="dashboard-panels">
+            <!-- Gráfica 1: Alcaldías con más electrolineras -->
+            <div class="dashboard-card dash-panel active" id="panel-chargers-by-alcaldia">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">
+                        <i class="fa-solid fa-ranking-star"></i>
+                        Electrolineras por Alcaldía (Ranking Completo)
+                    </h2>
+                    <span class="dashboard-card__badge">Infraestructura</span>
+                </div>
+                <div class="dashboard-card__chart">
+                    <canvas id="chart-chargers-by-alcaldia"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfica 2: Distribución por Red -->
+            <div class="dashboard-card dash-panel" id="panel-chargers-by-network">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">
+                        <i class="fa-solid fa-pie-chart"></i>
+                        Distribución por Red de Carga
+                    </h2>
+                    <span class="dashboard-card__badge">Operadores</span>
+                </div>
+                <div class="dashboard-card__chart">
+                    <canvas id="chart-chargers-by-network"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfica 3: Viabilidad Promedio por Alcaldía -->
+            <div class="dashboard-card dash-panel" id="panel-avg-viability">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">
+                        <i class="fa-solid fa-chart-simple"></i>
+                        Viabilidad Promedio por Alcaldía (%)
+                    </h2>
+                    <span class="dashboard-card__badge">Económico</span>
+                </div>
+                <div class="dashboard-card__chart">
+                    <canvas id="chart-avg-viability"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfica 4: Desglose de Componentes del Modelo -->
+            <div class="dashboard-card dash-panel" id="panel-model-components">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">
+                        <i class="fa-solid fa-layer-group"></i>
+                        Desglose de Componentes del Modelo (Poder Adquisitivo, Destinos y Competencia)
+                    </h2>
+                    <span class="dashboard-card__badge">Variables</span>
+                </div>
+                <div class="dashboard-card__chart">
+                    <canvas id="chart-model-components"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfica 5: Proyección de Cargadores (2026-2035) -->
+            <div class="dashboard-card dash-panel" id="panel-chargers-projection">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        Proyección de Nuevos Cargadores Óptimos y Zonas Rentables (2026–2035)
+                    </h2>
+                    <span class="dashboard-card__badge">Proyección</span>
+                </div>
+                <div class="dashboard-card__chart">
+                    <canvas id="chart-chargers-projection"></canvas>
+                </div>
+            </div>
+
+            <!-- Gráfica 6: Equidad Territorial - Zonas de Alto Potencial sin Cobertura -->
+            <div class="dashboard-card dash-panel" id="panel-equity-gaps">
+                <div class="dashboard-card__header">
+                    <h2 class="dashboard-card__title">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                        Zonas de Alto Potencial sin Cobertura de Carga (Prioridad de Expansión)
+                    </h2>
+                    <span class="dashboard-card__badge">Equidad Territorial</span>
+                </div>
+                <div class="dashboard-card__chart">
+                    <canvas id="chart-equity-gaps"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/sidebar.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+</body>
+
+</html>

@@ -27,18 +27,29 @@ document.addEventListener('DOMContentLoaded', () => {
         attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
         maxZoom: 16
     }).addTo(map);
-
-    // ---------- Leyenda (cambia según lo que se colorea) ----------
+    // ---------- Leyenda (cambia según lo que se colorea) ----------
     let legendDiv = null;
     function renderLegend(kind) {
         if (!legendDiv) return;
         const filas = {
-            pb: [['#2ca25f', 'Payback ≤ 3 años'], ['#ffeda0', 'Payback de 3 a 6 años'],
-                 ['#de2d26', 'Más de 6 años o no recupera']],
-            prob: [['#2ca25f', 'Rentable en ≥ 80 % de los casos'], ['#ffeda0', 'Rentable en 50–80 %'],
-                   ['#de2d26', 'Rentable en < 50 %'], ['#bdbdbd', 'No se construiría']],
-            pct: [['#2ca25f', 'Alta (top 20 %)'], ['#ffeda0', 'Media (40–80 %)'],
-                  ['#de2d26', 'Baja (40 % inferior)']]
+            pb: [
+                ['#2ca25f', 'Payback ≤ 3 años'],
+                ['#ffeda0', 'Payback de 3 a 6 años'],
+                ['#de2d26', 'Más de 6 años'],
+                ['#bdbdbd', 'No recupera / Sin datos']
+            ],
+            prob: [
+                ['#2ca25f', 'Rentable en ≥ 80 % de los casos'],
+                ['#ffeda0', 'Rentable en 50–80 %'],
+                ['#de2d26', 'Rentable en < 50 %'],
+                ['#bdbdbd', 'No se construiría / Sin datos']
+            ],
+            pct: [
+                ['#2ca25f', 'Alta (top 20 %)'],
+                ['#ffeda0', 'Media (40–80 %)'],
+                ['#de2d26', 'Baja (40 % inferior)'],
+                ['#bdbdbd', 'Sin datos / No calculado']
+            ]
         }[kind];
         legendDiv.innerHTML = filas.map(([c, t]) => `<div><i style="background:${c}"></i>${t}</div>`).join('');
     }
@@ -53,21 +64,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---------- Utilidades ----------
     // pct = percentil 0-1 (no el valor crudo)
     function getColor(pct) {
+        if (pct === null || pct === undefined || isNaN(pct)) return '#bdbdbd';
         if (pct > 0.8) return '#2ca25f';   // Verde (alta)
         if (pct > 0.4) return '#ffeda0';   // Amarillo (media)
-        return '#de2d26';                  // Rojo (baja)
+        if (pct >= 0) return '#de2d26';    // Rojo (baja)
+        return '#bdbdbd';                  // Gris (sin datos)
     }
 
-    // Payback en años; null/undefined = la ganancia no cubre la inversión
+    // Payback en años; null/undefined = la ganancia no cubre la inversión o sin datos
     function colorPayback(v) {
-        if (v === null || v === undefined) return '#de2d26';
+        if (v === null || v === undefined || isNaN(v)) return '#bdbdbd';
         if (v <= 3) return '#2ca25f';
         if (v <= 6) return '#ffeda0';
         return '#de2d26';
     }
+
     // Probabilidad de ganancia neta > 0 (solo zonas que se construirían en el caso base)
     function colorProb(p) {
-        if (!p || !p.viable_max) return '#bdbdbd';
+        if (!p || !p.viable_max || p.prob_rentable === null || p.prob_rentable === undefined || isNaN(p.prob_rentable)) return '#bdbdbd';
         if (p.prob_rentable >= 0.8) return '#2ca25f';
         if (p.prob_rentable >= 0.5) return '#ffeda0';
         return '#de2d26';
@@ -75,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Degradado continuo de color (Rojo -> Amarillo -> Verde), para las gráficas
     function getColorGradient(val) {
-        if (val === null || val === undefined || isNaN(val)) return '#cccccc';
+        if (val === null || val === undefined || isNaN(val)) return '#bdbdbd';
 
         const stops = [
             { pos: 0.00, r: 222, g: 45, b: 38 },   // #de2d26 Rojo
@@ -108,25 +122,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Calcula el percentil de `key` entre todos los polígonos y lo guarda en _pct
     function addPct(data, key) {
-        const vals = data.features
-            .map(f => f.properties[key] ?? 0)
+        if (!data || !data.features) return;
+        const validFeatures = data.features.filter(f => {
+            const v = f.properties && f.properties[key];
+            return v !== null && v !== undefined && !isNaN(v) && v > 0;
+        });
+        const vals = validFeatures
+            .map(f => f.properties[key])
             .sort((a, b) => a - b);
         const n = Math.max(vals.length - 1, 1);
         data.features.forEach(f => {
-            const v = f.properties[key] ?? 0;
+            if (!f.properties) f.properties = {};
+            const v = f.properties[key];
+            if (v === null || v === undefined || isNaN(v) || v <= 0) {
+                f.properties._pct = null;
+                f.properties._fill = '#bdbdbd'; // Gris para zonas sin datos o no coloreadas
+                return;
+            }
             let lo = 0, hi = vals.length;
             while (lo < hi) {
                 const m = (lo + hi) >> 1;
                 if (vals[m] < v) lo = m + 1; else hi = m;
             }
             f.properties._pct = lo / n;
+            f.properties._fill = getColor(f.properties._pct);
         });
     }
 
-    // Si la feature trae _fill (predicciones) se usa; si no, el percentil
+    // Si la feature trae _fill se usa; si no, el percentil, o gris por defecto
     function style(feature) {
+        const p = feature.properties || {};
+        let fill = p._fill;
+        if (!fill) {
+            if (p._pct !== null && p._pct !== undefined && !isNaN(p._pct)) {
+                fill = getColor(p._pct);
+            } else {
+                fill = '#bdbdbd'; // Gris para partes no coloreadas
+            }
+        }
         return {
-            fillColor: feature.properties._fill ?? getColor(feature.properties._pct ?? 0),
+            fillColor: fill || '#bdbdbd',
             weight: 1,
             opacity: 1,
             color: 'white',
@@ -138,17 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnIds = ['btn-original', 'btn-no-destinos', 'btn-2030', 'btn-2035'];
     const aviso = document.getElementById('aviso');
     const opciones = document.getElementById('opciones');
-
-    // ---------- Formulario "Nueva Electrolinera" ----------
-    const estRed = document.getElementById('est-red');
-    const estNombre = document.getElementById('est-nombre');
-    const estLat = document.getElementById('est-lat');
-    const estLon = document.getElementById('est-lon');
-    const estConectores = document.getElementById('est-conectores');
-    const btnUbicarMapa = document.getElementById('btn-ubicar-mapa');
-    const btnPredecir = document.getElementById('btn-predecir');
-    const btnQuitarPrueba = document.getElementById('btn-quitar-prueba');
-    const stationResult = document.getElementById('station-result');
 
     function setActive(id) {
         btnIds.forEach(b => document.getElementById(b).classList.remove('active'));
@@ -207,17 +231,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Datos de todos los pines (incluye los personalizados) para búsqueda y distancias
     const chargersData = [];
 
-    let CHARGERS_PROMISE = null;
-    function getChargersGeo() {
-        return CHARGERS_PROMISE ??= fetch('./all_chargers_geo.json')
-            .then(res => {
-                if (!res.ok) throw new Error('Error al cargar las electrolineras');
-                return res.json();
-            });
-    }
-
     function loadChargersData() {
-        return getChargersGeo()
+        return fetch('./all_chargers_geo.json')
+            .then(res => res.json())
             .then(data => {
                 let teslaCount = 0;
                 let evergoCount = 0;
@@ -275,6 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 map.addLayer(chargersCluster);
+                window._cachedChargersCounts = { tesla: teslaCount, evergo: evergoCount, plugshare: plugshareCount };
                 renderChargersPieChart(teslaCount, evergoCount, plugshareCount);
             })
             .catch(err => {
@@ -806,15 +823,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         list.sort((a, b) => b.avgViabilidad - a.avgViabilidad);
 
+        window._cachedAlcaldiaList = list;
         renderAlcaldiaBarChart(list);
         renderComponentsChart(list.slice(0, 8));
     }
 
     function renderAlcaldiaBarChart(list) {
+        if (!list || !list.length) return;
         const labels = list.map(a => a.name);
         const data = list.map(a => +(a.avgViabilidad.toFixed(4)));
 
-        const ctx = document.getElementById('chart-alcaldia').getContext('2d');
+        const canvas = document.getElementById('chart-alcaldia');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
 
         if (alcaldiaChart) alcaldiaChart.destroy();
 
@@ -844,10 +865,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderChargersPieChart(tesla, evergo, plugshare) {
-        if (!document.getElementById('chart-chargers')) return;
+        const canvas = document.getElementById('chart-chargers');
+        if (!canvas) return;
 
-        const ctx = document.getElementById('chart-chargers').getContext('2d');
-
+        const ctx = canvas.getContext('2d');
         if (chargersPieChart) chargersPieChart.destroy();
 
         chargersPieChart = new Chart(ctx, {
@@ -855,28 +876,38 @@ document.addEventListener('DOMContentLoaded', () => {
             data: {
                 labels: ['Tesla', 'Evergo', 'PlugShare'],
                 datasets: [{
-                    data: [tesla, evergo, plugshare],
-                    backgroundColor: ['#E5484D', '#2FBF71', '#D4A537']
+                    data: [tesla || 41, evergo || 72, plugshare || 118],
+                    backgroundColor: ['#E5484D', '#2FBF71', '#D4A537'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom' }
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        callbacks: {
+                            label: (c) => ` ${c.label}: ${c.raw} sitios (${((c.raw / ((tesla||41) + (evergo||72) + (plugshare||118))) * 100).toFixed(1)}%)`
+                        }
+                    }
                 }
             }
         });
     }
 
     function renderComponentsChart(topAlcaldias) {
+        if (!topAlcaldias || !topAlcaldias.length) return;
+        const canvas = document.getElementById('chart-components');
+        if (!canvas) return;
+
         const labels = topAlcaldias.map(a => a.name);
         const riqueza = topAlcaldias.map(a => +(a.avgRiqueza.toFixed(3)));
         const destinos = topAlcaldias.map(a => +(a.avgDestinos.toFixed(3)));
         const competencia = topAlcaldias.map(a => +(a.avgCompetencia.toFixed(3)));
 
-        const ctx = document.getElementById('chart-components').getContext('2d');
-
+        const ctx = canvas.getContext('2d');
         if (componentsChart) componentsChart.destroy();
 
         componentsChart = new Chart(ctx, {
@@ -884,16 +915,19 @@ document.addEventListener('DOMContentLoaded', () => {
             data: {
                 labels: labels,
                 datasets: [
-                    { label: 'Poder Adquisitivo', data: riqueza, backgroundColor: '#8C1D40' },
-                    { label: 'Destinos', data: destinos, backgroundColor: '#2FBF71' },
-                    { label: 'Competencia', data: competencia, backgroundColor: '#E5484D' }
+                    { label: 'Poder Adquisitivo', data: riqueza, backgroundColor: '#8C1D40', borderRadius: 6 },
+                    { label: 'Destinos', data: destinos, backgroundColor: '#2FBF71', borderRadius: 6 },
+                    { label: 'Competencia', data: competencia, backgroundColor: '#E5484D', borderRadius: 6 }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { position: 'top' } },
-                scales: { y: { beginAtZero: true } }
+                scales: { 
+                    y: { beginAtZero: true, grid: { color: '#E4DEEA' } },
+                    x: { grid: { display: false } }
+                }
             }
         });
     }
@@ -988,191 +1022,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return r.json();
         });
 
-    let MODEL_ZONES_PROMISE = null;
-    const getModelZones = () => MODEL_ZONES_PROMISE ??= Promise.all([getGeo(), getChargersGeo()])
-        .then(([geo, chargers]) => ElectraModelo.prepararZonas(geo, chargers));
-
     const mxn = n => (n === null || n === undefined) ? 'N/D'
         : (n < 0 ? '-' : '') + '$' + Math.abs(Math.round(n)).toLocaleString('es-MX');
     // payback null = la ganancia operativa no es positiva
     const años = v => (v === null || v === undefined) ? 'No recupera' : v.toFixed(1) + ' años';
-
-    let simulationMarker = null;
-    let simulationZone = null;
-    let simulationChargers = 1;
-    let simulationAño = null;
-    let punteroManual = null;
-    let ubicandoEnMapa = false;
-
-    function simulationInputs() {
-        const lat = parseFloat(((estLat && estLat.value) || '').replace(',', '.'));
-        const lon = parseFloat(((estLon && estLon.value) || '').replace(',', '.'));
-        const n = Number.parseInt(estConectores && estConectores.value, 10);
-        return { lat, lon, n };
-    }
-
-    function formularioVisible() {
-        const panel = document.getElementById('station-side-panel');
-        return panel && panel.classList.contains('open') && panel.dataset.mode === 'form';
-    }
-
-    // Economía de la estación del usuario y oportunidad restante en la zona
-    function calcularEstacion(zone, año, esc, n) {
-        const estacion = ElectraModelo.estacion(zone, año, esc, n, n);
-        const restante = ElectraModelo.zonaPrediccion(zone, año, esc, {
-            extraComp: n * ElectraModelo.PESO.Propia
-        });
-        return { estacion, restante };
-    }
-
-    function simulationPopupHtml() {
-        if (!simulationZone || !simulationAño) return '';
-        const esc = document.getElementById('sel-escenario').value;
-        const { estacion, restante } = calcularEstacion(simulationZone, simulationAño, esc, simulationChargers);
-        const nombre = (estNombre && estNombre.value.trim()) || 'Nueva electrolinera';
-        const red = (estRed && estRed.value.trim()) || 'Sin red';
-        const prob = (estacion.prob_rentable * 100).toFixed(0) + ' %';
-        const probRestante = (restante.prob_rentable * 100).toFixed(0) + ' %';
-        return `
-            <div class="popup-title">${escapeHtml(nombre)} — ${escapeHtml(simulationZone.alcaldia)} (${simulationAño})</div>
-            <div><b>Red:</b> ${escapeHtml(red)} · <b>Conectores:</b> ${simulationChargers}</div>
-            <div><b>Ganancia anual P10–P90:</b> ${mxn(estacion.ganancia_min)} a ${mxn(estacion.ganancia_max)}</div>
-            <div><b>Ganancia neta mediana:</b> ${mxn(estacion.neta_p50)}</div>
-            <div><b>Probabilidad de rentabilidad:</b> ${prob}</div>
-            <div><b>Payback optimista:</b> ${años(estacion.payback_max)}</div>
-            <div class="popup-sec">Oportunidad restante en la zona</div>
-            <div><b>Cargadores recomendados adicionales:</b> ${restante.nBase}</div>
-            <div><b>Probabilidad de rentabilidad restante:</b> ${probRestante}</div>
-        `;
-    }
-
-    function simulationResultHtml() {
-        if (!simulationZone || !simulationAño) return '';
-        const esc = document.getElementById('sel-escenario').value;
-        const { estacion, restante } = calcularEstacion(simulationZone, simulationAño, esc, simulationChargers);
-        const fmtPct = p => (p * 100).toFixed(0) + ' %';
-        const nombre = (estNombre && estNombre.value.trim()) || 'Nueva electrolinera';
-        return `
-            <h4>Resultado de tu electrolinera</h4>
-            <p class="station-result__sub">${escapeHtml(nombre)} · AGEB ${escapeHtml(simulationZone.cve)} · ${simulationAño} · adopción ${esc}</p>
-            <div class="station-result__kpis">
-                <div class="station-result__kpi"><span>Ganancia P50</span><b>${mxn(estacion.ganancia_p50)}</b></div>
-                <div class="station-result__kpi"><span>Rango P10–P90</span><b>${mxn(estacion.ganancia_min)} – ${mxn(estacion.ganancia_max)}</b></div>
-                <div class="station-result__kpi"><span>Neta mediana</span><b>${mxn(estacion.neta_p50)}</b></div>
-                <div class="station-result__kpi"><span>Prob. rentable</span><b>${fmtPct(estacion.prob_rentable)}</b></div>
-                <div class="station-result__kpi"><span>Payback (P90)</span><b>${años(estacion.payback_max)}</b></div>
-                <div class="station-result__kpi"><span>Cargadores recomendados</span><b>${restante.nBase}</b></div>
-            </div>
-            <p class="station-result__note">Oportunidad restante en la zona: ${restante.nBase} cargador(es), prob. ${fmtPct(restante.prob_rentable)}. Simulación local; depende de los supuestos del modelo.</p>
-        `;
-    }
-
-    function refreshSimulationPopup() {
-        if (!simulationMarker || !simulationZone) return;
-        if (predAño) simulationAño = predAño;
-        simulationMarker.setPopupContent(simulationPopupHtml());
-        if (stationResult) {
-            stationResult.innerHTML = simulationResultHtml();
-            stationResult.hidden = false;
-        }
-    }
-
-    function clearSimulation() {
-        quitarPuntero();
-        if (simulationMarker) map.removeLayer(simulationMarker);
-        simulationMarker = null;
-        simulationZone = null;
-        simulationAño = null;
-        if (stationResult) { stationResult.innerHTML = ''; stationResult.hidden = true; }
-        if (btnQuitarPrueba) btnQuitarPrueba.hidden = true;
-    }
-
-    async function predecirNuevaEstacion() {
-        const { lat, lon, n } = simulationInputs();
-        if (!isFinite(lat) || !isFinite(lon)) {
-            aviso.textContent = 'Captura latitud y longitud válidas (o haz clic en el mapa).';
-            return;
-        }
-        if (!Number.isInteger(n) || n < 1 || n > 50) {
-            aviso.textContent = 'El número de conectores debe estar entre 1 y 50.';
-            return;
-        }
-
-        let año = predAño;
-        let sinAño = false;
-        if (!año) { año = 2030; sinAño = true; }
-
-        try {
-            const { localizar } = await getModelZones();
-            const zone = localizar(lat, lon);
-            if (!zone) {
-                aviso.textContent = 'El punto está fuera de las zonas disponibles de la CDMX.';
-                return;
-            }
-
-            simulationZone = zone;
-            simulationChargers = n;
-            simulationAño = año;
-            quitarPuntero();
-            if (simulationMarker) map.removeLayer(simulationMarker);
-            simulationMarker = L.marker([lat, lon], { icon: pinPersonalizadoIcon, zIndexOffset: 1000 })
-                .addTo(map)
-                .bindPopup(simulationPopupHtml())
-                .openPopup();
-            map.setView([lat, lon], Math.max(map.getZoom(), 15));
-            refreshSimulationPopup();
-            if (btnQuitarPrueba) btnQuitarPrueba.hidden = false;
-            aviso.textContent = sinAño
-                ? 'No había año activo: se usó 2030.'
-                : 'Simulación local: los resultados dependen de los supuestos del modelo.';
-        } catch (error) {
-            console.error('Error al preparar la predicción:', error);
-            aviso.textContent = 'No se pudo preparar la predicción. Revisa los datos del modelo.';
-        }
-    }
-
-    if (btnPredecir) btnPredecir.addEventListener('click', predecirNuevaEstacion);
-    if (btnQuitarPrueba) btnQuitarPrueba.addEventListener('click', clearSimulation);
-
-    // Puntero manual: botón + clic en el mapa (además de escribir lat/lon)
-    function setUbicando(active) {
-        ubicandoEnMapa = active;
-        if (btnUbicarMapa) {
-            btnUbicarMapa.classList.toggle('active', active);
-            btnUbicarMapa.setAttribute('aria-pressed', String(active));
-        }
-        map.getContainer().style.cursor = active ? 'crosshair' : '';
-        if (active) aviso.textContent = 'Haz clic en el mapa para colocar el puntero de tu electrolinera.';
-    }
-
-    function colocarPuntero(lat, lon) {
-        if (estLat) estLat.value = lat.toFixed(6);
-        if (estLon) estLon.value = lon.toFixed(6);
-        if (punteroManual) map.removeLayer(punteroManual);
-        punteroManual = L.marker([lat, lon], { icon: searchPointIcon, zIndexOffset: 900 })
-            .addTo(map)
-            .bindPopup(`<div class="popup-title">Ubicación seleccionada</div>
-                <div><b>Coordenadas:</b> ${lat.toFixed(6)}, ${lon.toFixed(6)}</div>`)
-            .openPopup();
-    }
-
-    function quitarPuntero() {
-        if (punteroManual) { map.removeLayer(punteroManual); punteroManual = null; }
-        setUbicando(false);
-    }
-
-    if (btnUbicarMapa) btnUbicarMapa.addEventListener('click', () => setUbicando(!ubicandoEnMapa));
-
-    // Con el formulario abierto, un clic en el mapa llena lat/lon y coloca el puntero
-    map.on('click', (e) => {
-        if (!formularioVisible()) {
-            if (ubicandoEnMapa) setUbicando(false);
-            return;
-        }
-        colocarPuntero(e.latlng.lat, e.latlng.lng);
-        if (ubicandoEnMapa) setUbicando(false);
-        aviso.textContent = 'Coordenadas capturadas del mapa. Presiona "Predecir".';
-    });
 
     function popupPrediccion(p, año) {
         const prob = (p.prob_rentable !== null && p.prob_rentable !== undefined)
@@ -1240,9 +1093,9 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadPrediction(año) {
         predAño = año;
         sincronizarTimeline(año);
-        if (año === 2030) setActive('btn-2030');
-        else if (año === 2035) setActive('btn-2035');
-        else if (año === 2026) setActive('btn-original');
+        if (año === 2030 && document.getElementById('btn-2030')) setActive('btn-2030');
+        else if (año === 2035 && document.getElementById('btn-2035')) setActive('btn-2035');
+        else if (año === 2026 && document.getElementById('btn-original')) setActive('btn-original');
         else {
             btnIds.forEach(b => {
                 const el = document.getElementById(b);
@@ -1250,43 +1103,64 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         const id = ++reqId;
-        aviso.textContent = '';
-        opciones.classList.remove('off');
+        if (aviso) aviso.textContent = '';
+        if (opciones) opciones.classList.remove('off');
         if (currentLayer) {
             map.removeLayer(currentLayer);
             currentLayer = null;
         }
 
-        const esc = document.getElementById('sel-escenario').value;
-        const metrica = document.getElementById('sel-metrica').value;
+        const selEsc = document.getElementById('sel-escenario');
+        const selMet = document.getElementById('sel-metrica');
+        const esc = selEsc ? selEsc.value : 'media';
+        const metrica = selMet ? selMet.value : 'score';
 
         try {
             const [PRED, geo] = await Promise.all([getPred(esc), getGeo()]);
             if (id !== reqId) return;     // el usuario ya pidió otra cosa
 
             if (!PRED) {
-                aviso.textContent = `No se pudo cargar el escenario "${esc}". ` +
-                    `Revisa que exista su archivo de predicciones en esta carpeta (lo copia export.py).`;
+                if (aviso) {
+                    aviso.textContent = `No se pudo cargar el escenario "${esc}". ` +
+                        `Revisa que exista su archivo de predicciones en esta carpeta (lo copia export.py).`;
+                }
                 return;
             }
 
             // Índice rápido: CVEGEO -> predicción de ese año
             const porZona = {};
-            PRED.filter(r => r['año'] === año).forEach(r => { porZona[r.zona] = r; });
+            PRED.filter(r => {
+                const rYear = r['año'] || r['ao'] || r['a\u00f1o'];
+                return rYear === año;
+            }).forEach(r => { porZona[r.zona] = r; });
 
             // Geo para las comparaciones de equidad en el panel de zona
             if (window.ZonePanel) window.ZonePanel.setGeo(geo.features);
 
             geo.features.forEach(f => {
+                if (!f.properties) f.properties = {};
                 const p = porZona[f.properties.CVEGEO];
+                if (!p) {
+                    f.properties._fill = '#bdbdbd';
+                    f.properties._pct = null;
+                    return;
+                }
                 if (metrica === 'score') {
-                    // score_viabilidad ya es un percentil (0-1) calculado en export.py
-                    f.properties._pct = p ? p.score_viabilidad : 0;
-                    f.properties._fill = undefined;
+                    const score = (p.score_viabilidad !== null && p.score_viabilidad !== undefined && !isNaN(p.score_viabilidad))
+                        ? p.score_viabilidad : null;
+                    if (score !== null && score > 0) {
+                        f.properties._pct = score;
+                        f.properties._fill = getColor(score);
+                    } else {
+                        f.properties._pct = null;
+                        f.properties._fill = '#bdbdbd';
+                    }
                 } else if (metrica === 'prob') {
                     f.properties._fill = colorProb(p);
                 } else {
-                    f.properties._fill = p ? colorPayback(p[metrica]) : '#de2d26';
+                    const val = p[metrica];
+                    f.properties._fill = (val !== null && val !== undefined && !isNaN(val))
+                        ? colorPayback(val) : '#bdbdbd';
                 }
             });
             renderLegend(metrica === 'score' ? 'pct' : metrica === 'prob' ? 'prob' : 'pb');
@@ -1296,31 +1170,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 onEachFeature: (f, layer) => {
                     const p = porZona[f.properties.CVEGEO];
                     if (!p) return;
-                    layer.on('click', event => {
-                        if (formularioVisible()) return;   // el clic solo llena lat/lon (map.on('click'))
-                        L.popup().setLatLng(event.latlng).setContent(popupPrediccion(p, año)).openOn(map);
+                    layer.bindPopup(popupPrediccion(p, año));
+                    layer.on('click', () => {
                         const rows = PRED.filter(r => r.zona === f.properties.CVEGEO);
                         if (window.StationPanel) window.StationPanel.open('zone');
                         if (window.ZonePanel) window.ZonePanel.open({ rows, year: año, props: f.properties });
                     });
                 }
             }).addTo(map);
-            refreshSimulationPopup();
 
             // Gráficas temáticas agregadas (CO₂ y equidad de cobertura)
             if (window.ELECTRA_AGG) window.ELECTRA_AGG.render(PRED);
         } catch (e) {
             console.error('Error al cargar la predicción:', e);
-            aviso.textContent = 'Error al cargar la predicción. Revisa la consola.';
+            if (aviso) aviso.textContent = 'Error al cargar la predicción. Revisa la consola.';
         }
     }
+
+    window.loadPrediction = loadPrediction;
 
     // Al volver a un mapa original: quita los colores de predicción y restaura la leyenda
     function modoOriginal() {
         predAño = null;
-        aviso.textContent = '';
-        opciones.classList.add('off');
-        clearSimulation();
+        if (aviso) aviso.textContent = '';
+        if (opciones) opciones.classList.add('off');
         renderLegend('pct');
         if (window.ZonePanel) window.ZonePanel.close();
     }
@@ -1332,59 +1205,143 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Gráficas temáticas con el escenario por defecto (aunque no se abra la predicción)
     getPred('media').then(PRED => {
-        if (PRED && window.ELECTRA_AGG) window.ELECTRA_AGG.render(PRED);
+        if (PRED) {
+            window._cachedPredData = PRED;
+            if (window.ELECTRA_AGG) window.ELECTRA_AGG.render(PRED);
+        }
     });
 
-    // ---------- Botones (solo en index.html) ----------
-    if (document.getElementById('btn-original')) {
-        document.getElementById('btn-original').addEventListener('click', function () {
-            setActive('btn-original');
-            sincronizarTimeline(2026);
-            modoOriginal();
-            isSinDestinosMap = false;
-            loadMapData('./viabilidad_cdmx_v2.geojson');
-        });
-
-        if (document.getElementById('btn-no-destinos')) {
-            document.getElementById('btn-no-destinos').addEventListener('click', function () {
-                setActive('btn-no-destinos');
-                sincronizarTimeline(2026);
-                modoOriginal();
-                isSinDestinosMap = true;
-                loadMapData('./viabilidad_cdmx_v2_no_destinos.geojson');
-            });
+    // ---------- Control de la Línea de Tiempo (slider 2026 a 2035) ----------
+    if (sliderTiempo) {
+        const containerTiempo = document.querySelector('.linea_tiempo');
+        if (containerTiempo && window.L) {
+            L.DomEvent.disableClickPropagation(containerTiempo);
+            L.DomEvent.disableScrollPropagation(containerTiempo);
         }
 
-        // Listener de la Línea de Tiempo (slider 2026 a 2035)
-        if (sliderTiempo) {
-            const containerTiempo = document.querySelector('.linea_tiempo');
-            if (containerTiempo && window.L) {
-                L.DomEvent.disableClickPropagation(containerTiempo);
-                L.DomEvent.disableScrollPropagation(containerTiempo);
-            }
+        sliderTiempo.addEventListener('input', function (e) {
+            const año = parseInt(e.target.value);
+            if (labelTiempo) labelTiempo.textContent = año;
+            loadPrediction(año);
+        });
+    }
 
-            sliderTiempo.addEventListener('input', function (e) {
-                const año = parseInt(e.target.value);
-                if (labelTiempo) labelTiempo.textContent = año;
+    // ---------- Modal de Configuración ----------
+    const configModalBackdrop = document.getElementById('config-modal-backdrop');
+    const configModalClose = document.getElementById('config-modal-close');
+    const configBtnApply = document.getElementById('config-btn-apply');
+    const btnSidebarConfig = document.getElementById('btn-sidebar-config');
+
+    function openConfigModal() {
+        if (configModalBackdrop) configModalBackdrop.classList.add('open');
+    }
+
+    function closeConfigModal() {
+        if (configModalBackdrop) configModalBackdrop.classList.remove('open');
+    }
+
+    if (btnSidebarConfig) {
+        btnSidebarConfig.addEventListener('click', (e) => {
+            e.preventDefault();
+            openConfigModal();
+        });
+    }
+
+    if (configModalClose) configModalClose.addEventListener('click', closeConfigModal);
+    if (configBtnApply) configBtnApply.addEventListener('click', closeConfigModal);
+    if (configModalBackdrop) {
+        configModalBackdrop.addEventListener('click', (e) => {
+            if (e.target === configModalBackdrop) closeConfigModal();
+        });
+    }
+
+    // Cambios inmediatos en selectores de configuración (escenario o métrica)
+    ['sel-escenario', 'sel-metrica'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('change', () => {
+                const año = predAño || (sliderTiempo ? parseInt(sliderTiempo.value) : 2026);
                 loadPrediction(año);
             });
         }
+    });
 
-        document.getElementById('btn-2030').addEventListener('click', function () {
-            setActive('btn-2030');
-            loadPrediction(2030);
+    // Parámetros de URL (?openConfig=true o ?year=2030)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('openConfig') === 'true') {
+        openConfigModal();
+    }
+    const queryYear = parseInt(urlParams.get('year'));
+    if (queryYear >= 2026 && queryYear <= 2035) {
+        setTimeout(() => {
+            if (sliderTiempo) sliderTiempo.value = queryYear;
+            if (labelTiempo) labelTiempo.textContent = queryYear;
+            loadPrediction(queryYear);
+        }, 150);
+    }
+
+    // ---------- Menú de Gráficas de la Página Principal (Mapa) ----------
+    const mapMenuButtons = document.querySelectorAll('#map-charts-menu .dash-menu-btn');
+    const mapChartsContainer = document.getElementById('map-charts-container');
+    const mapPanels = document.querySelectorAll('#map-charts-container .map-chart-panel');
+
+    function renderMapChartsOnDemand(targetId) {
+        setTimeout(() => {
+            if (targetId === 'box-chart-alcaldia' || targetId === 'box-all') {
+                if (window._cachedAlcaldiaList) renderAlcaldiaBarChart(window._cachedAlcaldiaList);
+            }
+            if (targetId === 'box-chart-chargers' || targetId === 'box-all') {
+                const c = window._cachedChargersCounts || { tesla: 41, evergo: 72, plugshare: 118 };
+                renderChargersPieChart(c.tesla, c.evergo, c.plugshare);
+            }
+            if (targetId === 'box-chart-components' || targetId === 'box-all') {
+                if (window._cachedAlcaldiaList) renderComponentsChart(window._cachedAlcaldiaList.slice(0, 8));
+            }
+            if (targetId === 'box-chart-sustentabilidad' || targetId === 'box-all') {
+                if (window._cachedPredData && window.ELECTRA_AGG) {
+                    window.ELECTRA_AGG._renderSustentabilidad(window._cachedPredData);
+                }
+            }
+            if (targetId === 'box-chart-equidad' || targetId === 'box-all') {
+                if (window._cachedPredData && window.ELECTRA_AGG) {
+                    window.ELECTRA_AGG._renderEquidad(window._cachedPredData);
+                }
+            }
+        }, 30);
+    }
+
+    function resizeAllMainCharts() {
+        setTimeout(() => {
+            if (alcaldiaChart) { try { alcaldiaChart.resize(); alcaldiaChart.update('none'); } catch(e){} }
+            if (chargersPieChart) { try { chargersPieChart.resize(); chargersPieChart.update('none'); } catch(e){} }
+            if (componentsChart) { try { componentsChart.resize(); componentsChart.update('none'); } catch(e){} }
+            if (window.ELECTRA_AGG && window.ELECTRA_AGG._charts) {
+                if (window.ELECTRA_AGG._charts.sust) { try { window.ELECTRA_AGG._charts.sust.resize(); } catch(e){} }
+                if (window.ELECTRA_AGG._charts.eq) { try { window.ELECTRA_AGG._charts.eq.resize(); } catch(e){} }
+            }
+            window.dispatchEvent(new Event('resize'));
+        }, 60);
+    }
+
+    if (mapMenuButtons.length && mapChartsContainer) {
+        mapMenuButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.dataset.target;
+                mapMenuButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                if (targetId === 'box-all') {
+                    mapChartsContainer.classList.add('show-all');
+                    mapPanels.forEach(p => p.classList.add('active'));
+                } else {
+                    mapChartsContainer.classList.remove('show-all');
+                    mapPanels.forEach(p => {
+                        p.classList.toggle('active', p.id === targetId);
+                    });
+                }
+                renderMapChartsOnDemand(targetId);
+                resizeAllMainCharts();
+            });
         });
-
-        document.getElementById('btn-2035').addEventListener('click', function () {
-            setActive('btn-2035');
-            loadPrediction(2035);
-        });
-
-        // Cambiar escenario o métrica reaplica la predicción activa
-        ['sel-escenario', 'sel-metrica'].forEach(id =>
-            document.getElementById(id).addEventListener('change', () => {
-                if (predAño) loadPrediction(predAño);
-                else refreshSimulationPopup();
-            }));
     }
 });

@@ -103,25 +103,25 @@ navItems.forEach(li => {
     });
 });
 
-// Submenú de Predicciones: dispara los botones del mapa (solo existen en index.html)
+// Submenú de Predicciones: actualiza la línea de tiempo y carga la predicción
 document.querySelectorAll('.sub-menu .pred-btn').forEach(a => {
     a.addEventListener('click', (e) => {
-        const btn = document.getElementById(a.dataset.target);
-        if (!btn) return;                 // sin botón en esta página: deja navegar (href)
-        e.preventDefault();
-        btn.click();
-        setActiveLink(a.closest('li.has-submenu'));
-        if (isMobile()) setSidebar(true);
+        const target = a.dataset.target;
+        const year = target === 'btn-2035' ? 2035 : 2030;
+        const slider = document.getElementById('slider-tiempo');
+        if (slider) {
+            e.preventDefault();
+            slider.value = year;
+            const label = document.getElementById('linea_tiempo_label');
+            if (label) label.textContent = year;
+            if (typeof window.loadPrediction === 'function') {
+                window.loadPrediction(year);
+            }
+            setActiveLink(a.closest('li.has-submenu'));
+            if (isMobile()) setSidebar(true);
+        }
     });
 });
-
-// Sincroniza el link activo con los botones del mapa (solo en index.html)
-const syncActive = (btnId, liId) => {
-    const btn = document.getElementById(btnId);
-    if (btn) btn.addEventListener('click', () => setActiveLink(document.getElementById(liId)));
-};
-['btn-original', 'btn-no-destinos'].forEach(id => syncActive(id, 'nav-mapa'));
-['btn-2030', 'btn-2035'].forEach(id => syncActive(id, 'nav-predicciones'));
 
 // ===== Init =====
 renderMenus();

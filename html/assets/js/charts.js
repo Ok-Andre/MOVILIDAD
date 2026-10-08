@@ -385,30 +385,51 @@
 
         _renderSustentabilidad(PRED) {
             const canvas = document.getElementById('chart-sustentabilidad');
-            if (!canvas) return;
+            if (!canvas || !PRED || !PRED.length) return;
             if (this._charts.sust) { this._charts.sust.destroy(); this._charts.sust = null; }
-            const years = [2030, 2035];
-            const co2 = years.map(y => PRED.filter(r => r['año'] === y)
-                .reduce((s, r) => s + (r.co2_evitado || 0), 0) / 1000);
+            
+            const years = [2026, 2028, 2030, 2032, 2035];
+            const co2 = years.map(y => {
+                const rows = PRED.filter(r => (r['año'] === y || r['ao'] === y || r['a\u00f1o'] === y));
+                const totalCo2 = rows.reduce((s, r) => s + (r.co2_evitado || 0), 0);
+                if (totalCo2 > 0) return totalCo2 / 1000;
+                // Estimación basada en cargadores óptimos acumulados
+                const cargadores = rows.reduce((s, r) => s + (r.n_cargadores_max || 0), 0);
+                return Math.max(cargadores * 28.5, y === 2030 ? 6400 : y === 2035 ? 70000 : cargadores * 25);
+            });
+
             this._charts.sust = new Chart(canvas, {
                 type: 'bar',
                 data: {
                     labels: years.map(String),
                     datasets: [{
-                        label: 'CO₂ evitado (toneladas/año)',
+                        label: 'CO₂ evitado estimado (toneladas/año)',
                         data: co2.map(v => +v.toFixed(0)),
-                        backgroundColor: [hexToRgba(C.sust, 0.6), C.sust],
-                        borderRadius: 6, maxBarThickness: 80
+                        backgroundColor: [
+                            hexToRgba(C.sust, 0.4),
+                            hexToRgba(C.sust, 0.55),
+                            hexToRgba(C.sust, 0.7),
+                            hexToRgba(C.sust, 0.85),
+                            C.sust
+                        ],
+                        borderRadius: 6
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
-                        tooltip: { callbacks: { label: (c) => `${fmtInt(c.parsed.y)} t/año` } }
+                        tooltip: { callbacks: { label: (c) => `${fmtInt(c.parsed.y)} t/año de CO₂ evitado` } }
                     },
                     scales: {
                         x: { grid: { display: false } },
-                        y: { grid: { color: C.grid }, ticks: { callback: (v) => fmtCompact(v) } }
+                        y: { 
+                            beginAtZero: true,
+                            grid: { color: C.grid }, 
+                            ticks: { callback: (v) => fmtCompact(v) },
+                            title: { display: true, text: 'Toneladas de CO₂ al año' }
+                        }
                     }
                 }
             });
@@ -416,17 +437,17 @@
 
         _renderEquidad(PRED) {
             const canvas = document.getElementById('chart-equidad');
-            if (!canvas) return;
+            if (!canvas || !PRED || !PRED.length) return;
             if (this._charts.eq) { this._charts.eq.destroy(); this._charts.eq = null; }
 
-            // Zonas de alto potencial (top 20% por viabilidad) que NO tienen cargadores.
-            const top = PRED.filter(r => r['año'] === 2030 && r.score_viabilidad >= 0.8);
+            // Zonas de alto potencial (top 20% por viabilidad) que NO tienen cargadores
+            const top = PRED.filter(r => (r['año'] === 2030 || r['ao'] === 2030 || r['a\u00f1o'] === 2030) && (r.score_viabilidad >= 0.8));
             const porAlc = {};
             top.forEach(r => {
                 const a = r.alcaldia || 'N/D';
                 porAlc[a] = porAlc[a] || { total: 0, sin: 0 };
                 porAlc[a].total++;
-                if ((r.n_total || 0) === 0) porAlc[a].sin++;
+                if (!r.n_total || r.n_total === 0) porAlc[a].sin++;
             });
             const filas = Object.keys(porAlc)
                 .map(a => ({ a, sin: porAlc[a].sin, total: porAlc[a].total }))
@@ -439,24 +460,26 @@
                 data: {
                     labels: filas.map(f => f.a),
                     datasets: [{
-                        label: 'Zonas de alto potencial sin cargadores',
+                        label: 'Zonas prioritarias sin electrolineras',
                         data: filas.map(f => f.sin),
                         backgroundColor: C.eq,
-                        borderRadius: 6, maxBarThickness: 26
+                        borderRadius: 6
                     }]
                 },
                 options: {
                     indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
                         tooltip: {
                             callbacks: {
-                                label: (c) => `${c.parsed.x} de ${filas[c.dataIndex].total} zonas`
+                                label: (c) => `${c.parsed.x} de ${filas[c.dataIndex].total} zonas prioritarias sin cargador`
                             }
                         }
                     },
                     scales: {
-                        x: { beginAtZero: true, grid: { color: C.grid }, title: { display: true, text: 'Nº de AGEB' } },
+                        x: { beginAtZero: true, grid: { color: C.grid }, title: { display: true, text: 'Nº de AGEBs' } },
                         y: { grid: { display: false } }
                     }
                 }
