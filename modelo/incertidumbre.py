@@ -103,13 +103,14 @@ def dimensionar(a: dict, year: int, p: dict):
 
 
 def simular(a: dict, year: int, p: dict, n):
-    """Resultado REAL con n cargadores ya decididos. Devuelve (ganancia, neta)."""
+    """Resultado REAL con n cargadores ya decididos.
+    Devuelve (ganancia, neta, kwh_servido)."""
     kwh_k = _kwh_captado(a, year, p)
     m = max(p["precio"] - p["costo"], 0.01)
     servido = np.minimum(kwh_k, n * KW_CARGADOR * 8760 * UTIL_MAX)
     g = servido * m - n * p["opex"]
     capex = p["capex_sitio"] + n * p["capex_cargador"]
-    return g, g - anualidad(capex, p["tasa"])
+    return g, g - anualidad(capex, p["tasa"]), servido
 
 
 def tornado(z: pd.DataFrame, year: int):
@@ -130,26 +131,29 @@ def tornado(z: pd.DataFrame, year: int):
 def montecarlo(z: pd.DataFrame, year: int, n_sim=N_SIM, seed=SEED):
     a, rng = _arrays(z), np.random.default_rng(seed + year)
     n_base, n_eval = dimensionar(a, year, base_params())
-    G, NE = [], []
+    G, NE, K = [], [], []
     for _ in range(n_sim):
         p = {**base_params(), **{k: rng.uniform(lo, hi) for k, (lo, hi) in rangos().items()}}
-        g, ne = simular(a, year, p, n_eval)
-        G.append(g); NE.append(ne)
-    return n_base, n_eval, np.array(G), np.array(NE)
+        g, ne, kwh = simular(a, year, p, n_eval)
+        G.append(g); NE.append(ne); K.append(kwh)
+    return n_base, n_eval, np.array(G), np.array(NE), np.array(K)
 
 
 def tabla_zonas(z: pd.DataFrame, years=PRED_YEARS, n_sim=N_SIM):
     """Una fila por zona y año con percentiles y probabilidades. Devuelve (df, resumen)."""
     partes, resumen = [], {}
     for y in years:
-        n_base, n_eval, G, NE = montecarlo(z, y, n_sim)
+        n_base, n_eval, G, NE, K = montecarlo(z, y, n_sim)
         pc = lambda M, q: np.percentile(M, q, axis=0)
         prob = (NE > 0).mean(axis=0)
+        kwh_p50 = pc(K, 50)
         partes.append(pd.DataFrame({
             "zona": z["zona"].to_numpy(), "year": y, "n_base": n_base, "n_eval": n_eval,
             "ganancia_p10": pc(G, 10), "ganancia_p50": pc(G, 50), "ganancia_p90": pc(G, 90),
             "neta_p10": pc(NE, 10), "neta_p50": pc(NE, 50), "neta_p90": pc(NE, 90),
-            "prob_rentable": prob}))
+            "prob_rentable": prob,
+            "kwh_p10": pc(K, 10), "kwh_p50": kwh_p50, "kwh_p90": pc(K, 90),
+            "co2_evitado_p50": kwh_p50 * CO2_KG_POR_KWH_EVITADO}))
         obra = n_base > 0
         tot = NE[:, obra].sum(axis=1) / 1e6
         resumen[str(y)] = {

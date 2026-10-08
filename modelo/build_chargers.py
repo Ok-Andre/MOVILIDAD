@@ -83,9 +83,10 @@ def build():
     gdf = gpd.GeoDataFrame(base[["nombre", "red", "n_puertos"]],
                            geometry=gpd.points_from_xy(base["lon"], base["lat"]),
                            crs=4326)
-    CHARGERS_JSON.parent.mkdir(exist_ok=True)
-    CHARGERS_JSON.unlink(missing_ok=True)    # to_file no sobrescribe bien en algunos casos
-    gdf.to_file(CHARGERS_JSON, driver="GeoJSON")
+    for output in (CHARGERS_JSON, BASE / "html" / "all_chargers_geo.json"):
+        output.parent.mkdir(exist_ok=True)
+        output.unlink(missing_ok=True)        # to_file no sobrescribe bien en algunos casos
+        gdf.to_file(output, driver="GeoJSON")
     print(gdf.groupby("red")["n_puertos"].agg(["count", "sum"]))
     print(f"Total: {len(gdf)} sitios, {int(gdf['n_puertos'].sum())} puertos")
     return gdf
