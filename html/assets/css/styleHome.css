@@ -1,0 +1,356 @@
+/* Este CSS lo realizó Sanchez Cano Alejandro muajajaj*/
+
+body{
+    overflow-x: hidden;
+}
+
+.sidebar2 {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    height: 100%;
+    width: 260px;
+    background: var(--primary-color);
+    z-index: 100;
+    transition: all 0.5s ease;
+}
+
+.sidebar2.close {
+    width: 78px;
+}
+
+.sidebar2 .logo-details {
+    color: var(--tertiary-color);
+    margin-top: 50px;
+    font-size: 25px;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.sidebar2 .logo-details .logo_name {
+    font-size: 30px;
+    color: var(--tertiary-color);
+    transition: all 0.3s ease;
+    transition-delay: 0.1s;
+    justify-content: center;
+}
+
+.sidebar2.close .logo-details .logo_name {
+    transition-delay: 0s;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.logo-details img {
+    transition: all 0.5s ease;
+    max-width: 60px;
+    margin-left: 20px;
+}
+
+.sidebar2.close .logo-details img {
+    max-width: 60px;
+    margin-left: 10px;
+}
+
+.sidebar2 .nav-links {
+    height: 100%;
+    padding-top: 80px;
+    overflow: visible;
+}
+
+.sidebar2 .nav-links::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-links li {
+    position: relative;
+    list-style-type: none;
+    transition: all 0.4s ease;
+}
+
+.nav-links li:hover{
+    background: var(--fourt-color);
+}
+
+.sidebar2 .nav-links li i {
+
+    font-size: 23px;
+    height: 50px;
+    min-width: 78px;
+    text-align: center;
+    line-height: 50px;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+
+.sidebar2 .nav-links li.showMenu i.arrow{
+    transform: rotate(-180deg);
+}
+
+.sidebar2.close .nav-links i.arrow{
+    display: none;
+}
+
+.nav-links span {
+    color: var(--text-color);
+    transition: all 0.3s;
+}
+
+.nav-links span:hover {
+    color: var(--tertiary-color);
+}
+
+.nav-links a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.nav-links a .link_name {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text-color);
+}
+
+.sidebar2.close .nav-links a .link_name {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sub-menu {
+    padding: 6px 6px 14px 80px;
+    margin-top: -10px;
+    background-color: var(--fourt-color);
+    display: none;
+}
+
+li.showMenu .sub-menu {
+    display: block;
+}
+
+.sub-menu a {
+    color: var(--text-color);
+    font-size: 15px;
+    padding: 5px 0;
+    transition: all 0.3s;
+    white-space: nowrap;
+    opacity: 0.6;
+}
+
+.sub-menu a:hover{
+    color: var(--tertiary-color);
+    opacity: 1;
+}
+
+.sidebar2.close .sub-menu{
+    position: absolute;
+    left: 100%;
+    top: -10px;
+    margin-top: 0;
+    padding: 10px 20px;
+    border-radius: 0 6px 6px 0;
+    transition: all 0.4s ease;
+    opacity: 0;
+    display: block;
+    pointer-events: none;
+}
+
+.sidebar2.close li:hover .sub-menu{
+    top: 0;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sidebar2 .sub-menu .link_name{
+    display: none;
+}
+
+.sidebar2.close .sub-menu .link_name{
+    font-size: 18px;
+    opacity: 1;
+}
+
+.sidebar2.close .sub-menu .link_name{
+    font-size: 18px;
+    opacity: 1;
+    display: block;
+}
+
+.sub-menu.blank{
+    opacity: 1;
+    pointer-events: auto;
+    padding: 3px 20px 6px 16px;
+}
+
+.sidebar2 li:hover .sub-menu.blank{
+    top:50%;
+    transform: translateY(-50%);
+}
+
+.profile-details{
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    padding-bottom: 20px;
+    justify-content: space-between;
+}
+
+.sidebar2 .profile-details .profile-content{
+    display: flex;
+    align-items: center;
+}
+
+.profile-details img{
+    height: 52px;
+    width: 52px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin: 0 14px 0 12px;
+    background-color: var(--fourt-color);
+    padding: 10px;
+    transition: all 0.4s ease;
+}
+
+.sidebar2.close .profile-details img{
+    padding: 10px;
+}
+
+.profile_name,.job{
+    color: var(--text-color);
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.sidebar2.close .profile_name,.sidebar2.close .job, .sidebar2.close .profile-details i{
+    display: none;
+}
+
+.job{
+    font-size: 12px;
+    color: var(--text-color);
+}
+
+.home-section{
+    position: relative;
+    background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('../img/fondo.jpg');
+    min-height: 100%;
+    width: calc(100% - 260px);
+    left: 260px;
+    transition: all 0.5s ease;
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    transition: all 0.5s ease;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+
+
+.sidebar2.close ~ .home-section{
+    left: 78px;
+    width: calc(100% - 78px);
+}
+
+/* Link activo */
+.nav-links li.active {
+    background: var(--fourt-color);
+}
+
+.nav-links li.active > a .link_name,
+.nav-links li.active > a i {
+    color: var(--tertiary-color);
+}
+
+/* Links inactivos (próximamente) */
+.nav-links a.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* Flecha de submenú */
+.sidebar2 .nav-links li i.arrow {
+    min-width: auto;
+    height: auto;
+    line-height: 1;
+    font-size: 14px;
+    margin-left: auto;
+    margin-right: 18px;
+    transition: transform 0.3s ease;
+}
+
+/* Hamburguesa + backdrop (móvil) */
+.mobile-menu-btn {
+    display: none;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 120;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: var(--primary-color);
+    color: var(--text-color);
+    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+}
+
+.sidebar-backdrop.show {
+    display: block;
+}
+
+/* Móvil: sidebar como drawer superpuesto */
+@media (max-width: 768px) {
+    .sidebar2,
+    .sidebar2.close {
+        width: 260px;
+        transform: translateX(-100%);
+        box-shadow: 4px 0 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .sidebar2:not(.close) {
+        transform: translateX(0);
+    }
+
+    .home-section,
+    .sidebar2.close ~ .home-section {
+        left: 0;
+        width: 100%;
+    }
+
+    .sidebar2 .nav-links {
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-bottom: 30px;
+    }
+
+    .mobile-menu-btn {
+        display: inline-flex;
+    }
+}
