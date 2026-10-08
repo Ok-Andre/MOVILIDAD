@@ -56,6 +56,7 @@
 
             <li id="nav-electrolineras">
                 <a href="electrolineras.html">
+                <a href="#" id="nav-crud" title="Administrar electrolineras">
                     <i class="fa-solid fa-charging-station"></i>
                     <span class="link_name">Electrolineras</span>
                 </a>
@@ -308,10 +309,124 @@
 
     </section>
 
+    <!-- CRUD de electrolineras (menú derecho) -->
+    <button id="crud-toggle" class="crud-toggle" type="button" aria-controls="crud-panel" aria-expanded="false">
+        <i class="fa-solid fa-charging-station" aria-hidden="true"></i>
+        <span>Administrar electrolineras</span>
+    </button>
+
+    <aside id="crud-panel" class="crud-panel" aria-labelledby="crud-title">
+        <header class="crud-head">
+            <div>
+                <h2 id="crud-title">Electrolineras</h2>
+                <p id="crud-count" class="crud-sub" aria-live="polite"></p>
+            </div>
+            <button id="crud-close" class="crud-icon-btn" type="button" aria-label="Cerrar panel">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+        </header>
+
+        <div id="crud-body" class="crud-body">
+            <form id="crud-form" class="crud-form" novalidate>
+                <h3 id="crud-form-title">Agregar electrolinera</h3>
+
+                <div class="crud-field">
+                    <label for="crud-nombre">Nombre</label>
+                    <input id="crud-nombre" name="nombre" type="text" maxlength="120" autocomplete="off"
+                        aria-describedby="crud-err-nombre">
+                    <p id="crud-err-nombre" class="crud-err"></p>
+                </div>
+
+                <div class="crud-field">
+                    <label for="crud-red">Red</label>
+                    <input id="crud-red" name="red" type="text" maxlength="40" list="crud-redes" autocomplete="off"
+                        aria-describedby="crud-err-red">
+                    <datalist id="crud-redes"></datalist>
+                    <p id="crud-err-red" class="crud-err"></p>
+                </div>
+
+                <div class="crud-field">
+                    <label for="crud-puertos">Número de puertos</label>
+                    <input id="crud-puertos" name="n_puertos" type="text" inputmode="numeric" value="1"
+                        autocomplete="off" aria-describedby="crud-err-puertos">
+                    <p id="crud-err-puertos" class="crud-err"></p>
+                </div>
+
+                <div class="crud-coords">
+                    <div class="crud-field">
+                        <label for="crud-lat">Latitud</label>
+                        <input id="crud-lat" name="lat" type="text" inputmode="decimal" autocomplete="off"
+                            aria-describedby="crud-err-lat">
+                        <p id="crud-err-lat" class="crud-err"></p>
+                    </div>
+                    <div class="crud-field">
+                        <label for="crud-lng">Longitud</label>
+                        <input id="crud-lng" name="lng" type="text" inputmode="decimal" autocomplete="off"
+                            aria-describedby="crud-err-lng">
+                        <p id="crud-err-lng" class="crud-err"></p>
+                    </div>
+                </div>
+
+                <div class="crud-pick-row">
+                    <button id="crud-pick" class="crud-btn" type="button" aria-pressed="false">
+                        <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i>
+                        <span>Elegir en el mapa</span>
+                    </button>
+                </div>
+
+                <div class="crud-actions">
+                    <button id="crud-save" class="crud-btn crud-btn-primary" type="submit">Agregar</button>
+                    <button id="crud-cancel" class="crud-btn" type="button">Limpiar</button>
+                </div>
+            </form>
+
+            <section class="crud-list-wrap" aria-label="Electrolineras registradas">
+                <div class="crud-filters">
+                    <input id="crud-search" type="search" placeholder="Buscar por nombre" aria-label="Buscar por nombre"
+                        autocomplete="off">
+                    <select id="crud-filter-red" aria-label="Filtrar por red">
+                        <option value="">Todas las redes</option>
+                    </select>
+                </div>
+                <label class="crud-check">
+                    <input id="crud-show-dots" type="checkbox" checked>
+                    Mostrar puntos editables en el mapa
+                </label>
+                <ul id="crud-list" class="crud-list"></ul>
+                <button id="crud-more" class="crud-btn" type="button" hidden></button>
+            </section>
+
+            <div id="crud-note" class="crud-note" hidden>
+                <p>Los cambios ya están guardados. El mapa principal y las gráficas leen los datos al cargar la
+                    página.</p>
+                <button id="crud-reload" class="crud-btn" type="button">
+                    <i class="fa-solid fa-rotate" aria-hidden="true"></i> Recargar página
+                </button>
+            </div>
+
+            <div class="crud-tools">
+                <button id="crud-export" class="crud-btn" type="button">
+                    <i class="fa-solid fa-file-export" aria-hidden="true"></i> Exportar
+                </button>
+                <button id="crud-import" class="crud-btn" type="button">
+                    <i class="fa-solid fa-file-import" aria-hidden="true"></i> Importar
+                </button>
+                <button id="crud-restore" class="crud-btn" type="button">
+                    <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Restaurar original
+                </button>
+                <input id="crud-import-file" type="file" accept=".json,.geojson,application/json" hidden>
+            </div>
+        </div>
+
+        <div id="crud-toast" class="crud-toast" role="status" aria-live="polite" hidden></div>
+    </aside>
+
     <!-- Scripts Leaflet, MarkerCluster, Chart.js y Lógica -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <!-- CRUD: debe ir antes de main.js (intercepta la carga del JSON y captura el mapa) -->
+    <script src="assets/js/crud.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="assets/js/sidebar.js"></script>
     <script src="assets/js/charts.js"></script>
