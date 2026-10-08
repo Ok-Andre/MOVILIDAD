@@ -270,3 +270,187 @@
         width: 100%;
     }
 }
+
+/* ---------- Tipografía y Bordes Redondeados Modernos ---------- */
+.dashboard-section {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.kpi-card {
+    border-radius: 16px !important;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.kpi-card > i {
+    border-radius: 12px !important;
+}
+
+/* ---------- Menú de pestañas de Gráficas (Modern Pill / Segmented) ---------- */
+.dashboard-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px !important;
+    padding: 8px;
+    margin-bottom: 22px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.dash-menu-btn {
+    flex: 1 1 auto;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--muted-color);
+    border: 1px solid transparent;
+    border-radius: 10px !important;
+    padding: 11px 16px;
+    font-size: 13.5px;
+    font-weight: 600;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    text-align: center;
+}
+
+.dash-menu-btn i {
+    font-size: 14px;
+    color: var(--tertiary-color);
+    transition: color 0.2s ease;
+}
+
+.dash-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.dash-menu-btn.active {
+    background: linear-gradient(135deg, var(--secondary-color), #5f132b);
+    color: #ffffff;
+    border-color: rgba(212, 165, 55, 0.4);
+    box-shadow: 0 4px 14px rgba(140, 29, 64, 0.45);
+}
+
+.dash-menu-btn.active i {
+    color: var(--gold-color);
+}
+
+/* ---------- Paneles de Gráficas ---------- */
+.dashboard-panels {
+    width: 100%;
+}
+
+.dashboard-card {
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 16px !important;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-left: 6px solid var(--secondary-color);
+}
+
+.dash-panel {
+    display: none;
+    width: 100%;
+}
+
+.dash-panel.active {
+    display: flex;
+}
+
+.dashboard-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee8f4;
+}
+
+.dashboard-card__title {
+    font-size: 16.5px;
+    font-weight: 700;
+    color: #2D2040;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.dashboard-card__title i {
+    color: var(--secondary-color);
+    font-size: 18px;
+}
+
+.dashboard-card__badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px !important;
+    text-transform: uppercase;
+    background: #eee8f5;
+    color: #4a3f57;
+    letter-spacing: 0.4px;
+}
+
+.dashboard-card__chart {
+    position: relative;
+    height: 420px;
+    width: 100%;
+}
+
+.kpi-card--top-alc > i { color: #F5A524; }
+.kpi-card--top-viab > i { color: #2FBF71; }
+.kpi-card--top-red > i { color: #3E8EDE; }
+
+/* Modo "Ver Todas" */
+.dashboard-panels.show-all {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.dashboard-panels.show-all .dash-panel {
+    display: flex !important;
+    margin-bottom: 0;
+}
+
+.dashboard-panels.show-all .dashboard-card__chart {
+    height: 310px;
+}
+
+@media (max-width: 960px) {
+    .dashboard-menu {
+        flex-direction: column;
+    }
+
+    .dash-menu-btn {
+        justify-content: flex-start;
+        padding: 10px 14px;
+    }
+
+    .dashboard-panels.show-all {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+

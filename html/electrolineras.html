@@ -31,8 +31,8 @@
                 </a>
             </li>
 
-            <li>
-                <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
+            <li id="nav-dashboard">
+                <a href="dashboard.html">
                     <i class="fa-solid fa-chart-column"></i>
                     <span class="link_name">Dashboard</span>
                 </a>
@@ -64,10 +64,10 @@
                 </a>
             </li>
 
-            <li>
-                <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
+            <li id="nav-configuracion">
+                <a href="index.html?openConfig=true" id="btn-sidebar-config">
                     <i class="fa-solid fa-gear"></i>
-                    <span class="link_name">Configuracion</span>
+                    <span class="link_name">Configuración</span>
                 </a>
             </li>
 
@@ -85,38 +85,6 @@
             <h1>Electrolineras disponibles</h1>
             <p class="dashboard-subtitle">Red de carga pública registrada en la CDMX. Usa el pin para ubicarla en el mapa.</p>
         </header>
-
-        <!-- KPIs -->
-        <div class="kpi-row" id="kpi-row">
-            <div class="kpi-card kpi-card--total">
-                <i class="fa-solid fa-charging-station"></i>
-                <div class="kpi-card__body">
-                    <span class="kpi-card__value" id="kpi-total">-</span>
-                    <span class="kpi-card__label">Sitios totales</span>
-                </div>
-            </div>
-            <div class="kpi-card kpi-card--tesla">
-                <i class="fa-solid fa-bolt"></i>
-                <div class="kpi-card__body">
-                    <span class="kpi-card__value" id="kpi-tesla">-</span>
-                    <span class="kpi-card__label">Tesla</span>
-                </div>
-            </div>
-            <div class="kpi-card kpi-card--evergo">
-                <i class="fa-solid fa-plug-circle-bolt"></i>
-                <div class="kpi-card__body">
-                    <span class="kpi-card__value" id="kpi-evergo">-</span>
-                    <span class="kpi-card__label">Evergo</span>
-                </div>
-            </div>
-            <div class="kpi-card kpi-card--plugshare">
-                <i class="fa-solid fa-plug"></i>
-                <div class="kpi-card__body">
-                    <span class="kpi-card__value" id="kpi-plugshare">-</span>
-                    <span class="kpi-card__label">PlugShare</span>
-                </div>
-            </div>
-        </div>
 
         <!-- Herramientas -->
         <div class="toolbar">
