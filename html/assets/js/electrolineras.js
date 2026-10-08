@@ -25,15 +25,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setKpis() {
+        const elTotal = document.getElementById('kpi-total');
+        if (!elTotal) return;
         const conteo = { Tesla: 0, Evergo: 0, PlugShare: 0 };
         sitios.forEach(s => {
             if (conteo[s.red] === undefined) conteo[s.red] = 0;
             conteo[s.red]++;
         });
-        document.getElementById('kpi-total').textContent = sitios.length;
-        document.getElementById('kpi-tesla').textContent = conteo.Tesla || 0;
-        document.getElementById('kpi-evergo').textContent = conteo.Evergo || 0;
-        document.getElementById('kpi-plugshare').textContent = conteo.PlugShare || 0;
+        elTotal.textContent = sitios.length;
+        const elT = document.getElementById('kpi-tesla');
+        if (elT) elT.textContent = conteo.Tesla || 0;
+        const elE = document.getElementById('kpi-evergo');
+        if (elE) elE.textContent = conteo.Evergo || 0;
+        const elP = document.getElementById('kpi-plugshare');
+        if (elP) elP.textContent = conteo.PlugShare || 0;
     }
 
     function renderTabla() {

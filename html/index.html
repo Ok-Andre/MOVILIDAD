@@ -36,8 +36,8 @@
                 </a>
             </li>
 
-            <li>
-                <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
+            <li id="nav-dashboard">
+                <a href="dashboard.html">
                     <i class="fa-solid fa-chart-column"></i>
                     <span class="link_name">Dashboard</span>
                 </a>
@@ -65,7 +65,7 @@
             <li>
                 <a href="#" class="disabled" aria-disabled="true" title="Próximamente">
                     <i class="fa-solid fa-gear"></i>
-                    <span class="link_name">Configuracion</span>
+                    <span class="link_name">Configuración</span>
                 </a>
             </li>
 
@@ -81,42 +81,6 @@
     <section class="home-section">
 
         <h1>Viabilidad para Estaciones de Carga - CDMX</h1>
-
-        <div class="controls">
-            <button id="btn-original" class="btn active">Modelo Original (Con Destinos)</button>
-            <button id="btn-no-destinos" class="btn">Modelo sin Destinos</button>
-            <button id="btn-2030" class="btn">Predicción 2030</button>
-            <button id="btn-2035" class="btn">Predicción 2035</button>
-        </div>
-
-        <!-- Solo aplican a las predicciones 2030 / 2035 -->
-        <div id="opciones" class="opciones off">
-            <label>Escenario de adopción de EVs:
-                <select id="sel-escenario">
-                    <option value="baja">Baja</option>
-                    <option value="media" selected>Media</option>
-                    <option value="alta">Alta</option>
-                </select>
-            </label>
-            <label>Colorear por:
-                <select id="sel-metrica">
-                    <option value="score">Viabilidad (percentil)</option>
-                    <option value="prob">Probabilidad de ser rentable</option>
-                    <option value="payback_max">Payback, caso optimista (P90)</option>
-                    <option value="payback_min">Payback, caso pesimista (P10)</option>
-                </select>
-            </label>
-        </div>
-
-        <p class="nota">Modelos originales: los colores se asignan por percentil entre las AGEB de la CDMX (verde = 20 %
-            superior, amarillo = 40–80 %, rojo = 40 % inferior). Las predicciones 2030/2035 son una simulación Monte
-            Carlo
-            con supuestos provisionales (precios, capex, adopción de EVs), no un pronóstico calibrado: el rango va del
-            percentil 10 (pesimista) al 90 (optimista). El número de cargadores se decide con el caso base y la
-            probabilidad de ser rentable es la de que la ganancia neta anualizada sea positiva. Payback = años para
-            recuperar la inversión del sitio con la ganancia operativa.</p>
-
-        <p id="aviso"></p>
 
         <!-- Contenedor del mapa y panel lateral -->
         <div class="map-wrapper">
@@ -267,44 +231,107 @@
             </aside>
         </div>
 
+        <!-- Menú de Selección de Gráficas para Mapa Principal -->
+        <nav class="map-charts-menu" id="map-charts-menu">
+            <button type="button" class="dash-menu-btn active" data-target="box-chart-alcaldia">
+                <i class="fa-solid fa-chart-simple"></i>
+                <span>Viabilidad por Alcaldía</span>
+            </button>
+            <button type="button" class="dash-menu-btn" data-target="box-chart-chargers">
+                <i class="fa-solid fa-pie-chart"></i>
+                <span>Electrolineras por Red</span>
+            </button>
+            <button type="button" class="dash-menu-btn" data-target="box-chart-components">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Componentes del Modelo</span>
+            </button>
+            <button type="button" class="dash-menu-btn" data-target="box-chart-sustentabilidad">
+                <i class="fa-solid fa-leaf"></i>
+                <span>CO₂ Evitado</span>
+            </button>
+            <button type="button" class="dash-menu-btn" data-target="box-chart-equidad">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <span>Zonas sin Cobertura</span>
+            </button>
+            <button type="button" class="dash-menu-btn" data-target="box-all">
+                <i class="fa-solid fa-table-cells-large"></i>
+                <span>Ver Todas</span>
+            </button>
+        </nav>
+
         <!-- Gráficas generales (debajo del mapa) -->
-        <div class="charts-container">
-            <div class="chart-box">
+        <div class="charts-container" id="map-charts-container">
+            <div class="chart-box map-chart-panel active" id="box-chart-alcaldia">
                 <h2>Viabilidad Promedio por Alcaldía <span class="chart-tag chart-tag--econ">Económico</span></h2>
                 <div class="chart-wrapper">
                     <canvas id="chart-alcaldia"></canvas>
                 </div>
             </div>
 
-            <div class="charts-row">
-                <div class="chart-box">
-                    <h2>Electrolineras por Red</h2>
-                    <div class="chart-wrapper">
-                        <canvas id="chart-chargers"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-box">
-                    <h2>Desglose de Componentes del Modelo <span class="chart-tag chart-tag--econ">Económico</span></h2>
-                    <div class="chart-wrapper">
-                        <canvas id="chart-components"></canvas>
-                    </div>
+            <div class="chart-box map-chart-panel" id="box-chart-chargers">
+                <h2>Electrolineras por Red <span class="chart-tag chart-tag--econ">Operadores</span></h2>
+                <div class="chart-wrapper">
+                    <canvas id="chart-chargers"></canvas>
                 </div>
             </div>
 
-            <div class="charts-row">
-                <div class="chart-box">
-                    <h2>CO₂ Evitado por Año <span class="chart-tag chart-tag--sust">Sustentabilidad</span></h2>
-                    <div class="chart-wrapper">
-                        <canvas id="chart-sustentabilidad"></canvas>
+            <div class="chart-box map-chart-panel" id="box-chart-components">
+                <h2>Desglose de Componentes del Modelo <span class="chart-tag chart-tag--econ">Económico</span></h2>
+                <div class="chart-wrapper">
+                    <canvas id="chart-components"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-box map-chart-panel" id="box-chart-sustentabilidad">
+                <h2>CO₂ Evitado por Año <span class="chart-tag chart-tag--sust">Sustentabilidad</span></h2>
+                <div class="chart-wrapper">
+                    <canvas id="chart-sustentabilidad"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-box map-chart-panel" id="box-chart-equidad">
+                <h2>Zonas de Alto Potencial sin Cobertura <span class="chart-tag chart-tag--eq">Equidad</span></h2>
+                <div class="chart-wrapper">
+                    <canvas id="chart-equidad"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <p class="nota"><b>Nota metodológica:</b> Los modelos originales asignan colores por percentil entre las AGEBs de la CDMX (verde = 20 % superior, amarillo = 40–80 %, rojo = 40 % inferior). Las predicciones 2026–2035 son una simulación Monte Carlo con supuestos provisionales (precios, capex, adopción de EVs), no un pronóstico calibrado: el rango va del percentil 10 (pesimista) al 90 (optimista). El número de cargadores se decide con el caso base y la probabilidad de ser rentable es la de que la ganancia neta anualizada sea positiva. Payback = años para recuperar la inversión del sitio con la ganancia operativa.</p>
+
+        <!-- Modal de Configuración del Modelo -->
+        <div class="config-modal-backdrop" id="config-modal-backdrop">
+            <div class="config-modal">
+                <div class="config-modal__header">
+                    <h3><i class="fa-solid fa-gear"></i> Configuración del Modelo</h3>
+                    <button type="button" class="config-modal__close" id="config-modal-close" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="config-modal__body">
+                    <div class="config-group">
+                        <label for="sel-escenario"><i class="fa-solid fa-sliders"></i> Escenario de adopción de EVs:</label>
+                        <select id="sel-escenario" class="config-select">
+                            <option value="baja">Baja (Conservador)</option>
+                            <option value="media" selected>Media (Caso Base)</option>
+                            <option value="alta">Alta (Acelerado)</option>
+                        </select>
+                        <small class="config-hint">Define la velocidad proyectada de adopción vehicular eléctrica en la CDMX para las proyecciones 2026–2035.</small>
+                    </div>
+
+                    <div class="config-group">
+                        <label for="sel-metrica"><i class="fa-solid fa-palette"></i> Colorear mapa por:</label>
+                        <select id="sel-metrica" class="config-select">
+                            <option value="score" selected>Viabilidad (percentil general)</option>
+                            <option value="prob">Probabilidad de ser rentable (>0 ganancia neta)</option>
+                            <option value="payback_max">Payback, caso optimista (P90)</option>
+                            <option value="payback_min">Payback, caso pesimista (P10)</option>
+                        </select>
+                        <small class="config-hint">Modifica la métrica y escala de color asignada a cada AGEB en el mapa.</small>
                     </div>
                 </div>
-
-                <div class="chart-box">
-                    <h2>Zonas de Alto Potencial sin Cobertura <span class="chart-tag chart-tag--eq">Equidad</span></h2>
-                    <div class="chart-wrapper">
-                        <canvas id="chart-equidad"></canvas>
-                    </div>
+                <div class="config-modal__footer">
+                    <button type="button" class="config-btn-apply" id="config-btn-apply">
+                        <i class="fa-solid fa-check"></i> Aplicar Cambios
+                    </button>
                 </div>
             </div>
         </div>
