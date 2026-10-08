@@ -75,9 +75,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Carga de datos simultánea
     try {
         const [chargersData, geoData, predData] = await Promise.all([
-            fetch('./all_chargers_geo.json').then(r => r.json()).catch(() => ({ features: [] })),
-            fetch('./viabilidad_cdmx_v2.geojson').then(r => r.json()).catch(() => ({ features: [] })),
-            fetch('./predicciones.json').then(r => r.json()).catch(() => [])
+            fetch('./all_chargers_geo.json?t=' + Date.now()).then(r => r.json()).catch(() => ({ features: [] })),
+            fetch('./viabilidad_cdmx_v2.geojson?t=' + Date.now()).then(r => r.json()).catch(() => ({ features: [] })),
+            fetch('./predicciones.json?t=' + Date.now()).then(r => r.json()).catch(() => [])
         ]);
 
         const chargers = chargersData.features || [];

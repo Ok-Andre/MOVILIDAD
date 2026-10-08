@@ -228,19 +228,32 @@ document.addEventListener('DOMContentLoaded', () => {
         maxClusterRadius: 45
     });
 
+    // Delimitación estricta de CDMX: coordenadas límite
+    function isInsideCDMX(lat, lon) {
+        if (typeof lat !== 'number' || typeof lon !== 'number') return false;
+        return lat >= 19.124 && lat <= 19.593 && lon >= -99.345 && lon <= -98.946;
+    }
+
     // Datos de todos los pines (incluye los personalizados) para búsqueda y distancias
     const chargersData = [];
 
     function loadChargersData() {
-        return fetch('./all_chargers_geo.json')
+        return fetch('./all_chargers_geo.json?t=' + Date.now())
             .then(res => res.json())
             .then(data => {
                 let teslaCount = 0;
                 let evergoCount = 0;
                 let plugshareCount = 0;
 
-                data.features.forEach(feature => {
-                    const coords = feature.geometry.coordinates;
+                (data.features || []).forEach(feature => {
+                    const coords = feature.geometry ? feature.geometry.coordinates : null;
+                    if (!coords || coords.length < 2) return;
+                    const lon = coords[0];
+                    const lat = coords[1];
+
+                    // Filtrado estricto a la CDMX
+                    if (!isInsideCDMX(lat, lon)) return;
+
                     const props = feature.properties || {};
                     const red = props.red || 'PlugShare';
                     const nombre = props.nombre || 'Estación de Carga';
@@ -257,27 +270,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     const popupHtml = `
-                        <div class="popup-title">${nombre}</div>
-                        <div><b>Red:</b> ${red}</div>
+                        <div class="popup-title">${escapeHtml(nombre)}</div>
+                        <div><b>Red:</b> ${escapeHtml(red)}</div>
                     `;
 
-                    const marker = L.marker([coords[1], coords[0]], { icon: iconToUse })
+                    const marker = L.marker([lat, lon], { icon: iconToUse })
                         .bindPopup(popupHtml);
 
                     chargersCluster.addLayer(marker);
                     chargersData.push({
                         nombre: nombre,
                         red: red,
-                        lat: coords[1],
-                        lon: coords[0],
+                        lat: lat,
+                        lon: lon,
                         marker: marker,
                         custom: false
                     });
                 });
 
-                // Puntos personalizados guardados en el navegador (no cuentan en la gráfica)
+                // Puntos personalizados guardados en el navegador (solo si están dentro de CDMX)
                 leerPuntosPersonalizados().forEach(punto => {
-                    if (typeof punto.lat !== 'number' || typeof punto.lon !== 'number') return;
+                    if (!isInsideCDMX(punto.lat, punto.lon)) return;
                     const marker = crearMarcadorPunto(punto);
                     chargersCluster.addLayer(marker);
                     chargersData.push({

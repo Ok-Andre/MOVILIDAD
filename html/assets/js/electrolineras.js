@@ -107,13 +107,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    fetch('./all_chargers_geo.json')
+    function isInsideCDMX(lat, lon) {
+        if (typeof lat !== 'number' || typeof lon !== 'number') return false;
+        return lat >= 19.124 && lat <= 19.593 && lon >= -99.345 && lon <= -98.946;
+    }
+
+    fetch('./all_chargers_geo.json?t=' + Date.now())
         .then(res => {
             if (!res.ok) throw new Error('HTTP ' + res.status);
             return res.json();
         })
         .then(data => {
-            sitios = (data.features || []).map(f => {
+            sitios = (data.features || []).filter(f => {
+                const c = f.geometry ? f.geometry.coordinates : null;
+                return c && isInsideCDMX(c[1], c[0]);
+            }).map(f => {
                 const c = f.geometry.coordinates;
                 const p = f.properties || {};
                 return {
