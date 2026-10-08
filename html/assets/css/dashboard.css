@@ -1,0 +1,272 @@
+/* ===== Dashboard de electrolineras ===== */
+
+.dashboard-section {
+    justify-content: flex-start;
+    padding: 32px 32px 48px;
+    min-height: 100vh;
+    color: var(--text-color);
+}
+
+.dashboard-header {
+    margin-bottom: 22px;
+}
+
+.dashboard-header h1 {
+    color: var(--text-color);
+    margin-bottom: 6px;
+}
+
+.dashboard-subtitle {
+    color: var(--muted-color);
+    font-size: 14px;
+}
+
+/* ---------- KPIs ---------- */
+.kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.kpi-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 18px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(4px);
+}
+
+.kpi-card > i {
+    font-size: 24px;
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-color);
+}
+
+.kpi-card__body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.kpi-card__value {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.kpi-card__label {
+    font-size: 13px;
+    color: var(--muted-color);
+}
+
+.kpi-card--total > i { color: var(--tertiary-color); }
+.kpi-card--tesla > i { color: #E5484D; }
+.kpi-card--evergo > i { color: #2FBF71; }
+.kpi-card--plugshare > i { color: var(--gold-color); }
+
+/* ---------- Barra de herramientas ---------- */
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.toolbar__search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    padding: 8px 12px;
+    min-width: 280px;
+    flex: 1 1 280px;
+    max-width: 460px;
+}
+
+.toolbar__search i {
+    color: var(--secondary-color);
+    font-size: 14px;
+}
+
+.toolbar__search input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+    color: #333;
+    width: 100%;
+}
+
+.toolbar__select {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.toolbar__select select {
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    font-size: 14px;
+}
+
+.toolbar__count {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--muted-color);
+}
+
+/* ---------- Tabla ---------- */
+.tabla-box {
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: 12px;
+    padding: 6px 6px 2px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+}
+
+.tabla-electrolineras {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: #333;
+}
+
+.tabla-electrolineras thead th {
+    position: sticky;
+    top: 0;
+    background: #f3eef6;
+    color: #4a3f57;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 12px 14px;
+    border-bottom: 2px solid #e4dbea;
+    z-index: 1;
+}
+
+.tabla-electrolineras tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #efeaf2;
+    vertical-align: middle;
+}
+
+.tabla-electrolineras tbody tr:hover {
+    background: #faf6fc;
+}
+
+.col-num { width: 52px; }
+.col-red { width: 120px; }
+.col-coords { width: 210px; }
+.col-pin { width: 90px; text-align: center; }
+
+.tabla-electrolineras tbody td.col-pin {
+    text-align: center;
+}
+
+.cell-coords {
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 12.5px;
+    color: #6b6275;
+    white-space: nowrap;
+}
+
+/* ---------- Badges de red ---------- */
+.badge-red {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.badge-red--tesla { background: #E5484D; }
+.badge-red--evergo { background: #2FBF71; }
+.badge-red--plugshare { background: #D4A537; color: #3a2c00; }
+
+/* ---------- Botón pin ---------- */
+.btn-pin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: var(--secondary-color);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.btn-pin:hover {
+    background: #6f1530;
+    transform: translateY(-1px);
+}
+
+.btn-pin i {
+    font-size: 14px;
+}
+
+.tabla-vacia {
+    padding: 24px 16px;
+    text-align: center;
+    color: #8a8194;
+    font-size: 14px;
+}
+
+.tabla-vacia[hidden] {
+    display: none;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+    .kpi-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboard-section {
+        padding: 24px 14px 40px;
+    }
+
+    .kpi-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .col-coords,
+    .tabla-electrolineras td.cell-coords {
+        display: none;
+    }
+
+    .toolbar__count {
+        margin-left: 0;
+        width: 100%;
+    }
+}

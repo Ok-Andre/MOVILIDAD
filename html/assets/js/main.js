@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chargersData = [];
 
     function loadChargersData() {
-        fetch('./all_chargers_geo.json')
+        return fetch('./all_chargers_geo.json')
             .then(res => res.json())
             .then(data => {
                 let teslaCount = 0;
@@ -261,6 +261,49 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => {
                 console.error('Error cargando electrolineras:', err);
             });
+    }
+
+    // Vuelve desde el dashboard de electrolineras: index.html?lat=..&lon=..&nombre=..
+    function applyPinFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const lat = parseFloat(params.get('lat'));
+        const lon = parseFloat(params.get('lon'));
+        if (!isFinite(lat) || !isFinite(lon)) return;
+        const nombre = params.get('nombre') || 'Electrolinera';
+
+        // Busca el marcador exacto del clúster (mismo sitio)
+        let encontrado = null;
+        let mejor = Infinity;
+        chargersData.forEach(c => {
+            const d = haversine(lat, lon, c.lat, c.lon);
+            if (d < mejor) { mejor = d; encontrado = c; }
+        });
+
+        const highlight = L.layerGroup().addTo(map);
+
+        if (encontrado && mejor <= 30) {
+            L.circle([encontrado.lat, encontrado.lon], {
+                radius: 25,
+                color: '#E6007E',
+                weight: 3,
+                opacity: 1,
+                fillColor: '#E6007E',
+                fillOpacity: 0.25,
+                interactive: false,
+                className: 'search-ring'
+            }).addTo(highlight);
+            chargersCluster.zoomToShowLayer(encontrado.marker, () => encontrado.marker.openPopup());
+        } else {
+            const marker = L.marker([lat, lon], { icon: searchPointIcon, zIndexOffset: 1000 })
+                .bindPopup(`<div class="popup-title">${escapeHtml(nombre)}</div>
+                    <div><b>Coordenadas:</b> ${lat.toFixed(5)}, ${lon.toFixed(5)}</div>`)
+                .addTo(map);
+            map.setView([lat, lon], 16);
+            marker.openPopup();
+        }
+
+        // Limpia los params para no re-disparar al recargar
+        history.replaceState(null, '', window.location.pathname);
     }
 
     // ---------- Búsqueda: dirección, coordenadas o electrolinera ----------
@@ -1027,7 +1070,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---------- Arranque ----------
     loadMapData('./viabilidad_cdmx_v2.geojson');
-    loadChargersData();
+    loadChargersData().then(applyPinFromUrl);
     initSearch();
 
     // Gráficas temáticas con el escenario por defecto (aunque no se abra la predicción)
