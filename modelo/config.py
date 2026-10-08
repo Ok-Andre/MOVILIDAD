@@ -23,7 +23,7 @@ METRICS_JSON = OUT / "metricas.json"
 # ---- Switches ----
 USE_RF = True            # False => solo regresión lineal (modo "sin tiempo")
 TRAIN_YEARS = list(range(2025, 2036))
-PRED_YEARS = [2030, 2035]
+PRED_YEARS = list(range(2026, 2036))
 SEED = 42
 
 # ---- Supuestos de la simulación (EDITABLES; son SUPUESTOS, no datos) ----
