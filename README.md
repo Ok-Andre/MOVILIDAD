@@ -1,3 +1,59 @@
+# ELECTRA — Viabilidad para Estaciones de Carga en la CDMX
+
+Mapa interactivo que muestra las zonas más viables de la CDMX para instalar electrolineras, con predicciones.
+
+---
+
+## Requisitos
+
+- **Python 3** (cualquier versión 3.7+)
+- **Un navegador web** (Chrome, Firefox, Edge, etc.)
+- Conexión a internet (el mapa usa Leaflet y Font Awesome desde CDN)
+
+> No necesitas instalar ningún paquete de Python; solo se usa el servidor HTTP que ya viene incluido.
+
+---
+
+## Cómo ejecutar
+
+1. **Abre una terminal** y navega a la carpeta `html/` del proyecto:
+
+   ```bash
+   cd MOVILIDAD/html
+   ```
+
+2. **Inicia un servidor local** con Python:
+
+   ```bash
+   python -m http.server 8000
+   ```
+
+   > En Mac/Linux puede ser `python3` en lugar de `python`.
+
+3. **Abre el navegador** y ve a:
+
+   ```
+   http://localhost:8000
+   ```
+
+¡Listo! El mapa debería cargar mostrando la CDMX con las zonas coloreadas por viabilidad.
+
+---
+
+## Páginas disponibles
+
+| URL                                          | Descripción                              |
+| -------------------------------------------- | ---------------------------------------- |
+| `http://localhost:8000`                       | Mapa principal de viabilidad             |
+| `http://localhost:8000/electrolineras.html`   | Vista de electrolineras existentes       |
+
+---
+
+## Para detener el servidor
+
+Presiona `Ctrl + C` en la terminal donde lo iniciaste.
+
+
 # Viabilidad para Estaciones de Carga (Electrolineras) en la CDMX — v2
 
 Este proyecto tiene dos partes:
