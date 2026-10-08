@@ -6,6 +6,7 @@ BASE = Path(__file__).resolve().parents[1]
 ZONES_GEOJSON = BASE / "html" / "viabilidad_cdmx_v2.geojson"
 CENSUS_CSV    = BASE / "clean" / "RESAGEBURB_09CSV20.csv"
 CHARGERS_JSON = BASE / "datasets" / "all_chargers_geo.json"
+PENDIENTE_CSV = BASE / "datasets" / "pendiente_ageb.csv"
 
 # ---- Escenario de adopción de EVs: "baja" | "media" | "alta" ----
 # Se elige con la variable de entorno ESCENARIO o con `python run_all.py baja`.
@@ -25,6 +26,10 @@ USE_RF = True            # False => solo regresión lineal (modo "sin tiempo")
 TRAIN_YEARS = list(range(2025, 2036))
 PRED_YEARS = list(range(2026, 2036))
 SEED = 42
+
+# ---- Accesibilidad por pendiente (SUPUESTO; calibrar con datos viales) ----
+# A esta pendiente media se reduce a la mitad la demanda accesible de la AGEB.
+PENDIENTE_MITAD_ACCESIBILIDAD_PCT = 15.0
 
 # ---- Supuestos de la simulación (EDITABLES; son SUPUESTOS, no datos) ----
 # Adopción: logística  ADOPT_BASE + max / (1 + exp(-k (año - mid)))

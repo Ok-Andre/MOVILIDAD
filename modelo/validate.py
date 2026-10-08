@@ -2,9 +2,11 @@ from scipy.stats import spearmanr
 from data import build_zones
 
 z = build_zones()
-z["demanda"] = z["vph_autom"] * (1 + z["riqueza_norm"])
+z["demanda"] = (z["vph_autom"] * (1 + z["riqueza_norm"])
+                * z["accesibilidad_pendiente"])
+z["trafico_accesible"] = z["traffic_idx"] * z["accesibilidad_pendiente"]
 
-for col in ["demanda", "traffic_idx", "riqueza_norm"]:
+for col in ["demanda", "trafico_accesible", "riqueza_norm"]:
     rho, p = spearmanr(z[col], z["n_total"])
     print(f"{col:14s} vs puertos instalados: rho={rho:.3f}  p={p:.2g}")
 
