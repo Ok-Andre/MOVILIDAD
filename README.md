@@ -1,65 +1,80 @@
-# ELECTRA — Viabilidad para Estaciones de Carga en la CDMX
+# ELECTRA CDMX
 
-Mapa interactivo que muestra las zonas más viables de la CDMX para instalar electrolineras, con predicciones.
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+![Leaflet](https://img.shields.io/badge/Leaflet-199900?logo=leaflet&logoColor=white)
+![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?logo=chartdotjs&logoColor=white)
+![GeoJSON](https://img.shields.io/badge/Datos%20geoespaciales-GeoJSON-2E8B57)
 
----
+**ELECTRA** es una herramienta de análisis territorial para explorar la red de carga pública de vehículos eléctricos y evaluar dónde podría ser viable instalar electrolineras en la Ciudad de México. Combina un mapa interactivo, un dashboard y un modelo de simulación para comparar zonas y apoyar la planeación de nueva infraestructura.
 
-## Requisitos
+## ¿Para qué sirve?
 
-- **Python 3** (cualquier versión 3.7+)
-- **Un navegador web** (Chrome, Firefox, Edge, etc.)
-- Conexión a internet (el mapa usa Leaflet y Font Awesome desde CDN)
+La aplicación permite consultar la distribución de cargadores existentes y explorar estimaciones de viabilidad por zona geoestadística (AGEB). El análisis combina información de población y viviendas, destinos económicos, ubicación y cantidad de cargadores, y un factor de accesibilidad asociado a la pendiente del terreno.
 
-> No necesitas instalar ningún paquete de Python; solo se usa el servidor HTTP que ya viene incluido.
+El modelo proyecta posibles escenarios de adopción de vehículos eléctricos entre 2026 y 2035. Para cada zona y año genera indicadores como demanda estimada, ganancia operativa, probabilidad de rentabilidad, número de cargadores, recuperación e inversión aproximadas y emisiones de CO₂ evitadas. Los resultados se muestran en el mapa y en las gráficas del dashboard para facilitar la comparación territorial.
 
----
+> **Importante:** las ganancias y proyecciones son simulaciones basadas en supuestos editables, no resultados observados ni garantías de rentabilidad. Los datos disponibles no incluyen ingresos reales de estaciones; los resultados deben validarse con información de demanda, costos, tarifas y sitios concretos antes de tomar decisiones.
 
-## Cómo ejecutar
+## Funcionalidades principales
 
-1. **Abre una terminal** y navega a la carpeta `html/` del proyecto:
+- Explorar en el mapa la viabilidad de instalación por AGEB, año y escenario.
+- Consultar, buscar y filtrar cargadores públicos de redes como Tesla, Evergo y PlugShare.
+- Revisar en el dashboard la distribución de infraestructura y los indicadores territoriales.
+- Comparar escenarios de adopción baja, media y alta para 2026–2035.
+- Generar rangos de estimación mediante simulación Monte Carlo y exportar resultados en CSV y JSON.
 
-   ```bash
-   cd MOVILIDAD/html
-   ```
+## Tecnologías utilizadas
 
-2. **Inicia un servidor local** con Python:
+- **Interfaz:** HTML, CSS y JavaScript.
+- **Mapas:** Leaflet y Leaflet.markercluster.
+- **Gráficas:** Chart.js.
+- **Procesamiento geoespacial:** GeoJSON y GeoPandas.
+- **Análisis y simulación:** Python, NumPy y pandas.
+- **Gráficas del procesamiento:** Matplotlib.
+- **Iconografía:** Font Awesome.
 
-   ```bash
-   python -m http.server 8000
-   ```
+La web se sirve como sitio estático y consume archivos GeoJSON/JSON. El procesamiento del modelo se ejecuta por separado en Python. `modelo/api.py` permite consultar las predicciones exportadas desde Python, pero no inicia un servidor web.
 
-   > En Mac/Linux puede ser `python3` en lugar de `python`.
+## Ejecutar la interfaz
 
-3. **Abre el navegador** y ve a:
+Desde la carpeta raíz del proyecto, inicia un servidor local:
 
-   ```
-   http://localhost:8000
-   ```
+```bash
+python3 -m http.server 8000
+```
 
-¡Listo! El mapa debería cargar mostrando la CDMX con las zonas coloreadas por viabilidad.
+Abre [http://localhost:8000/html/index.html](http://localhost:8000/html/index.html). El servidor es necesario para que el navegador pueda leer los datos locales de mapas y predicciones. El dashboard está en `html/dashboard.html` y el listado de estaciones en `html/electrolineras.html`.
 
----
+## Generar predicciones
 
-## Páginas disponibles
+El flujo de simulación está en `modelo/`. Requiere Python y las bibliotecas NumPy, pandas, GeoPandas y Matplotlib. Desde la carpeta raíz:
 
-| URL                                          | Descripción                              |
-| -------------------------------------------- | ---------------------------------------- |
-| `http://localhost:8000`                       | Mapa principal de viabilidad             |
-| `http://localhost:8000/electrolineras.html`   | Vista de electrolineras existentes       |
+```bash
+cd modelo
+python run_all.py
+```
 
----
+Sin argumentos se usa el escenario configurado (actualmente `media`). También es posible elegir uno o ejecutar todos:
 
-## Para detener el servidor
+```bash
+python run_all.py baja
+python run_all.py media
+python run_all.py alta
+python run_all.py todos
+```
 
-Presiona `Ctrl + C` en la terminal donde lo iniciaste.
+La ejecución exporta predicciones y actualiza los archivos de datos consumidos por la interfaz. Los parámetros de los escenarios y los supuestos están en `modelo/config.py`.
 
+## Autores
 
-# Viabilidad para Estaciones de Carga (Electrolineras) en la CDMX — v2
+- Marco André García Carballo
+- Uriel Natanael Mayorga García
+- Alejandro Sánchez Cano
 
-Este proyecto tiene dos partes:
-
-1. **Mapa de viabilidad:** dice qué zonas (AGEB) de la CDMX son mejores para poner una electrolinera hoy.
-2. **Modelo predictivo:** estima cuánto podría ganar una electrolinera por zona en **2030 y 2035**.
+## Detalles técnicos
 
 ---
 
@@ -125,15 +140,13 @@ Cada punto dice **qué se cambió**, **por qué** y **en qué archivo**.
 ## Qué sigue igual (y hay que decirlo con honestidad)
 
 - **La ganancia sigue siendo simulada.** No existen datos reales de ingresos de electrolineras. La fórmula está en `simulate.py` y sus supuestos en `config.py`.
-- **El modelo aprende esa fórmula.** Su error (RMSE) mide qué tan bien copia nuestros supuestos, no la realidad.
+- **Los rangos no son observaciones reales.** Los percentiles y la probabilidad de rentabilidad resumen la variabilidad de la simulación y de sus supuestos, no una garantía de resultados futuros.
 - **Datos reales:** censo 2020, comercios y ubicación de cargadores. **Supuestos:** adopción de autos eléctricos, kWh por auto, margen por kWh, costos y captura de clientes.
 
-## Pendientes (no se hicieron en v2)
+## Mejoras futuras
 
 - Reemplazar los supuestos de adopción, consumo y margen por datos de INEGI, AMDA y tarifas de CFE.
-- Cambiar "máxima" y "mínima" por un rango estadístico (Monte Carlo, percentiles 10 y 90).
 - Usar distancia al cargador más cercano, en lugar de contar solo los que están dentro de la misma AGEB.
-- Incluir el costo de instalación para calcular retorno de inversión.
 - Conseguir datos reales de tráfico (hoy es un proxy) y de sesiones de carga.
 
 ---
@@ -183,9 +196,9 @@ Se resta puntaje si ya hay estaciones en la zona, para favorecer zonas desatendi
 
 ## Modelo predictivo
 
-Predice la ganancia anual (máxima y mínima) por AGEB para **2030 y 2035**, y un score de 0 a 1.
+Simula la ganancia anual por AGEB para cada año de **2026 a 2035** y calcula rangos estadísticos (percentiles 10, 50 y 90), probabilidad de rentabilidad e indicadores complementarios.
 
-> ⚠️ **Aviso:** la ganancia es **simulada**. Validar los supuestos con tarifas y datos reales antes de tomar decisiones de negocio.
+>  **Aviso:** la ganancia es **simulada**. Validar los supuestos con tarifas y datos reales antes de tomar decisiones de negocio.
 
 ### Cómo correrlo
 
@@ -194,9 +207,11 @@ cd modelo
 pip install geopandas pandas numpy scikit-learn matplotlib scipy rasterio
 python pendiente.py        # 1) calcula la pendiente media por AGEB desde el DEM
 python build_chargers.py   # 2) une y limpia los cargadores
-python run_all.py          # 3) entrena, predice y exporta
+python run_all.py          # 3) simula, predice y exporta
 python validate.py         # 4) revisa contra cargadores reales
 ```
+
+El flujo actual de `run_all.py` no entrena un modelo de Random Forest: genera resultados mediante simulación Monte Carlo. `train.py` está disponible para entrenar un modelo por separado.
 
 `pendiente.py` busca el DEM GeoTIFF `09_Ciuda*r15m*.tif` dentro del proyecto y
 genera `datasets/pendiente_ageb.csv`; coloca el DEM en `datasets/`. Las predicciones aplican una reducción
@@ -204,8 +219,7 @@ gradual de demanda por pendiente: como supuesto inicial, 15 % de pendiente media
 reduce a la mitad la demanda accesible. Este factor es un proxy topográfico,
 no una medición de caminos transitables, y debe calibrarse con datos viales.
 
-Genera en `salidas/`: `modelo.pkl`, `metricas.json`, `predicciones.csv`, `predicciones.json` y gráficas `.png`.
-`export.py` también copia `predicciones.json` a `html/`.
+El flujo actual genera `predicciones.csv`, `predicciones.json` y gráficas `.png` bajo `salidas/`. `export.py` también copia los JSON necesarios a `html/`. `modelo.pkl` y `metricas.json` corresponden al entrenamiento independiente de `train.py`, no a la ejecución normal de `run_all.py`.
 
 Para ver el mapa, desde `html/`:
 
@@ -230,7 +244,7 @@ censo (POBTOT) ─────────────┼─> data.py <───
                             │   simulate.py (ganancia sintética, 2025-2035)
                             │      │
                             │      v
-                            │   train.py (Regresión lineal vs Random Forest)
+                            │   incertidumbre.py (Monte Carlo)
                             │      │
                             │      v
                             │   export.py -> CSV + JSON (score en percentil)
@@ -250,11 +264,12 @@ censo (POBTOT) ─────────────┼─> data.py <───
 | `config.py` | Rutas, switch `USE_RF` y supuestos de la simulación |
 | `data.py` | Una fila por AGEB con las features (corregido: puertos y datos `*`) |
 | `simulate.py` | Crea la ganancia sintética por zona y año |
-| `train.py` | Entrena y compara modelos (corregido: más variables) |
-| `export.py` | Predice 2030/2035 y exporta (corregido: score en percentil y copia al html) |
+| `train.py` | Entrena modelos opcionales de regresión; no forma parte del flujo actual de `run_all.py` |
+| `incertidumbre.py` | Calcula rangos y probabilidad de rentabilidad mediante simulación Monte Carlo |
+| `export.py` | Calcula y exporta predicciones 2026–2035 y las copia al html |
 | `plots.py` | Gráficas de ganancia máx/mín |
 | `api.py` | `get_predictions()` para consumir los datos |
-| `run_all.py` | Ejecuta entrenamiento, exportación y gráficas |
+| `run_all.py` | Ejecuta la simulación Monte Carlo, exporta predicciones y genera gráficas |
 
 ### Variables del modelo
 
@@ -296,7 +311,7 @@ get_predictions(año=2030, top=10)
 get_predictions(año=2035, alcaldia="Coyoacán")
 ```
 
-**Web:** `html/index.html` lee `predicciones.json` y lo une por `CVEGEO` (botones 2030 y 2035). Hay que abrirlo con un servidor local.
+**Web:** `html/index.html` lee los JSON de predicciones y los une a las zonas por `CVEGEO`; incluye selección temporal para 2026–2035 y accesos a los escenarios 2030 y 2035. Hay que abrirlo con un servidor local.
 
 ### Modo sin tiempo
 
@@ -327,5 +342,6 @@ Los puntos personalizados se guardan en `localStorage` (clave `electra_puntos_pe
 - El tráfico es un proxy.
 - Evergo y Tesla no traen número de puertos (cuentan como 1); PlugShare sí, pero solo algunos conectores traen potencia en kW.
 - Las zonas sin comercios (alrededor del 80 %) dependen casi solo de autos y riqueza.
-- El censo es de 2020 y la población no se proyecta a 2030 y 2035.
-- Los resultados cambian al reentrenar; guarda una copia de `predicciones.json` si quieres comparar versiones.
+- El censo es de 2020 y la población no se proyecta para los años futuros.
+- Los resultados pueden cambiar al volver a ejecutar la simulación; guarda una copia de `predicciones.json` si quieres comparar versiones.
+
